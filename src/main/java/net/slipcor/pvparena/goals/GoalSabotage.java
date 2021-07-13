@@ -16,7 +16,9 @@ import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.core.RandomUtils;
 import net.slipcor.pvparena.core.StringUtils;
-import net.slipcor.pvparena.events.PAGoalEvent;
+import net.slipcor.pvparena.events.goal.PAGoalEndEvent;
+import net.slipcor.pvparena.events.goal.PAGoalSabotageIgniteEvent;
+import net.slipcor.pvparena.events.goal.PAGoalScoreEvent;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
 import net.slipcor.pvparena.managers.PermissionManager;
@@ -177,7 +179,7 @@ public class GoalSabotage extends ArenaGoal implements Listener {
                             pTeam.colorizePlayer(player) + ChatColor.YELLOW,
                             team.getColoredName() + ChatColor.YELLOW));
 
-                    final PAGoalEvent gEvent = new PAGoalEvent(this.arena, this, "trigger:" + player.getName());
+                    final PAGoalSabotageIgniteEvent gEvent = new PAGoalSabotageIgniteEvent(this.arena, this, ArenaPlayer.fromPlayer(player), team);
                     Bukkit.getPluginManager().callEvent(gEvent);
                     this.primeTNT(team, new PABlockLocation(block.getLocation()));
 
@@ -262,7 +264,7 @@ public class GoalSabotage extends ArenaGoal implements Listener {
         debug(this.arena, "[SABOTAGE] committing end. Force: {}, Winner: {}", force, this.winningTeam);
 
         if(!force) {
-            final PAGoalEvent gEvent = new PAGoalEvent(this.arena, this, "");
+            final PAGoalEndEvent gEvent = new PAGoalEndEvent(arena, this);
             Bukkit.getPluginManager().callEvent(gEvent);
 
             this.arena.getTeams().stream()

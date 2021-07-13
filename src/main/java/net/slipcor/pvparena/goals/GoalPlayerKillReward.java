@@ -9,7 +9,9 @@ import net.slipcor.pvparena.commands.CommandTree;
 import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
-import net.slipcor.pvparena.events.PAGoalEvent;
+import net.slipcor.pvparena.events.goal.PAGoalEndEvent;
+import net.slipcor.pvparena.events.goal.PAGoalPlayerDeathEvent;
+import net.slipcor.pvparena.events.goal.PAGoalScoreEvent;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
 import net.slipcor.pvparena.managers.ArenaManager;
@@ -152,7 +154,7 @@ public class GoalPlayerKillReward extends ArenaGoal {
             debug(this.arena, "[PKW] already ending");
             return;
         }
-        final PAGoalEvent gEvent = new PAGoalEvent(this.arena, this, "");
+        final PAGoalEndEvent gEvent = new PAGoalEndEvent(this.arena, this);
         Bukkit.getPluginManager().callEvent(gEvent);
 
         for (ArenaTeam team : this.arena.getNotEmptyTeams()) {
@@ -182,12 +184,12 @@ public class GoalPlayerKillReward extends ArenaGoal {
 
     @Override
     public void parsePlayerDeath(Player player, PADeathInfo deathInfo) {
-            if (!this.getPlayerLifeMap().containsKey(player)) {
-                return;
-            }
-            if (!this.arena.getConfig().getBoolean(CFG.GOAL_PLAYERKILLREWARD_GRADUALLYDOWN)) {
-                this.getPlayerLifeMap().put(player, this.getDefaultRemainingKills());
-            }
+        if (!this.getPlayerLifeMap().containsKey(player)) {
+            return;
+        }
+        if (!this.arena.getConfig().getBoolean(CFG.GOAL_PLAYERKILLREWARD_GRADUALLYDOWN)) {
+            this.getPlayerLifeMap().put(player, this.getDefaultRemainingKills());
+        }
         class ResetRunnable implements Runnable {
             private final Player player;
 
@@ -232,8 +234,7 @@ public class GoalPlayerKillReward extends ArenaGoal {
         debug(this.arena, killer, "kills to go for " + killer.getName() + ": " + iLives);
         if (iLives <= 1) {
             // player has won!
-            final PAGoalEvent gEvent = new PAGoalEvent(this.arena, this, "trigger:" + killer.getName(),
-                    "playerKill:" + killer.getName() + ':' + player.getName(), "playerDeath:" + player.getName());
+            final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, ArenaPlayer.fromPlayer(player), ArenaPlayer.fromPlayer(killer), false);
             Bukkit.getPluginManager().callEvent(gEvent);
             final Set<ArenaPlayer> arenaPlayers = new HashSet<>();
             for (ArenaPlayer arenaPlayer : this.arena.getFighters()) {
@@ -254,8 +255,7 @@ public class GoalPlayerKillReward extends ArenaGoal {
             }
             WorkflowManager.handleEnd(this.arena, false);
         } else {
-            final PAGoalEvent gEvent = new PAGoalEvent(this.arena, this, "playerKill:" +
-                    killer.getName() + ':' + player.getName(), "playerDeath:" + player.getName());
+            final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, ArenaPlayer.fromPlayer(player), ArenaPlayer.fromPlayer(killer), false);
             Bukkit.getPluginManager().callEvent(gEvent);
             iLives--;
             this.getPlayerLifeMap().put(killer, iLives);
@@ -317,11 +317,11 @@ public class GoalPlayerKillReward extends ArenaGoal {
             for (String line : cs.getKeys(false)) {
                 try {
                     this.getItemMap().put(Integer.parseInt(line.substring(2)),
-                        new ItemStack[][] {
-                            cs.getList(line + ".items").toArray(new ItemStack[0]),
-                            cs.getList(line + ".offhand").toArray(new ItemStack[]{new ItemStack(Material.AIR, 1)}),
-                            cs.getList(line + ".armor").toArray(new ItemStack[0])
-                        });
+                            new ItemStack[][]{
+                                    cs.getList(line + ".items").toArray(new ItemStack[0]),
+                                    cs.getList(line + ".offhand").toArray(new ItemStack[]{new ItemStack(Material.AIR, 1)}),
+                                    cs.getList(line + ".armor").toArray(new ItemStack[0])
+                            });
                 } catch (final Exception ignored) {
                 }
             }
@@ -330,15 +330,15 @@ public class GoalPlayerKillReward extends ArenaGoal {
         if (this.getItemMap().size() < 1) {
 
             this.getItemMap().put(5, new ItemStack[][]{
-                        new ItemStack[]{new ItemStack(Material.WOODEN_SWORD, 1)},
-                        new ItemStack[]{new ItemStack(Material.AIR, 1)},
-                        new ItemStack[]{
-                                new ItemStack(Material.LEATHER_HELMET, 1),
-                                new ItemStack(Material.LEATHER_CHESTPLATE, 1),
-                                new ItemStack(Material.LEATHER_LEGGINGS, 1),
-                                new ItemStack(Material.LEATHER_BOOTS, 1),
-                        },
-                    });
+                    new ItemStack[]{new ItemStack(Material.WOODEN_SWORD, 1)},
+                    new ItemStack[]{new ItemStack(Material.AIR, 1)},
+                    new ItemStack[]{
+                            new ItemStack(Material.LEATHER_HELMET, 1),
+                            new ItemStack(Material.LEATHER_CHESTPLATE, 1),
+                            new ItemStack(Material.LEATHER_LEGGINGS, 1),
+                            new ItemStack(Material.LEATHER_BOOTS, 1),
+                    },
+            });
             this.getItemMap().put(4, new ItemStack[][]{
                     new ItemStack[]{new ItemStack(Material.STONE_SWORD, 1)},
                     new ItemStack[]{new ItemStack(Material.AIR, 1)},
@@ -386,11 +386,11 @@ public class GoalPlayerKillReward extends ArenaGoal {
 
     private void saveItems() {
         for (int i : this.getItemMap().keySet()) {
-            this.arena.getConfig().setManually("goal.playerkillrewards.kr" + i+".items",
+            this.arena.getConfig().setManually("goal.playerkillrewards.kr" + i + ".items",
                     getSerializableItemStacks(this.getItemMap().get(i)[0]));
-            this.arena.getConfig().setManually("goal.playerkillrewards.kr" + i+".offhand",
+            this.arena.getConfig().setManually("goal.playerkillrewards.kr" + i + ".offhand",
                     getSerializableItemStacks(this.getItemMap().get(i)[1]));
-            this.arena.getConfig().setManually("goal.playerkillrewards.kr" + i+".armor",
+            this.arena.getConfig().setManually("goal.playerkillrewards.kr" + i + ".armor",
                     getSerializableItemStacks(this.getItemMap().get(i)[2]));
         }
         this.arena.getConfig().save();
