@@ -6,6 +6,13 @@ This module adds WorldEdit hooking for BATTLE [region](../regions.md) backup, re
 
 You can also use this module to design your arena [regions](../regions.md) with a WorldEdit selection (cuboid shape only).
 
+## Installation
+
+Unzip the module files (files tab, "PA Files v*..") into the /pvparena/files folder and install them via
+
+    /pa modules install [modname], activate per arena via
+    /pa [arenaname] !tm [modname]
+
 ## Setup
 
 This module needs a full server restart to hook into WorldEdit properly, for the first time.
