@@ -3,7 +3,6 @@ package net.slipcor.pvparena.commands;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.core.Help.HELP;
-import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.core.StringParser;
 import org.bukkit.command.CommandSender;
@@ -23,7 +22,7 @@ import java.util.List;
 public class PAI_Shutup extends AbstractArenaCommand {
 
     public PAI_Shutup() {
-        super(new String[]{"pvparena.user", "pvparena.cmds.shutup"});
+        super(new String[]{"pvparena.cmds.shutup"});
     }
 
     @Override

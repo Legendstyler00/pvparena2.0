@@ -3,10 +3,9 @@ package net.slipcor.pvparena.commands;
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
-import net.slipcor.pvparena.core.Help;
 import net.slipcor.pvparena.core.Help.HELP;
-import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
+import net.slipcor.pvparena.managers.PermissionManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -49,7 +48,7 @@ public class PAA_PlayerClass extends AbstractArenaCommand {
         final String className;
 
         if (args.length > 1) {
-            if (PVPArena.hasCreatePerms(sender, arena)) {
+            if (PermissionManager.hasBuilderPerm(sender, arena)) {
                 className = args[1];
             } else {
                 className = sender.getName();

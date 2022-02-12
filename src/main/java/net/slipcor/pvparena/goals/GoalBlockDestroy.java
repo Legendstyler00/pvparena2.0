@@ -18,6 +18,7 @@ import net.slipcor.pvparena.core.StringUtils;
 import net.slipcor.pvparena.events.PAGoalEvent;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
+import net.slipcor.pvparena.managers.PermissionManager;
 import net.slipcor.pvparena.managers.SpawnManager;
 import net.slipcor.pvparena.managers.TeamManager;
 import net.slipcor.pvparena.managers.WorkflowManager;
@@ -132,7 +133,7 @@ public class GoalBlockDestroy extends ArenaGoal {
             return false;
         }
 
-        return PVPArena.hasAdminPerms(player) || PVPArena.hasCreatePerms(player, this.arena);
+        return PermissionManager.hasAdminPerm(player) || PermissionManager.hasBuilderPerm(player, this.arena);
     }
 
     private void commit(final Arena arena, final ArenaTeam arenaTeam) {

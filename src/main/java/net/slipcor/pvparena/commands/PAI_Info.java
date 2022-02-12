@@ -26,7 +26,7 @@ import java.util.*;
 public class PAI_Info extends AbstractArenaCommand {
 
     public PAI_Info() {
-        super(new String[]{"pvparena.user", "pvparena.cmds.info"});
+        super(new String[]{"pvparena.cmds.info"});
     }
 
     @Override
@@ -123,7 +123,7 @@ public class PAI_Info extends AbstractArenaCommand {
         if (displayMode == null || "perms".equals(displayMode)) {
             arena.msg(sender, MSG.INFO_SECTION, "perms");
             arena.msg(sender,
-                    StringParser.colorVar("explicitarena", cfg.getBoolean(CFG.PERMS_EXPLICITARENA)) + " | " +
+                    StringParser.colorVar("explicitarena", cfg.getBoolean(CFG.PERMS_EXPLICIT_PER_ARENA)) + " | " +
                     StringParser.colorVar("explicitclass", cfg.getBoolean(CFG.PERMS_EXPLICITCLASS)) + " | " +
                     StringParser.colorVar("joininbattle", cfg.getBoolean(CFG.PERMS_JOININBATTLE)) + " | " +
                     StringParser.colorVar("teamkill", cfg.getBoolean(CFG.PERMS_TEAMKILL)));

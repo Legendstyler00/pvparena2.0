@@ -1,16 +1,16 @@
 package net.slipcor.pvparena.loadables;
 
-import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.api.IArenaCommandHandler;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaClass;
 import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.arena.ArenaTeam;
 import net.slipcor.pvparena.classes.PABlock;
-import net.slipcor.pvparena.classes.PASpawn;
 import net.slipcor.pvparena.classes.PADeathInfo;
+import net.slipcor.pvparena.classes.PASpawn;
 import net.slipcor.pvparena.commands.CommandTree;
 import net.slipcor.pvparena.exceptions.GameplayException;
+import net.slipcor.pvparena.managers.PermissionManager;
 import net.slipcor.pvparena.regions.RegionType;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -22,8 +22,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.ItemStack;
@@ -109,11 +114,11 @@ public abstract class ArenaModule implements IArenaCommandHandler {
     }
 
     @Override
-    public boolean hasPerms(final CommandSender sender, final Arena arena) {
+    public boolean hasPerms(final CommandSender sender, final Arena arena, final boolean silent) {
         if (arena == null) {
-            return PVPArena.hasAdminPerms(sender);
+            return PermissionManager.hasAdminPerm(sender);
         }
-        return PVPArena.hasAdminPerms(sender) || PVPArena.hasCreatePerms(sender, arena);
+        return PermissionManager.hasAdminPerm(sender) || PermissionManager.hasBuilderPerm(sender, arena);
     }
 
     /**

@@ -2,9 +2,7 @@ package net.slipcor.pvparena.commands;
 
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.CollectionUtils;
-import net.slipcor.pvparena.core.Help;
 import net.slipcor.pvparena.core.Help.HELP;
-import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.managers.ConfigurationManager;
 import net.slipcor.pvparena.managers.WorkflowManager;
@@ -27,7 +25,7 @@ import java.util.Set;
 public class PAG_Spectate extends AbstractArenaCommand {
 
     public PAG_Spectate() {
-        super(new String[]{"pvparena.user", "pvparena.cmds.spectate"});
+        super(new String[]{"pvparena.cmds.spectate"});
     }
 
     @Override

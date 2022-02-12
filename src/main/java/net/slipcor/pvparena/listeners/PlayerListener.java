@@ -61,7 +61,7 @@ public class PlayerListener implements Listener {
     private boolean checkAndCommitCancel(final Arena arena, final Player player,
                                          final Cancellable event) {
 
-        if (this.willBeCancelled(player, event)) {
+        if (willBeCancelled(player, event)) {
             return true;
         }
 
@@ -79,7 +79,7 @@ public class PlayerListener implements Listener {
         }
 
         debug(player, "checkAndCommitCancel");
-        if (arena == null || player.hasPermission("pvparena.admin")) {
+        if (arena == null || PermissionManager.hasAdminPerm(player)) {
             debug(player, "no arena or admin");
             debug(player, "> false");
             return false;
@@ -193,8 +193,8 @@ public class PlayerListener implements Listener {
         }
 
         final Arena arena = ArenaPlayer.fromPlayer(player).getArena();
-        if (arena == null || player.isOp() || PVPArena.hasAdminPerms(player)
-                || PVPArena.hasCreatePerms(player, arena)) {
+        if (arena == null || player.isOp() || PermissionManager.hasAdminPerm(player)
+                || PermissionManager.hasBuilderPerm(player, arena)) {
             return; // no fighting player => OUT
         }
 
@@ -248,8 +248,8 @@ public class PlayerListener implements Listener {
         final Player player = (Player) event.getWhoClicked();
 
         final Arena arena = ArenaPlayer.fromPlayer(player).getArena();
-        if (arena == null || player.isOp() || PVPArena.hasAdminPerms(player)
-                || PVPArena.hasCreatePerms(player, arena)) {
+        if (arena == null || player.isOp() || PermissionManager.hasAdminPerm(player)
+                || PermissionManager.hasBuilderPerm(player, arena)) {
             return; // no fighting player => OUT
         }
 

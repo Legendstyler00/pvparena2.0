@@ -4,7 +4,6 @@ import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Help.HELP;
-import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.core.StringParser;
 import org.bukkit.command.CommandSender;
@@ -25,7 +24,7 @@ import java.util.List;
 public class PAG_Chat extends AbstractArenaCommand {
 
     public PAG_Chat() {
-        super(new String[]{"pvparena.user", "pvparena.cmds.chat"});
+        super(new String[]{"pvparena.cmds.chat"});
     }
 
     @Override

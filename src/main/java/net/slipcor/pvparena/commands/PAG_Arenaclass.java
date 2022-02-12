@@ -12,6 +12,7 @@ import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.core.StringParser;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
 import net.slipcor.pvparena.managers.InventoryManager;
+import net.slipcor.pvparena.managers.PermissionManager;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
@@ -37,7 +38,7 @@ import static net.slipcor.pvparena.arena.PlayerStatus.LOUNGE;
 
 public class PAG_Arenaclass extends AbstractArenaCommand {
     public PAG_Arenaclass() {
-        super(new String[]{"pvparena.user", "pvparena.cmds.arenaclass"});
+        super(new String[]{"pvparena.cmds.arenaclass"});
     }
 
     @Override
@@ -82,8 +83,7 @@ public class PAG_Arenaclass extends AbstractArenaCommand {
             return;
         }
 
-        if (arena.getConfig().getBoolean(CFG.PERMS_EXPLICITCLASS)
-                && !sender.hasPermission("pvparena.class." + arenaClass.getName())) {
+        if (!PermissionManager.hasExplicitClassPerm(sender, arena, arenaClass)) {
             arena.msg(sender, MSG.ERROR_NOPERM_CLASS, arenaClass.getName());
             return;
         }

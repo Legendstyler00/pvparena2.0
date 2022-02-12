@@ -6,8 +6,8 @@ import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.arena.ArenaTeam;
 import net.slipcor.pvparena.arena.PlayerStatus;
 import net.slipcor.pvparena.classes.PABlockLocation;
-import net.slipcor.pvparena.classes.PALocation;
 import net.slipcor.pvparena.classes.PADeathInfo;
+import net.slipcor.pvparena.classes.PALocation;
 import net.slipcor.pvparena.commands.PAA_Region;
 import net.slipcor.pvparena.core.Config;
 import net.slipcor.pvparena.core.Config.CFG;
@@ -16,6 +16,7 @@ import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 import net.slipcor.pvparena.loadables.ArenaRegionShape;
 import net.slipcor.pvparena.managers.ArenaManager;
+import net.slipcor.pvparena.managers.PermissionManager;
 import net.slipcor.pvparena.managers.SpawnManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -113,8 +114,7 @@ public class ArenaRegion {
         }
         final Arena arena = PAA_Region.activeSelections.get(player.getName());
         if (arena != null
-                && (PVPArena.hasAdminPerms(player) || PVPArena.hasCreatePerms(
-                player, arena))
+                && (PermissionManager.hasAdminPerm(player) || PermissionManager.hasBuilderPerm(player, arena))
                 && player.getEquipment() != null
                 && player.getEquipment().getItemInMainHand().getType().equals(PVPArena.getInstance().getWandItem())) {
             // - modify mode is active

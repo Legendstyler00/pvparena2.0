@@ -2,7 +2,6 @@ package net.slipcor.pvparena.commands;
 
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
-import net.slipcor.pvparena.core.Help;
 import net.slipcor.pvparena.core.Help.HELP;
 import net.slipcor.pvparena.loader.Loadable;
 import org.bukkit.ChatColor;
@@ -23,7 +22,7 @@ import java.util.List;
 public class PAI_Version extends AbstractGlobalCommand {
 
     public PAI_Version() {
-        super(new String[]{"pvparena.user", "pvparena.cmds.version"});
+        super(new String[]{"pvparena.cmds.version"});
     }
 
     @Override

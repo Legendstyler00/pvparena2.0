@@ -3,8 +3,8 @@ package net.slipcor.pvparena.modules;
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
-import net.slipcor.pvparena.arena.PlayerStatus;
 import net.slipcor.pvparena.arena.ArenaTeam;
+import net.slipcor.pvparena.arena.PlayerStatus;
 import net.slipcor.pvparena.classes.PALocation;
 import net.slipcor.pvparena.classes.PASpawn;
 import net.slipcor.pvparena.core.Config.CFG;
@@ -13,12 +13,16 @@ import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.exceptions.GameplayException;
 import net.slipcor.pvparena.loadables.ArenaModule;
 import net.slipcor.pvparena.managers.ArenaManager;
+import net.slipcor.pvparena.managers.PermissionManager;
 import net.slipcor.pvparena.managers.SpawnManager;
 import net.slipcor.pvparena.managers.TeleportManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static net.slipcor.pvparena.config.Debugger.debug;
@@ -78,8 +82,7 @@ public class StandardLounge extends ArenaModule {
 
     @Override
     public boolean handleJoin(Player player) throws GameplayException {
-        if (this.arena.isLocked() && !player.hasPermission("pvparena.admin")
-                && !(player.hasPermission("pvparena.create") && this.arena.getOwner().equals(player.getName()))) {
+        if (this.arena.isLocked() && !PermissionManager.hasAdminPerm(player) && !PermissionManager.hasBuilderPerm(player, this.arena)) {
             throw new GameplayException(Language.parse(MSG.ERROR_DISABLED));
         }
 

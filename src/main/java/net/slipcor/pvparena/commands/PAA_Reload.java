@@ -2,7 +2,6 @@ package net.slipcor.pvparena.commands;
 
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.Help.HELP;
-import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.RegionManager;
@@ -22,8 +21,12 @@ import java.util.List;
 
 public class PAA_Reload extends AbstractArenaCommand {
 
+    private static final String CMD_RELOAD_PERM = "pvparena.cmds.reload";
+    private static final String RELOAD = "reload";
+    private static final String RELOAD_SHORT = "!rl";
+
     public PAA_Reload() {
-        super(new String[]{"pvparena.cmds.reload"});
+        super(new String[]{CMD_RELOAD_PERM});
     }
 
     @Override
@@ -61,12 +64,12 @@ public class PAA_Reload extends AbstractArenaCommand {
 
     @Override
     public List<String> getMain() {
-        return Collections.singletonList("reload");
+        return Collections.singletonList(RELOAD);
     }
 
     @Override
     public List<String> getShort() {
-        return Collections.singletonList("!rl");
+        return Collections.singletonList(RELOAD_SHORT);
     }
 
     @Override

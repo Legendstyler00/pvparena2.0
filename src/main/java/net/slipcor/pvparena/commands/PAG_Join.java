@@ -1,6 +1,5 @@
 package net.slipcor.pvparena.commands;
 
-import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.core.CollectionUtils;
@@ -9,6 +8,7 @@ import net.slipcor.pvparena.core.Help.HELP;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.ConfigurationManager;
+import net.slipcor.pvparena.managers.PermissionManager;
 import net.slipcor.pvparena.managers.WorkflowManager;
 import net.slipcor.pvparena.regions.ArenaRegion;
 import org.bukkit.command.CommandSender;
@@ -30,16 +30,21 @@ import static net.slipcor.pvparena.config.Debugger.debug;
  */
 
 public class PAG_Join extends AbstractArenaCommand {
+    private static final String CMD_JOIN_PERM = "pvparena.cmds.join";
+    private static final String JOIN = "join";
+    private static final String JOIN_SHORT = "-j";
 
     //private final Debugger debug = Debugger.getInstance();
 
     public PAG_Join() {
-        super(new String[]{"pvparena.user", "pvparena.cmds.join"});
+        super(new String[]{CMD_JOIN_PERM});
     }
 
     @Override
     public void commit(final Arena arena, final CommandSender sender, final String[] args) {
-        if (!this.hasPerms(sender, arena)) {
+        if (!(this.hasPerms(sender, arena) && PermissionManager.hasExplicitArenaPerm(sender, arena, JOIN))) {
+            debug(sender, "Insufficient perms to join '{}'. Current perms: {}", arena, String.join(", ", this.perms));
+            arena.msg(sender, MSG.ERROR_NOPERM_JOIN);
             return;
         }
 
@@ -60,11 +65,6 @@ public class PAG_Join extends AbstractArenaCommand {
                                 && !arena.hasAlreadyPlayed(sender.getName()))) {
 
             arena.msg(sender, MSG.ERROR_FIGHT_IN_PROGRESS);
-            return;
-        }
-
-        if (!PVPArena.hasPerms(sender, arena)) {
-            arena.msg(sender, MSG.ERROR_NOPERM_JOIN);
             return;
         }
 
@@ -110,12 +110,12 @@ public class PAG_Join extends AbstractArenaCommand {
 
     @Override
     public List<String> getMain() {
-        return Collections.singletonList("join");
+        return Collections.singletonList(JOIN);
     }
 
     @Override
     public List<String> getShort() {
-        return Collections.singletonList("-j");
+        return Collections.singletonList(JOIN_SHORT);
     }
 
     @Override

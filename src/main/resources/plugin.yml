@@ -1,14 +1,12 @@
 name: pvparena
-author: slipcor
-authors: [slipcor, Eredrim]
+authors: [ slipcor, Eredrim ]
 prefix: PVP Arena
 main: net.slipcor.pvparena.PVPArena
 version: ${project.version}${buildVersion}
 api-version: 1.13
-softdepend: [Spout,Multiverse-Core,MultiWorld,WormholeXTreme,Vault,WorldEdit,WorldGuard,LibsDisguises,DisguiseCraft,My Worlds,CrackShot]
-description: create, manage and enhance PvP arenas
-website: http://dev.bukkit.org/server-mods/pvparena
-dev-url: http://dev.bukkit.org/server-mods/pvparena
+softdepend:[ Vault,WorldEdit,WorldGuard,LibsDisguises,DisguiseCraft,CrackShot ]
+description: Create, manage and enhance PvP arenas
+website: https://www.spigotmc.org/resources/pvp-arena.16584
 commands:
     pvparena:
         description: Base commands for the PvP arena.
@@ -22,22 +20,35 @@ commands:
             /<command> help info | help getting information
 permissions:
     pvparena.*:
-        description: Gives access to everything
-        default: op
+        description: Allows all
+        default: false
         children:
-            pvparena.admin: true
-            pvparena.override: true
-            pvparena.telepass: true
             pvparena.user: true
-            pvparena.cmds: true
+            pvparena.admin: true
+    pvparena.user:
+        description: Allows you to use the arena
+        default: true
+        children:
+            pvparena.cmds.arenaclass: true
+            pvparena.cmds.chat: true
+            pvparena.cmds.join: true
+            pvparena.cmds.leave: true
+            pvparena.cmds.spectate: true
+            pvparena.cmds.arenalist: true
+            pvparena.cmds.help: true
+            pvparena.cmds.ready: true
+            pvparena.cmds.shutup: true
+            pvparena.cmds.stats: true
     pvparena.admin:
         description: Allows you to administrate arenas
         default: op
         children:
+            pvparena.cmds.*: true
             pvparena.create: true
+            pvparena.telepass: true
     pvparena.cmds.*:
         description: Allows you to do all commands
-        default: op
+        default: false
         children:
             pvparena.cmds.blacklist: true
             pvparena.cmds.check: true
@@ -45,13 +56,11 @@ permissions:
             pvparena.cmds.create: true
             pvparena.cmds.debug: true
             pvparena.cmds.disable: true
-            pvparena.cmds.duty: true
             pvparena.cmds.edit: true
             pvparena.cmds.enable: true
             pvparena.cmds.gamemode: true
             pvparena.cmds.goal: true
-            pvparena.cmds.install: true
-            pvparena.cmds.playerclass: true
+            pvparena.cmds.modules: true
             pvparena.cmds.playerjoin: true
             pvparena.cmds.protection: true
             pvparena.cmds.region: true
@@ -60,10 +69,7 @@ permissions:
             pvparena.cmds.regiontype: true
             pvparena.cmds.reload: true
             pvparena.cmds.remove: true
-            pvparena.cmds.round: true
             pvparena.cmds.set: true
-            pvparena.cmds.setowner: true
-            pvparena.cmds.setup: true
             pvparena.cmds.spawn: true
             pvparena.cmds.start: true
             pvparena.cmds.stop: true
@@ -71,21 +77,9 @@ permissions:
             pvparena.cmds.teleport: true
             pvparena.cmds.template: true
             pvparena.cmds.togglemod: true
-            pvparena.cmds.uninstall: true
-            pvparena.cmds.update: true
             pvparena.cmds.whitelist: true
-            pvparena.cmds.arenaclass: true
-            pvparena.cmds.chat: true
-            pvparena.cmds.join: true
-            pvparena.cmds.leave: true
-            pvparena.cmds.spectate: true
-            pvparena.cmds.arenalist: true
-            pvparena.cmds.help: true
             pvparena.cmds.info: true
             pvparena.cmds.list: true
-            pvparena.cmds.ready: true
-            pvparena.cmds.shutup: true
-            pvparena.cmds.stats: true
             pvparena.cmds.version: true
     pvparena.create:
         description: Allows you to create and administrate an arena
@@ -96,9 +90,6 @@ permissions:
     pvparena.telepass:
         description: Allows you to teleport while in an arena
         default: op
-    pvparena.user:
-        description: Allows you to use the arena
-        default: true
     pvparena.cmds.blacklist:
         description: Allows you to run /pvparena blacklist
         default: op

@@ -1,6 +1,5 @@
 package net.slipcor.pvparena.loadables;
 
-import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.api.IArenaCommandHandler;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
@@ -12,6 +11,7 @@ import net.slipcor.pvparena.commands.CommandTree;
 import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.exceptions.GameplayException;
+import net.slipcor.pvparena.managers.PermissionManager;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -132,11 +132,11 @@ public class ArenaGoal implements IArenaCommandHandler {
     }
 
     @Override
-    public boolean hasPerms(final CommandSender sender, final Arena arena) {
+    public boolean hasPerms(final CommandSender sender, final Arena arena, final boolean silent) {
         if (arena == null) {
-            return PVPArena.hasAdminPerms(sender);
+            return PermissionManager.hasAdminPerm(sender);
         }
-        return PVPArena.hasAdminPerms(sender) || PVPArena.hasCreatePerms(sender, arena);
+        return PermissionManager.hasAdminPerm(sender) || PermissionManager.hasBuilderPerm(sender, arena);
     }
 
     /**

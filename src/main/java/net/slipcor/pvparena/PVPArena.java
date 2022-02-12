@@ -122,62 +122,6 @@ public class PVPArena extends JavaPlugin {
         return this.spawnOffset;
     }
 
-    /**
-     * Check if a CommandSender has admin permissions
-     *
-     * @param sender the CommandSender to check
-     * @return true if a CommandSender has admin permissions, false otherwise
-     */
-    public static boolean hasAdminPerms(final CommandSender sender) {
-        return sender.hasPermission("pvparena.admin");
-    }
-
-    /**
-     * Check if a CommandSender has creation permissions
-     *
-     * @param sender the CommandSender to check
-     * @param arena  the arena to check
-     * @return true if the CommandSender has creation permissions, false
-     * otherwise
-     */
-    public static boolean hasCreatePerms(final CommandSender sender,
-                                         final Arena arena) {
-        return sender.hasPermission("pvparena.create") && (arena == null || arena
-                .getOwner().equals(sender.getName()));
-    }
-
-    public static boolean hasOverridePerms(final CommandSender sender) {
-        if (sender instanceof Player) {
-            return sender.hasPermission("pvparena.override");
-        }
-
-        return instance.getConfig().getBoolean("consoleoffduty")
-                != sender.hasPermission("pvparena.override");
-    }
-
-    /**
-     * Check if a CommandSender has permission for an arena
-     *
-     * @param sender the CommandSender to check
-     * @param arena  the arena to check
-     * @return true if explicit permission not needed or granted, false
-     * otherwise
-     */
-    public static boolean hasPerms(final CommandSender sender, final Arena arena) {
-        debug(arena, sender, "perm check.");
-        if (arena.getConfig().getBoolean(CFG.PERMS_EXPLICITARENA)) {
-            debug(arena, sender, " - explicit: "
-                                + sender.hasPermission("pvparena.join."
-                                + arena.getName().toLowerCase()));
-        } else {
-            debug(arena, sender, sender.hasPermission("pvparena.user"));
-        }
-
-        return arena.getConfig().getBoolean(CFG.PERMS_EXPLICITARENA) ? sender
-                .hasPermission("pvparena.join." + arena.getName().toLowerCase())
-                : sender.hasPermission("pvparena.user");
-    }
-
     public boolean isShuttingDown() {
         return this.shuttingDown;
     }

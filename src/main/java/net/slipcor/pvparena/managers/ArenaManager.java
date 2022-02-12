@@ -531,7 +531,7 @@ public final class ArenaManager {
 
     public static Arena getIndirectArenaByName(final CommandSender sender, String string) {
         debug("getIndirect({}): {}", sender.getName(), string);
-        if (!usingShortcuts || PVPArena.hasOverridePerms(sender)) {
+        if (!usingShortcuts || PermissionManager.hasOverridePerm(sender)) {
             debug("out1");
             return getArenaByName(string);
         }

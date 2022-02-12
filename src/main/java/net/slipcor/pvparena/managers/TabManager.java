@@ -129,7 +129,7 @@ public final class TabManager {
                                                       final Arena arena, final List<? extends IArenaCommandHandler> list,
                                                       final String prefix) {
         for (IArenaCommandHandler ach : list) {
-            if (ach.hasPerms(sender, arena)) {
+            if (ach.hasPerms(sender, arena, true)) {
                 if(prefix.startsWith("!") || prefix.startsWith("-")) {
                     for (String value : ach.getShort()) {
                         if (startsWithIgnoreCase(value, prefix)) {

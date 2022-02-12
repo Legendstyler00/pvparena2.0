@@ -2,9 +2,7 @@ package net.slipcor.pvparena.commands;
 
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
-import net.slipcor.pvparena.core.Help;
 import net.slipcor.pvparena.core.Help.HELP;
-import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import org.bukkit.command.CommandSender;
 
@@ -23,7 +21,7 @@ import java.util.List;
 public class PAI_Help extends AbstractGlobalCommand {
 
     public PAI_Help() {
-        super(new String[]{"pvparena.user", "pvparena.cmds.help"});
+        super(new String[]{"pvparena.cmds.help"});
     }
 
     @Override

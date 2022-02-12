@@ -10,6 +10,7 @@ import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.exceptions.GameplayException;
 import net.slipcor.pvparena.loadables.ArenaModule;
 import net.slipcor.pvparena.managers.ArenaManager;
+import net.slipcor.pvparena.managers.PermissionManager;
 import net.slipcor.pvparena.runnables.ArenaWarmupRunnable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -60,8 +61,7 @@ public class WarmupJoin extends ArenaModule {
 
     @Override
     public boolean handleJoin(Player player) throws GameplayException {
-        if (this.arena.isLocked() && !player.hasPermission("pvparena.admin")
-                && !(player.hasPermission("pvparena.create") && this.arena.getOwner().equals(player.getName()))) {
+        if (this.arena.isLocked() && !PermissionManager.hasAdminPerm(player) && !PermissionManager.hasBuilderPerm(player, this.arena)) {
             throw new GameplayException(Language.parse(MSG.ERROR_DISABLED));
         }
 

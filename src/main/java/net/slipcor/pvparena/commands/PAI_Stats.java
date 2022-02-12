@@ -1,7 +1,6 @@
 package net.slipcor.pvparena.commands;
 
 import net.slipcor.pvparena.arena.Arena;
-import net.slipcor.pvparena.core.Help;
 import net.slipcor.pvparena.core.Help.HELP;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
@@ -27,7 +26,7 @@ import java.util.Map;
 public class PAI_Stats extends AbstractArenaCommand {
 
     public PAI_Stats() {
-        super(new String[]{"pvparena.user", "pvparena.cmds.stats"});
+        super(new String[]{"pvparena.cmds.stats"});
     }
 
     @Override
