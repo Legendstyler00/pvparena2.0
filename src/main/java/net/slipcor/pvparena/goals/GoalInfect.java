@@ -18,7 +18,6 @@ import net.slipcor.pvparena.managers.InventoryManager;
 import net.slipcor.pvparena.managers.TeleportManager;
 import net.slipcor.pvparena.managers.WorkflowManager;
 import net.slipcor.pvparena.managers.SpawnManager;
-import net.slipcor.pvparena.managers.WorkflowManager;
 import net.slipcor.pvparena.runnables.EndRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -386,7 +385,7 @@ public class GoalInfect extends ArenaGoal {
 
                 respawnTeam.add(aPlayer);
 
-                final ArenaClass infectedClass = this.arena.getClass("%infected%");
+                final ArenaClass infectedClass = this.arena.getArenaClass("%infected%");
                 if (infectedClass != null) {
                     aPlayer.setArenaClass(infectedClass);
                 }
@@ -517,7 +516,7 @@ public class GoalInfect extends ArenaGoal {
         }
         this.infectedTeam.add(infected);
 
-        final ArenaClass infectedClass = this.arena.getClass("%infected%");
+        final ArenaClass infectedClass = this.arena.getArenaClass("%infected%");
         if (infectedClass != null) {
             infected.setArenaClass(infectedClass);
             InventoryManager.clearInventory(infected.getPlayer());

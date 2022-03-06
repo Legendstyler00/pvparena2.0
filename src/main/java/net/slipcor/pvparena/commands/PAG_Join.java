@@ -34,8 +34,6 @@ public class PAG_Join extends AbstractArenaCommand {
     private static final String JOIN = "join";
     private static final String JOIN_SHORT = "-j";
 
-    //private final Debugger debug = Debugger.getInstance();
-
     public PAG_Join() {
         super(new String[]{CMD_JOIN_PERM});
     }

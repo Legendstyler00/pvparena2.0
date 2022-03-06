@@ -461,7 +461,7 @@ public class PlayerListener implements Listener {
                 final Sign sign = (Sign) block.getState();
 
                 if ("custom".equalsIgnoreCase(sign.getLine(0)) || arena
-                        .getClass(sign.getLine(0)) != null) {
+                        .getArenaClass(sign.getLine(0)) != null) {
                     if (arena.isFightInProgress()) {
                         PAG_Arenaclass ac = new PAG_Arenaclass();
                         ac.commit(arena, player, new String[]{sign.getLine(0)});
@@ -470,7 +470,7 @@ public class PlayerListener implements Listener {
                     }
                 } else {
                     debug(arena, player, '|' + sign.getLine(0) + '|');
-                    debug(arena, player, arena.getClass(sign.getLine(0)));
+                    debug(arena, player, arena.getArenaClass(sign.getLine(0)));
                     debug(arena, player, team);
 
                     if (whyMe) {

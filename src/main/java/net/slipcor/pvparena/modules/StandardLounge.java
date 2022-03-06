@@ -1,7 +1,6 @@
 package net.slipcor.pvparena.modules;
 
 import net.slipcor.pvparena.PVPArena;
-import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.arena.ArenaTeam;
 import net.slipcor.pvparena.arena.PlayerStatus;
@@ -94,14 +93,8 @@ public class StandardLounge extends ArenaModule {
                     MSG.ERROR_ARENA_ALREADY_PART_OF, ArenaManager.getIndirectArenaName(aPlayer.getArena())));
         }
 
-        if (aPlayer.getArenaClass() == null) {
-            String autoClass = this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS);
-            if (this.arena.getConfig().getBoolean(CFG.USES_PLAYER_OWN_INVENTORY) && this.arena.getClass(player.getName()) != null) {
-                autoClass = player.getName();
-            }
-            if (autoClass != null && this.arena.getClass(autoClass) == null) {
-                throw new GameplayException(Language.parse(MSG.ERROR_CLASS_NOT_FOUND, "autoClass"));
-            }
+        if (aPlayer.getArenaClass() == null && this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS) == null) {
+            throw new GameplayException(Language.parse(MSG.ERROR_CLASS_NOT_FOUND, "autoClass"));
         }
 
         return true;
@@ -165,8 +158,6 @@ public class StandardLounge extends ArenaModule {
 
         if (arenaPlayer.getState() == null) {
 
-            final Arena arena = arenaPlayer.getArena();
-
             // Important: clear inventory before setting player state to deal with armor modifiers (like health)
             ArenaPlayer.backupAndClearInventory(this.arena, player);
             arenaPlayer.createState(player);
@@ -174,9 +165,11 @@ public class StandardLounge extends ArenaModule {
 
 
             if (arenaPlayer.getArenaTeam() != null && arenaPlayer.getArenaClass() == null) {
-                final String autoClass = arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS);
-                if (autoClass != null && arena.getClass(autoClass) != null) {
-                    arena.chooseClass(arenaPlayer.getPlayer(), null, autoClass);
+                String autoClassCfg = this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS);
+                if (autoClassCfg != null) {
+                    this.arena.getAutoClass(autoClassCfg, arenaPlayer.getArenaTeam()).ifPresent(autoClass ->
+                            this.arena.chooseClass(player, null, autoClass)
+                    );
                 }
             }
         } else {

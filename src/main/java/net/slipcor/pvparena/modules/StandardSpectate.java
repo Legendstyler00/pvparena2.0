@@ -1,12 +1,10 @@
 package net.slipcor.pvparena.modules;
 
 import net.slipcor.pvparena.PVPArena;
-import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.arena.PlayerStatus;
 import net.slipcor.pvparena.classes.PALocation;
 import net.slipcor.pvparena.classes.PASpawn;
-import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.exceptions.GameplayException;
@@ -82,25 +80,10 @@ public class StandardSpectate extends ArenaModule {
         this.arena.msg(player, MSG.NOTICE_WELCOME_SPECTATOR);
 
         if (arenaPlayer.getState() == null) {
-
-            final Arena arena = arenaPlayer.getArena();
-
             // Important: clear inventory before setting player state to deal with armor modifiers (like health)
             ArenaPlayer.backupAndClearInventory(this.arena, player);
             arenaPlayer.createState(player);
             arenaPlayer.dump();
-
-
-            if (arenaPlayer.getArenaTeam() != null && arenaPlayer.getArenaClass() == null) {
-                String autoClass = arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS);
-                if(arena.getConfig().getBoolean(CFG.USES_PLAYER_OWN_INVENTORY) && arena.getClass(player.getName()) != null) {
-                    autoClass = player.getName();
-                }
-
-                if (autoClass != null && arena.getClass(autoClass) != null) {
-                    arena.chooseClass(player, null, autoClass);
-                }
-            }
         }
     }
 

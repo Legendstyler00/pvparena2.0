@@ -88,12 +88,13 @@ public class BattlefieldJoin extends ArenaModule {
             arenaPlayer.dump();
 
             if (arenaPlayer.getArenaTeam() != null && arenaPlayer.getArenaClass() == null) {
-                String autoClass = this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS);
-                if (this.arena.getConfig().getBoolean(CFG.USES_PLAYER_OWN_INVENTORY) && this.arena.getClass(arenaPlayer.getName()) != null) {
-                    autoClass = arenaPlayer.getName();
-                }
-                if (autoClass != null && this.arena.getClass(autoClass) != null) {
-                    this.arena.chooseClass(arenaPlayer.getPlayer(), null, autoClass);
+                String autoClassCfg = this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS);
+                if (this.arena.getConfig().getBoolean(CFG.USES_PLAYER_OWN_INVENTORY) && this.arena.getArenaClass(arenaPlayer.getName()) != null) {
+                    this.arena.chooseClass(player, null, player.getName());
+                } else if (autoClassCfg != null) {
+                    this.arena.getAutoClass(autoClassCfg, arenaPlayer.getArenaTeam()).ifPresent(autoClass ->
+                            this.arena.chooseClass(player, null, autoClass)
+                    );
                 }
             }
         } else {

@@ -34,7 +34,7 @@ public class PAA_ArenaClassChest extends AbstractArenaCommand {
             Arena.pmsg(sender, MSG.ERROR_ONLY_PLAYERS);
             return;
         }
-        final ArenaClass aClass = arena.getClass(args[0]);
+        final ArenaClass aClass = arena.getArenaClass(args[0]);
 
         if (aClass == null) {
             sender.sendMessage(Language.parse(MSG.ERROR_CLASS_NOT_FOUND, args[0]));

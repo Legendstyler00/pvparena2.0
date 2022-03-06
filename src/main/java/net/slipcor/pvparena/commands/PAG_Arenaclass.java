@@ -77,7 +77,7 @@ public class PAG_Arenaclass extends AbstractArenaCommand {
             return;
         }
 
-        final ArenaClass arenaClass = arena.getClass(args[0]);
+        final ArenaClass arenaClass = arena.getArenaClass(args[0]);
         if (arenaClass == null) {
             sender.sendMessage(Language.parse(MSG.ERROR_CLASS_NOT_FOUND, args[0]));
             return;

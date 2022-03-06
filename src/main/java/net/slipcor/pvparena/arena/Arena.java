@@ -104,11 +104,40 @@ public class Arena {
         return this.blocks;
     }
 
-    public ArenaClass getClass(final String className) {
+    public ArenaClass getArenaClass(String className) {
         return this.classes.stream()
                 .filter(ac -> ac.getName().equalsIgnoreCase(className))
                 .findAny()
                 .orElse(null);
+    }
+
+    /**
+     * Convert the team class from autoClass configuration
+     * NB: AutoClass config should have one of the following formats:
+     * - className
+     * - teamName1:classNameA;teamName2:classNameB;defaultClassName
+     * @param autoClassStr raw string configuration of autoClass
+     * @param team The team object of the current player
+     * @return An arena class name or an empty optional
+     */
+    public Optional<String> getAutoClass(String autoClassStr, ArenaTeam team) {
+        // Handle complex autoClass config
+        if (autoClassStr != null && autoClassStr.contains(":") && autoClassStr.contains(";")) {
+            final String[] definitions = autoClassStr.split(";");
+            String defaultClass = definitions[definitions.length - 1]; // last element of array is the name of the default class
+
+            String selectedClass = Arrays.stream(definitions)
+                    .map(def -> def.split(":"))
+                    .filter(defArray -> defArray.length > 1 && team.getName().equalsIgnoreCase(defArray[0]))
+                    .findAny()
+                    .map(defArray -> defArray[1])
+                    .orElse(defaultClass);
+
+            return ofNullable(this.getArenaClass(selectedClass)).map(ArenaClass::getName);
+        }
+
+        // Handle simple autoClass config (only class name)
+        return ofNullable(this.getArenaClass(autoClassStr)).map(ArenaClass::getName);
     }
 
     public Set<ArenaClass> getClasses() {
@@ -326,7 +355,7 @@ public class Arena {
     }
 
     public void addClass(String className, ItemStack[] items, ItemStack offHand, ItemStack[] armors) {
-        if (this.getClass(className) != null) {
+        if (this.getArenaClass(className) != null) {
             this.removeClass(className);
         }
 
@@ -447,7 +476,7 @@ public class Arena {
     public void countDown() {
         if (this.startRunner != null || this.fightInProgress) {
 
-            if (!this.config.getBoolean(CFG.READY_ENFORCECOUNTDOWN) && this.getClass(this.config.getString(CFG.READY_AUTOCLASS)) == null && !this.fightInProgress) {
+            if (!this.config.getBoolean(CFG.READY_ENFORCECOUNTDOWN) && this.getArenaClass(this.config.getString(CFG.READY_AUTOCLASS)) == null && !this.fightInProgress) {
                 this.startRunner.cancel();
                 this.startRunner = null;
                 this.broadcast(Language.parse(MSG.TIMER_COUNTDOWN_INTERRUPTED));
@@ -761,10 +790,10 @@ public class Arena {
                     debug(this, p.getPlayer(), "player has no class");
 
                     String autoClass = this.config.getDefinedString(CFG.READY_AUTOCLASS);
-                    if (this.config.getBoolean(CFG.USES_PLAYER_OWN_INVENTORY) && this.getClass(p.getName()) != null) {
+                    if (this.config.getBoolean(CFG.USES_PLAYER_OWN_INVENTORY) && this.getArenaClass(p.getName()) != null) {
                         autoClass = p.getName();
                     }
-                    if (autoClass != null && this.getClass(autoClass) != null) {
+                    if (autoClass != null && this.getArenaClass(autoClass) != null) {
                         this.selectClass(p, autoClass);
                     } else {
                         // player no class!
@@ -1189,33 +1218,7 @@ public class Arena {
 
         if (arenaPlayer.getArenaClass() == null) {
             String autoClass = this.config.getDefinedString(CFG.READY_AUTOCLASS);
-            if (this.config.getBoolean(CFG.USES_PLAYER_OWN_INVENTORY) && this.getClass(player.getName()) != null) {
-                autoClass = player.getName();
-            }
-
-            if (autoClass != null && autoClass.contains(":") && autoClass.contains(";")) {
-                final String[] definitions = autoClass.split(";");
-                autoClass = definitions[definitions.length - 1]; // set default
-
-                final Map<String, ArenaClass> classes = new HashMap<>();
-
-                for (String definition : definitions) {
-                    if (!definition.contains(":")) {
-                        continue;
-                    }
-                    final String[] var = definition.split(":");
-                    final ArenaClass aClass = this.getClass(var[1]);
-                    if (aClass != null) {
-                        classes.put(var[0], aClass);
-                    }
-                }
-
-                if (classes.containsKey(team.getName())) {
-                    autoClass = classes.get(team.getName()).getName();
-                }
-            }
-
-            if (autoClass != null && this.getClass(autoClass) == null) {
+            if (!this.getAutoClass(autoClass, arenaPlayer.getArenaTeam()).isPresent()) {
                 this.msg(player, MSG.ERROR_CLASS_NOT_FOUND, "autoClass");
                 return false;
             }
@@ -1235,20 +1238,18 @@ public class Arena {
 
         if (arenaPlayer.getState() == null) {
 
-            final Arena arena = arenaPlayer.getArena();
-
-            ArenaPlayer.backupAndClearInventory(arena, player);
+            ArenaPlayer.backupAndClearInventory(this, player);
             arenaPlayer.createState(player);
             arenaPlayer.dump();
 
-
             if (arenaPlayer.getArenaTeam() != null && arenaPlayer.getArenaClass() == null) {
-                String autoClass = arena.config.getDefinedString(CFG.READY_AUTOCLASS);
-                if (arena.config.getBoolean(CFG.USES_PLAYER_OWN_INVENTORY) && arena.getClass(player.getName()) != null) {
-                    autoClass = player.getName();
-                }
-                if (autoClass != null && arena.getClass(autoClass) != null) {
-                    arena.chooseClass(player, null, autoClass);
+                String autoClassCfg = this.config.getDefinedString(CFG.READY_AUTOCLASS);
+                if (this.config.getBoolean(CFG.USES_PLAYER_OWN_INVENTORY) && this.getArenaClass(player.getName()) != null) {
+                    this.chooseClass(player, null, player.getName());
+                } else if (autoClassCfg != null) {
+                    this.getAutoClass(autoClassCfg, arenaPlayer.getArenaTeam()).ifPresent(autoClass ->
+                        this.chooseClass(player, null, autoClass)
+                    );
                 }
             }
         }

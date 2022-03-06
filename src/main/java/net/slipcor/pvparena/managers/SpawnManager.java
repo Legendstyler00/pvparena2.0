@@ -557,7 +557,7 @@ public final class SpawnManager {
     private static String parseSpawnClassNameArg(Arena arena, String[] args, int offset) throws GameplayException {
         if(args.length > offset) {
             String candidate = args[offset];
-            if(arena.getClass(candidate) == null) {
+            if(arena.getArenaClass(candidate) == null) {
                 throw new GameplayException(Language.parse(Language.MSG.ERROR_CLASS_NOT_FOUND, candidate));
             }
             return candidate;

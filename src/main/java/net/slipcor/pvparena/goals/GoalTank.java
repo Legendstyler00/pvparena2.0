@@ -25,7 +25,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -258,7 +257,7 @@ public class GoalTank extends ArenaGoal {
         tankTeam.add(tank);
         this.tank = tank;
 
-        final ArenaClass tankClass = this.arena.getClass("%tank%");
+        final ArenaClass tankClass = this.arena.getArenaClass("%tank%");
         if (tankClass != null) {
             tank.setArenaClass(tankClass);
             InventoryManager.clearInventory(tank.getPlayer());
