@@ -1,6 +1,5 @@
 package net.slipcor.pvparena.commands;
 
-import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaClass;
 import net.slipcor.pvparena.arena.ArenaPlayer;
@@ -11,7 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,43 +51,45 @@ public class PAA_Class extends AbstractArenaCommand {
         // /pa {arenaname} class load [name]
         // /pa {arenaname} class remove [name]
 
+        final Player player = (Player) sender;
+        final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
+        String classname;
+
         if (args.length == 1) {
-            final Player player = (Player) sender;
-            PVPArena.getInstance().getLogger().info("Exiting edit mode: " + player.getName());
-
-            final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
-
-            aPlayer.reloadInventory(false);
-
-            aPlayer.setArena(null);
-            return;
+            // when no 2nd arg, save/remove/load class with name of player's current class
+            if (aPlayer.getArenaClass() == null) {
+                Arena.pmsg(player, MSG.ERROR_CLASS_NOT_GIVEN);
+                return;
+            }
+            classname = aPlayer.getArenaClass().getName();
+        } else {
+            classname = args[1];
         }
 
-        if ("save".equalsIgnoreCase(args[0])) {
-            final Player player = (Player) sender;
-            final List<ItemStack> items = new ArrayList<>();
-
-            arena.getConfig().setManually("classitems." + args[1] + ".items", getSerializableItemStacks(player.getInventory().getStorageContents()));
-            arena.getConfig().setManually("classitems." + args[1] + ".offhand", getSerializableItemStacks(player.getInventory().getItemInOffHand()));
-            arena.getConfig().setManually("classitems." + args[1] + ".armor", getSerializableItemStacks(player.getInventory().getArmorContents()));
-            arena.getConfig().save();
-
-            arena.addClass(args[1], player.getInventory().getStorageContents(), player.getInventory().getItemInOffHand(), player.getInventory().getArmorContents());
-            Arena.pmsg(player, MSG.CLASS_SAVED, args[1]);
-        } else if ("load".equalsIgnoreCase(args[0])) {
-            final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer((Player) sender);
+        if ("load".equalsIgnoreCase(args[0])) {
             if(aPlayer.getArenaClass() == null) {
-                ArenaPlayer.backupAndClearInventory(arena, aPlayer.getPlayer());
+                ArenaPlayer.backupAndClearInventory(arena, player);
             } else {
-                InventoryManager.clearInventory(aPlayer.getPlayer());
+                InventoryManager.clearInventory(player);
             }
-            arena.selectClass(aPlayer, args[1]);
-        } else if ("remove".equalsIgnoreCase(args[0])) {
-            final Player player = (Player) sender;
-            arena.getConfig().setManually("classitems." + args[1], null);
+            arena.selectClass(aPlayer, classname);
+        } else if ("save".equalsIgnoreCase(args[0])) {
+            ItemStack[] storage = player.getInventory().getStorageContents();
+            ItemStack offhand = player.getInventory().getItemInOffHand();
+            ItemStack[] armor = player.getInventory().getArmorContents();
+
+            arena.getConfig().setManually("classitems." + classname + ".items", getSerializableItemStacks(storage));
+            arena.getConfig().setManually("classitems." + classname + ".offhand", getSerializableItemStacks(offhand));
+            arena.getConfig().setManually("classitems." + classname + ".armor", getSerializableItemStacks(armor));
             arena.getConfig().save();
-            arena.removeClass(args[1]);
-            Arena.pmsg(player, MSG.CLASS_REMOVED, args[1]);
+
+            arena.addClass(classname, storage, offhand, armor);
+            Arena.pmsg(player, MSG.CLASS_SAVED, classname);
+        } else if ("remove".equalsIgnoreCase(args[0])) {
+            arena.getConfig().setManually("classitems." + classname, null);
+            arena.getConfig().save();
+            arena.removeClass(classname);
+            Arena.pmsg(player, MSG.CLASS_REMOVED, classname);
         }
     }
 
