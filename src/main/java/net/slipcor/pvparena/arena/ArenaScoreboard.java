@@ -319,6 +319,14 @@ public class ArenaScoreboard {
                 sbTeam.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
             }
 
+            if (!this.arena.getConfig().getBoolean(Config.CFG.USES_SHOW_NAMETAGS)) {
+                if(this.arena.isFreeForAll()) {
+                    sbTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+                } else {
+                    sbTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.FOR_OTHER_TEAMS);
+                }
+            }
+
             if (addTeamEntry) {
                 sbTeam.addEntry(team.getName());
             }

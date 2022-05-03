@@ -190,6 +190,7 @@ public class Config {
         USES_OVERLAPCHECK("uses.overlapCheck", true, null),
         USES_PLAYER_OWN_INVENTORY("uses.playerclasses", false, null),
         USES_SCOREBOARD("uses.scoreboard", false, null),
+        USES_SHOW_NAMETAGS("uses.showNametags", true, null),
         USES_SUICIDEPUNISH("uses.suicidepunish", false, null),
         USES_TEAMREWARDS("uses.teamrewards", false, null),
         USES_TELEPORTONKILL("uses.teleportonkill", false, null),

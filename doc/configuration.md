@@ -155,7 +155,7 @@ uses:
   overlapCheck: true #Set to not check if the arena region collides with a running arena
   playerclasses: false #Use players own inventory
   scoreboard: true #Enable scoreboard
-  scoreboardrounddisplay: false #Show rounds number in scoreboard
+  showNametags: true #If false, nametag of opponents will be hidden during the game
   suicidepunish: false #Increase other players score where someone commit suicide
   teamrewards: false #Give reward to winning team
   teleportonkill: false #Respawn KILLER after a kill
