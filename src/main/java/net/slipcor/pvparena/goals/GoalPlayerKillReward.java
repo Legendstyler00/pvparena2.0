@@ -1,9 +1,13 @@
 package net.slipcor.pvparena.goals;
 
 import net.slipcor.pvparena.PVPArena;
-import net.slipcor.pvparena.arena.*;
-import net.slipcor.pvparena.classes.PASpawn;
+import net.slipcor.pvparena.arena.Arena;
+import net.slipcor.pvparena.arena.ArenaClass;
+import net.slipcor.pvparena.arena.ArenaPlayer;
+import net.slipcor.pvparena.arena.ArenaTeam;
+import net.slipcor.pvparena.arena.PlayerStatus;
 import net.slipcor.pvparena.classes.PADeathInfo;
+import net.slipcor.pvparena.classes.PASpawn;
 import net.slipcor.pvparena.commands.AbstractArenaCommand;
 import net.slipcor.pvparena.commands.CommandTree;
 import net.slipcor.pvparena.core.Config.CFG;
@@ -11,7 +15,6 @@ import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.events.goal.PAGoalEndEvent;
 import net.slipcor.pvparena.events.goal.PAGoalPlayerDeathEvent;
-import net.slipcor.pvparena.events.goal.PAGoalScoreEvent;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
 import net.slipcor.pvparena.managers.ArenaManager;
@@ -27,7 +30,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static net.slipcor.pvparena.config.Debugger.debug;
 import static net.slipcor.pvparena.core.Utils.getSerializableItemStacks;
@@ -234,7 +242,7 @@ public class GoalPlayerKillReward extends ArenaGoal {
         debug(this.arena, killer, "kills to go for " + killer.getName() + ": " + iLives);
         if (iLives <= 1) {
             // player has won!
-            final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, ArenaPlayer.fromPlayer(player), ArenaPlayer.fromPlayer(killer), false);
+            final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, ArenaPlayer.fromPlayer(player), deathInfo, false);
             Bukkit.getPluginManager().callEvent(gEvent);
             final Set<ArenaPlayer> arenaPlayers = new HashSet<>();
             for (ArenaPlayer arenaPlayer : this.arena.getFighters()) {
@@ -255,7 +263,7 @@ public class GoalPlayerKillReward extends ArenaGoal {
             }
             WorkflowManager.handleEnd(this.arena, false);
         } else {
-            final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, ArenaPlayer.fromPlayer(player), ArenaPlayer.fromPlayer(killer), false);
+            final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, ArenaPlayer.fromPlayer(player), deathInfo, false);
             Bukkit.getPluginManager().callEvent(gEvent);
             iLives--;
             this.getPlayerLifeMap().put(killer, iLives);

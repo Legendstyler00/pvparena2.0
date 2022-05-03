@@ -55,4 +55,8 @@ public abstract class PAGoalEvent extends Event {
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
+
+    public boolean isTriggerEvent() {
+        return false;
+    }
 }

@@ -148,10 +148,10 @@ public class GoalTank extends ArenaGoal {
         if (iLives <= 1 || this.tank.getName().equals(arenaPlayer.getName())) {
 
             if (this.tank.getName().equals(arenaPlayer.getName())) {
-                final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, null, false);
+                final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, false);
                 Bukkit.getPluginManager().callEvent(gEvent);
             } else {
-                final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, null, doesRespawn);
+                final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, doesRespawn);
                 Bukkit.getPluginManager().callEvent(gEvent);
             }
 
@@ -164,7 +164,7 @@ public class GoalTank extends ArenaGoal {
             // player died => commit death!
             WorkflowManager.handleEnd(this.arena, false);
         } else {
-            final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, null, true);
+            final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, true);
             Bukkit.getPluginManager().callEvent(gEvent);
             iLives--;
             this.getPlayerLifeMap().put(player, iLives);

@@ -324,7 +324,7 @@ public class GoalLiberation extends ArenaGoal {
             debug(this.arena, player, "cmd: not in life map!");
             return;
         }
-        final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, null, false);
+        final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, false);
         Bukkit.getPluginManager().callEvent(gEvent);
         int lives = this.getTeamLifeMap().get(arenaTeam);
         debug(this.arena, player, "lives before death: " + lives);

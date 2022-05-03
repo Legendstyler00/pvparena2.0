@@ -358,7 +358,7 @@ public class GoalInfect extends ArenaGoal {
         if (iLives <= 1 || INFECTED.equals(aPlayer.getArenaTeam().getName())) {
             if (iLives <= 1 && INFECTED.equals(aPlayer.getArenaTeam().getName())) {
 
-                final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, aPlayer, null, false);
+                final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, aPlayer, deathInfo, false);
                 Bukkit.getPluginManager().callEvent(gEvent);
                 // kill, remove!
                 this.getPlayerLifeMap().remove(player);
@@ -369,7 +369,7 @@ public class GoalInfect extends ArenaGoal {
                 return;
             }
             if (iLives <= 1) {
-                PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, aPlayer, null, false);
+                PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, aPlayer, deathInfo, false);
                 Bukkit.getPluginManager().callEvent(gEvent);
                 // dying player -> infected
                 this.getPlayerLifeMap().put(player.getPlayer(), this.arena.getConfig().getInt(CFG.GOAL_INFECTED_ILIVES));
@@ -406,7 +406,7 @@ public class GoalInfect extends ArenaGoal {
                 return;
             }
             // dying infected player, has lives remaining
-            PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this,  aPlayer, null, true);
+            PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this,  aPlayer, deathInfo, true);
             Bukkit.getPluginManager().callEvent(gEvent);
             iLives--;
             this.getPlayerLifeMap().put(player, iLives);

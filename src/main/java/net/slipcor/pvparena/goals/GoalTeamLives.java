@@ -61,7 +61,7 @@ public class GoalTeamLives extends AbstractTeamKillGoal {
     public void commitPlayerDeath(final Player respawnPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
         final PAGoalPlayerDeathEvent gEvent;
         ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(respawnPlayer);
-        gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, null, doesRespawn);
+        gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, doesRespawn);
         Bukkit.getPluginManager().callEvent(gEvent);
 
         ArenaTeam respawnTeam = arenaPlayer.getArenaTeam();

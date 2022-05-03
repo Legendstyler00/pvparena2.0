@@ -248,7 +248,7 @@ public final class StatisticsManager {
 
         if (entity instanceof Player) {
             final Player attacker = (Player) entity;
-            if (arena.hasPlayer(attacker)) {
+            if (arena.hasPlayer(attacker) && !attacker.equals(defender)) {
                 final PAKillEvent kEvent = new PAKillEvent(arena, attacker);
                 Bukkit.getPluginManager().callEvent(kEvent);
 

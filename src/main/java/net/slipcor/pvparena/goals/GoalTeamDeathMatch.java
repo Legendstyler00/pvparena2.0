@@ -66,7 +66,7 @@ public class GoalTeamDeathMatch extends AbstractTeamKillGoal {
                 this.broadcastSimpleDeathMessage(player, deathInfo);
                 this.respawnPlayer(respawnPlayer);
                 final PAGoalPlayerDeathEvent gEvent;
-                gEvent = new PAGoalPlayerDeathEvent(this.arena, this, respawnPlayer, null, doesRespawn);
+                gEvent = new PAGoalPlayerDeathEvent(this.arena, this, respawnPlayer, deathInfo, doesRespawn);
                 Bukkit.getPluginManager().callEvent(gEvent);
                 return;
             }
@@ -88,7 +88,7 @@ public class GoalTeamDeathMatch extends AbstractTeamKillGoal {
             return;
         }
 
-        final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, respawnPlayer, ArenaPlayer.fromPlayer(killer), false);
+        final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, respawnPlayer, deathInfo, false);
         Bukkit.getPluginManager().callEvent(gEvent);
 
         if (this.getTeamLifeMap().get(killerTeam) != null) {

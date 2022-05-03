@@ -11,7 +11,7 @@ import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.core.StringParser;
-
+import net.slipcor.pvparena.events.goal.PAGoalFlagBringEvent;
 import net.slipcor.pvparena.events.goal.PAGoalFlagTakeEvent;
 import net.slipcor.pvparena.exceptions.GameplayException;
 import org.bukkit.Bukkit;
@@ -181,7 +181,7 @@ public class GoalPhysicalFlags extends AbstractFlagGoal {
                     this.reduceLivesCheckEndAndCommit(this.arena, flagTeam);
                 }
 
-                final PAGoalFlagTakeEvent gEvent = new PAGoalFlagTakeEvent(this.arena, this, arenaPlayer, flagTeam);
+                final PAGoalFlagBringEvent gEvent = new PAGoalFlagBringEvent(this.arena, this, arenaPlayer, flagTeam);
                 Bukkit.getPluginManager().callEvent(gEvent);
 
                 return true;
@@ -353,7 +353,7 @@ public class GoalPhysicalFlags extends AbstractFlagGoal {
                                             + ChatColor.YELLOW));
                 }
                 try {
-                    this.getHeadGearMap().put(ArenaPlayer.fromPlayer(player), player.getInventory().getHelmet().clone());
+                    this.getHeadGearMap().put(aPlayer, player.getInventory().getHelmet().clone());
                 } catch (final Exception ignored) {
 
                 }
@@ -370,6 +370,9 @@ public class GoalPhysicalFlags extends AbstractFlagGoal {
                 player.getInventory().addItem(flagItemStack);
                 block.setType(Material.AIR);
                 event.setCancelled(true);
+
+                final PAGoalFlagTakeEvent gEvent = new PAGoalFlagTakeEvent(this.arena, this, aPlayer, arenaTeam);
+                Bukkit.getPluginManager().callEvent(gEvent);
                 return;
             }
         }

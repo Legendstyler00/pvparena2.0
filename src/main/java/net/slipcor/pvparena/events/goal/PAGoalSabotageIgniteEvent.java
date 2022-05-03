@@ -6,7 +6,7 @@ import net.slipcor.pvparena.arena.ArenaTeam;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 
 
-public class PAGoalSabotageIgniteEvent extends PAGoalEvent {
+public class PAGoalSabotageIgniteEvent extends PAGoalTriggerEvent {
 
     private final ArenaPlayer arenaPlayer;
     private final ArenaTeam tntTeam;
@@ -36,5 +36,10 @@ public class PAGoalSabotageIgniteEvent extends PAGoalEvent {
 
     public ArenaTeam getTntTeam() {
         return this.tntTeam;
+    }
+
+    @Override
+    public ArenaPlayer getTriggerPlayer() {
+        return this.arenaPlayer;
     }
 }

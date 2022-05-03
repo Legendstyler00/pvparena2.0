@@ -6,7 +6,7 @@ import net.slipcor.pvparena.arena.ArenaTeam;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 
 
-public class PAGoalScoreEvent extends PAGoalEvent {
+public class PAGoalScoreEvent extends PAGoalTriggerEvent {
 
     private final ArenaPlayer arenaPlayer;
     private final ArenaTeam arenaTeam;
@@ -43,5 +43,10 @@ public class PAGoalScoreEvent extends PAGoalEvent {
 
     public Long getPoints() {
         return this.points;
+    }
+
+    @Override
+    public ArenaPlayer getTriggerPlayer() {
+        return this.arenaPlayer;
     }
 }

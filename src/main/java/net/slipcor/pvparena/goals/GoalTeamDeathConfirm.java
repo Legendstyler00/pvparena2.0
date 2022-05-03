@@ -66,16 +66,9 @@ public class GoalTeamDeathConfirm extends AbstractTeamKillGoal {
 
     @Override
     public void commitPlayerDeath(final Player respawnPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
-
-        final PAGoalPlayerDeathEvent gEvent;
-        Player killer = deathInfo.getKiller();
         final ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(respawnPlayer);
-        if (killer == null) {
-            gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, null, false);
-        } else {
-            gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer,
-                    ArenaPlayer.fromPlayer(killer), false);
-        }
+
+        final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, false);
         Bukkit.getPluginManager().callEvent(gEvent);
 
         final ArenaTeam respawnTeam = arenaPlayer.getArenaTeam();

@@ -73,7 +73,7 @@ public abstract class AbstractPlayerLivesGoal extends ArenaGoal {
         }
 
         ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
-        final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, null, doesRespawn);
+        final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, doesRespawn);
         Bukkit.getPluginManager().callEvent(gEvent);
 
         final int currentPlayerOrTeamLive = this.getPlayerLifeMap().get(player);
