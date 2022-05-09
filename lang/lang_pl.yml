@@ -119,9 +119,6 @@ nulang:
     WOLF: a wolf
     IRON_GOLEM: an iron golem
     SPLASH_POTION: a splash potion
-  duty:
-    'false': '&7Jesteś teraz po służbie!'
-    'true': '&7 Jesteś teraz na służbie!'
   error:
     moduleupdate: 'You need to set ''update.modules: true'' to use this command!'
     nochest: You are not looking at a chest!
@@ -243,7 +240,6 @@ nulang:
       create: use the create command
       debug: use the debug command
       disable: use the disable command
-      duty: use the duty command
       edit: use the edit command
       enable: use the enable command
       gamemode: use the gamemode command

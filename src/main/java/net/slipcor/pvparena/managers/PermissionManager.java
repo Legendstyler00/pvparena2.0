@@ -1,6 +1,5 @@
 package net.slipcor.pvparena.managers;
 
-import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaClass;
 import net.slipcor.pvparena.core.Config;
@@ -104,6 +103,7 @@ public class PermissionManager {
             return sender.hasPermission("pvparena.override");
         }
 
-        return PVPArena.getInstance().getConfig().getBoolean("consoleoffduty") != sender.hasPermission("pvparena.override");
+        // Console or command block
+        return true;
     }
 }

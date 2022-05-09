@@ -19,7 +19,6 @@ Click on a command to get its syntax, usage examples and more information about 
 Command | Shorthand | Definition
 ------------- | ------------- | -------------
 [/pa debug](commands/debug.md) | /pa !d | Debug nodes
-/pa duty | /pa !du | Toggle your shortcuts override status
 [/pa modules](commands/modules.md) | /pa !mi | Manage modules
 [/pa reload](commands/reload.md) | /pa !r | Reload arena configs
 

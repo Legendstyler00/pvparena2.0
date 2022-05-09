@@ -172,7 +172,6 @@ public class PVPArena extends JavaPlugin {
     private void loadGlobalCommands() {
         this.globalCommands.add(new PAA_Create());
         this.globalCommands.add(new PAA_Debug());
-        this.globalCommands.add(new PAA_Duty());
         this.globalCommands.add(new PAA_Modules());
         this.globalCommands.add(new PAA_ReloadAll());
         this.globalCommands.add(new PAI_ArenaList());

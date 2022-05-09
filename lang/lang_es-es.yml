@@ -85,9 +85,6 @@ nulang:
     WOLF: un Lobo
     IRON_GOLEM: un Iron Golem
     SPLASH_POTION: una Poción Arrojadiza
-  duty:
-    'false': You are now off duty!
-    'true': You are now on duty!
   error:
     arena:
       alreadyplaying: ¡Ya eres parte de &a%1%&r!

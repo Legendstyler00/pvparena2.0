@@ -93,9 +93,6 @@ nulang:
     WOLF: un loup
     IRON_GOLEM: un golem de fer
     SPLASH_POTION: une potion splash
-  duty:
-    'false': You are now off duty!
-    'true': You are now on duty!
   error:
     arena:
       alreadyplaying: Vous faites déjà partie de &a%1%&r
@@ -218,7 +215,6 @@ nulang:
       create: d'utiliser la commande create
       debug: d'utiliser la commande debug
       disable: d'utiliser la commande disable
-      duty: d'utiliser la commande duty
       edit: d'utiliser la commande edit
       enable: d'utiliser la commande enable
       gamemode: d'utiliser la commande gamemode

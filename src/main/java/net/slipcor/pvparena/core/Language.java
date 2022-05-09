@@ -114,9 +114,6 @@ public final class Language {
         DEATHCAUSE_IRON_GOLEM("nulang.deathcause.IRON_GOLEM", "an iron golem"),
         DEATHCAUSE_SPLASH_POTION("nulang.deathcause.SPLASH_POTION", "a splash potion"),
 
-        DUTY_FALSE("nulang.duty.false", "You are now off duty!"),
-        DUTY_TRUE("nulang.duty.true", "You are now on duty!"),
-
         ERROR_ARENA_ALREADY_PART_OF("nulang.error.arena.alreadyplaying", "You are already part of &a%1%&r!"),
         ERROR_ARENA_EXISTS("nulang.error.arenaexists", "Arena already exists!"),
         ERROR_ARENA_NOTFOUND("nulang.error.arenanotexists", "Arena does not exist: %1%"),
@@ -184,7 +181,6 @@ public final class Language {
         ERROR_NOPERM_C_CREATE("nulang.nopermto.cmds.create", "use the create command"),
         ERROR_NOPERM_C_DEBUG("nulang.nopermto.cmds.debug", "use the debug command"),
         ERROR_NOPERM_C_DISABLE("nulang.nopermto.cmds.disable", "use the disable command"),
-        ERROR_NOPERM_C_DUTY("nulang.nopermto.cmds.duty", "use the duty command"),
         ERROR_NOPERM_C_EDIT("nulang.nopermto.cmds.edit", "use the edit command"),
         ERROR_NOPERM_C_ENABLE("nulang.nopermto.cmds.enable", "use the enable command"),
         ERROR_NOPERM_C_GAMEMODE("nulang.nopermto.cmds.gamemode", "use the gamemode command"),

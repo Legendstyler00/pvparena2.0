@@ -108,9 +108,6 @@ permissions:
     pvparena.cmds.disable:
         description: Allows you to run /pvparena disable
         default: op
-    pvparena.cmds.duty:
-        description: Allows you to run /pvparena duty
-        default: op
     pvparena.cmds.edit:
         description: Allows you to run /pvparena edit
         default: op
