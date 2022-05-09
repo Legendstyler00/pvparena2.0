@@ -86,11 +86,10 @@ public class JarLoader<T> {
                 logger.warning(String.format("The JAR file %s failed to load", file.getName()));
                 e.printStackTrace();
 
-            } catch (final Exception e) {
+            } catch (final Exception | Error e) {
                 logger.warning("Unknown cause");
                 logger.warning(String.format("The JAR file %s failed to load", file.getName()));
                 e.printStackTrace();
-
             }
         });
 
