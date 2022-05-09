@@ -137,7 +137,6 @@ public class PVPArena extends JavaPlugin {
         this.arenaCommands.add(new PAA_ForceWin());
         this.arenaCommands.add(new PAA_Goal());
         this.arenaCommands.add(new PAA_PlayerJoin());
-        this.arenaCommands.add(new PAA_PlayerClass());
         this.arenaCommands.add(new PAA_Protection());
         this.arenaCommands.add(new PAA_Regions());
         this.arenaCommands.add(new PAA_Region());
