@@ -143,7 +143,6 @@ tp:
   exit: exit #Spawnpoint where player goes after he leaves the arena
   lose: exit #Spawnpoint where player or team goes if they lose the match
   win: exit #Spawnpoint where player or team goes if they win the match
-  offsets: [] #Spawnpoint offsets. List of strings with following format : "spawnName:xOffset;yOffset;zOffset"
 uses:
   classSignsDisplay: false #Display player names on class signs
   deathMessages: true #Show death messages (from language file)

@@ -19,8 +19,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -178,7 +176,6 @@ public class Config {
         TP_EXIT("tp.exit", "old", null),
         TP_LOSE("tp.lose", "old", null),
         TP_WIN("tp.win", "old", null),
-        TP_OFFSETS("tp.offsets", new HashMap<>(), null),
 
         USES_CLASSSIGNSDISPLAY("uses.classSignsDisplay", false, null),
         USES_DEATHMESSAGES("uses.deathMessages", true, null),
@@ -1130,34 +1127,6 @@ public class Config {
 
         // "world,x1,y1,z1,x2,y2,z2,shape,FLAGS,PROTS,TYPE"
         return StringParser.joinArray(result, ",");
-    }
-
-    public void setOffset(String spawnName, double x, double y, double z) {
-        Map<String, String> offsets = this.getStringMap(CFG.TP_OFFSETS);
-        offsets.put(spawnName, String.format("%.1f;%.1f;%.1f", x, y, z));
-
-        this.cfg.set(CFG.TP_OFFSETS.getNode(), offsets);
-        this.save();
-    }
-
-    @NotNull
-    public Vector getOffset(String spawnName) {
-        Map<String, String> offsets = this.getStringMap(CFG.TP_OFFSETS);
-        String value = offsets.get(spawnName);
-
-        if (value != null && value.contains(";")) {
-            String[] vals = value.split(";");
-            try {
-                return new Vector(
-                        Double.parseDouble(vals[0]),
-                        Double.parseDouble(vals[1]),
-                        Double.parseDouble(vals[2])
-                );
-            } catch (Exception ignored) {
-
-            }
-        }
-        return new Vector(0, 0, 0);
     }
 
     /**

@@ -14,9 +14,11 @@ import net.slipcor.pvparena.loadables.ArenaModuleManager;
 import net.slipcor.pvparena.regions.RegionType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Random;
+import java.util.Set;
 
 import static net.slipcor.pvparena.classes.PASpawn.OLD;
 import static net.slipcor.pvparena.classes.PASpawn.SPECTATOR;
@@ -127,9 +129,6 @@ public final class TeleportManager {
 
         debug("raw location: {}", spawn);
 
-        spawn.setOffset(arena.getConfig().getOffset(spawn.getName()));
-        debug("offset location: {}", spawn.getOffset());
-
         arenaPlayer.setTeleporting(true);
         arenaPlayer.setTelePass(true);
         return spawn;
@@ -205,12 +204,11 @@ public final class TeleportManager {
                         arenaPlayer.setTeleporting(false);
                     }
                 } else {
-                    Vector offset = arena.getConfig().getOffset(destination);
                     PALocation loc = SpawnManager.getSpawnByExactName(arena, destination);
                     if (loc == null) {
                         new Exception("RESET Spawn null: " + arena.getName() + "->" + destination).printStackTrace();
                     } else {
-                        player.teleport(loc.toLocation().add(offset));
+                        player.teleport(loc.toLocation());
                         arenaPlayer.setTelePass(false);
                         arenaPlayer.setTeleporting(false);
                     }
