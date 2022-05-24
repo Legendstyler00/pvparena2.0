@@ -50,7 +50,7 @@ public class PAA_Spawn extends AbstractArenaCommand {
             return;
         }
 
-        if (!argCountValid(sender, arena, args, new Integer[]{1, 2, 3, 4})) {
+        if (!argCountValid(sender, arena, args, new Integer[]{2, 3, 4})) {
             return;
         }
 
