@@ -300,6 +300,11 @@ public final class ConfigurationManager {
         }
 
         Optional.ofNullable(SpawnManager.isSpawnsSetup(arena)).ifPresent(errors::add);
+
+        if(errors.isEmpty()) {
+            Optional.ofNullable(SpawnManager.areSpawnsInBattlefield(arena)).ifPresent(errors::add);
+        }
+
         Optional.ofNullable(SpawnManager.isBlocksSetup(arena)).ifPresent(errors::add);
 
         return errors;

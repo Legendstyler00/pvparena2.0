@@ -151,6 +151,7 @@ public final class Language {
         ERROR_MAT_NOT_FOUND("nulang.error.log.matnotfound", "Unrecognized material: %1%"),
         ERROR_MISSING_SPAWN("nulang.error.missingspawn", "Spawn(s) missing: &r%1%"),
         ERROR_MISSING_BLOCK("nulang.error.missingblock", "Block(s) missing: &r%1%"),
+        ERROR_OUT_OF_BOUNDS_SPAWN("nullang.error.outofboudsspawn", "Following spawn(s) are out of bounds of your BATTLE region(s): &r%1%"),
         ERROR_MODULE_UPDATE("nulang.error.moduleupdate", "You need to set 'update.modules: true' to use this command!"),
         ERROR_NO_ARENAS("nulang.error.noarenas", "No arenas found!"),
         ERROR_NEGATIVES("nulang.error.valueneg", "Negative values: &c%1%&r"),

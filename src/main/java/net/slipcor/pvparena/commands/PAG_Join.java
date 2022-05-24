@@ -66,10 +66,13 @@ public class PAG_Join extends AbstractArenaCommand {
             return;
         }
 
-        final Set<String> errors = ConfigurationManager.isSetup(arena);
-        if (CollectionUtils.isNotEmpty(errors)) {
-            errors.forEach(error -> arena.msg(sender, MSG.ERROR_ERROR, error));
-            return;
+        // Only check the first player who joins the arena
+        if(arena.getEveryone().isEmpty()) {
+            final Set<String> errors = ConfigurationManager.isSetup(arena);
+            if (CollectionUtils.isNotEmpty(errors)) {
+                errors.forEach(error -> arena.msg(sender, MSG.ERROR_ERROR, error));
+                return;
+            }
         }
 
         if (ArenaRegion.tooFarAway(arena, (Player) sender)) {

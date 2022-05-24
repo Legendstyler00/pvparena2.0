@@ -817,6 +817,24 @@ public final class SpawnManager {
         return null;
     }
 
+    public static String areSpawnsInBattlefield(Arena arena) {
+        Set<ArenaRegion> regions = arena.getRegionsByType(RegionType.BATTLE);
+
+        if(!regions.isEmpty()) {
+            String errorMsg = arena.getSpawns().stream()
+                    .filter(spawn -> StringUtils.startsWithIgnoreCase(spawn.getName(), SPAWN))
+                    .filter(spawn -> regions.stream().noneMatch(rg -> rg.containsLocation(spawn.getPALocation())))
+                    .map(PASpawn::getPrettyName)
+                    .collect(Collectors.joining(", "));
+
+            if(StringUtils.notBlank(errorMsg)) {
+                return Language.parse(Language.MSG.ERROR_OUT_OF_BOUNDS_SPAWN, errorMsg);
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Get missing spawn with name, empty otherwise
      *
