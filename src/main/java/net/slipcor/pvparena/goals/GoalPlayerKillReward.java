@@ -55,8 +55,6 @@ import static net.slipcor.pvparena.core.Utils.getSerializableItemStacks;
 
 public class GoalPlayerKillReward extends ArenaGoal {
 
-    public static final String SPAWN = "spawn";
-
     public GoalPlayerKillReward() {
         super("PlayerKillReward");
     }

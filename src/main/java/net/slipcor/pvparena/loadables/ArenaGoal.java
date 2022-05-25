@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static net.slipcor.pvparena.classes.PASpawn.FIGHT;
 import static net.slipcor.pvparena.config.Debugger.trace;
 
 /**
@@ -48,7 +49,6 @@ import static net.slipcor.pvparena.config.Debugger.trace;
  */
 
 public class ArenaGoal implements IArenaCommandHandler {
-    public static final String SPAWN = "spawn";
     protected String name;
     protected Arena arena;
     protected Map<ArenaTeam, Integer> teamLifeMap = new HashMap<>();
@@ -393,9 +393,9 @@ public class ArenaGoal implements IArenaCommandHandler {
         boolean hasByClass = false;
         if (this.arena.getConfig().getBoolean(CFG.GENERAL_SPAWN_PER_CLASS)) {
             hasByClass = this.arena.getClasses().stream().
-                    anyMatch(aClass -> spawnName.toLowerCase().startsWith(aClass.getName().toLowerCase() + SPAWN));
+                    anyMatch(aClass -> spawnName.toLowerCase().startsWith(aClass.getName().toLowerCase() + FIGHT));
         }
-        return hasByClass || spawnName.toLowerCase().startsWith(SPAWN);
+        return hasByClass || spawnName.toLowerCase().startsWith(FIGHT);
     }
 
     public boolean hasTeamSpawn(String spawnName, String spawnTeamName) {
@@ -404,11 +404,11 @@ public class ArenaGoal implements IArenaCommandHandler {
             boolean hasByClass = false;
             if (this.arena.getConfig().getBoolean(CFG.GENERAL_SPAWN_PER_CLASS)) {
                 hasByClass = this.arena.getClasses().stream().
-                        anyMatch(aClass -> spawnName.toLowerCase().startsWith(aClass.getName().toLowerCase() + SPAWN)
+                        anyMatch(aClass -> spawnName.toLowerCase().startsWith(aClass.getName().toLowerCase() + FIGHT)
                                 && spawnTeamName.equalsIgnoreCase(teamName));
             }
             trace("Has team {} spawn: class spawn: {}, spawn name: {}", teamName, hasByClass, spawnName);
-            final boolean hasSpawn = hasByClass || (spawnName.toLowerCase().startsWith(SPAWN)
+            final boolean hasSpawn = hasByClass || (spawnName.toLowerCase().startsWith(FIGHT)
                     && teamName.equalsIgnoreCase(spawnTeamName));
             if (hasSpawn) {
                 return true;

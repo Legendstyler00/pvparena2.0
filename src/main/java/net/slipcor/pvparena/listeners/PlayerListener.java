@@ -561,7 +561,7 @@ public class PlayerListener implements Listener {
                 ArenaPlayer.fromPlayer(player).setStatus(
                         PlayerStatus.FIGHT);
 
-                TeleportManager.teleportPlayerToRandomSpawn(arena, arenaPlayer, SpawnManager.selectSpawnsForPlayer(arena, arenaPlayer, PASpawn.SPAWN));
+                TeleportManager.teleportPlayerToRandomSpawn(arena, arenaPlayer, SpawnManager.selectSpawnsForPlayer(arena, arenaPlayer, PASpawn.FIGHT));
 
                 ArenaModuleManager.lateJoin(arena, player);
                 arena.getGoal().lateJoin(player);

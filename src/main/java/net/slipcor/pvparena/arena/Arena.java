@@ -347,7 +347,7 @@ public class Arena {
                 .findAny()
                 .map(rg -> Bukkit.getWorld(rg.getWorldName()))
                 .orElse(this.spawns.stream()
-                        .filter(spawn -> spawn.getName().contains(SPAWN))
+                        .filter(spawn -> spawn.getName().contains(FIGHT))
                         .findAny()
                         .map(spawn -> spawn.getPALocation().getWorld())
                         .orElse(Bukkit.getWorlds().get(0))
@@ -1228,7 +1228,7 @@ public class Arena {
         team.add(arenaPlayer);
         arenaPlayer.setStatus(PlayerStatus.FIGHT);
 
-        final Set<PASpawn> availableSpawns = SpawnManager.selectSpawnsForPlayer(this, arenaPlayer, SPAWN);
+        final Set<PASpawn> availableSpawns = SpawnManager.selectSpawnsForPlayer(this, arenaPlayer, FIGHT);
 
         if(availableSpawns.isEmpty()){
             PVPArena.getInstance().getLogger().severe("No available spawn found !");

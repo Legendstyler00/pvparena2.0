@@ -31,7 +31,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.slipcor.pvparena.classes.PASpawn.OLD;
-import static net.slipcor.pvparena.classes.PASpawn.SPAWN;
+import static net.slipcor.pvparena.classes.PASpawn.FIGHT;
 import static java.util.Optional.ofNullable;
 import static net.slipcor.pvparena.config.Debugger.debug;
 import static net.slipcor.pvparena.config.Debugger.trace;
@@ -95,7 +95,7 @@ public final class SpawnManager {
             return;
         }
 
-        Set<PASpawn> spawns = selectSpawnsForTeam(arena, arenaTeam, SPAWN);
+        Set<PASpawn> spawns = selectSpawnsForTeam(arena, arenaTeam, FIGHT);
 
         if (spawns.isEmpty()) {
             return;
@@ -120,12 +120,12 @@ public final class SpawnManager {
                             .collect(Collectors.toMap(
                                     arenaClassName -> arenaClassName,
                                     arenaClassName -> SpawnManager
-                                            .getPASpawnsStartingWith(arena, SPAWN, arenaTeam.getName(), arenaClassName)
+                                            .getPASpawnsStartingWith(arena, FIGHT, arenaTeam.getName(), arenaClassName)
                                             .stream().sorted(spawnNameComparator())
                                             .collect(Collectors.toList())
                             ));
                 } else {
-                    this.spawns = selectSpawnsForTeam(arena, arenaTeam, SPAWN).stream()
+                    this.spawns = selectSpawnsForTeam(arena, arenaTeam, FIGHT).stream()
                             .sorted(spawnNameComparator())
                             .collect(Collectors.toList());
                 }
@@ -182,7 +182,7 @@ public final class SpawnManager {
             return;
         }
 
-        Set<PASpawn> locations = selectSpawnsForTeam(arena, arenaTeam, SPAWN);
+        Set<PASpawn> locations = selectSpawnsForTeam(arena, arenaTeam, FIGHT);
         Set<PASpawn> totalLocations = new HashSet<>(locations);
 
         if (locations.isEmpty()) {
@@ -300,9 +300,9 @@ public final class SpawnManager {
                             .map(ArenaClass::getName)
                             .collect(Collectors.toMap(
                                     arenaClassName -> arenaClassName,
-                                    arenaClassName -> SpawnManager.getPASpawnsStartingWith(arena, SPAWN, arenaTeam.getName(), arenaClassName)));
+                                    arenaClassName -> SpawnManager.getPASpawnsStartingWith(arena, FIGHT, arenaTeam.getName(), arenaClassName)));
                 } else {
-                    this.spawns = selectSpawnsForTeam(arena, arenaTeam, SPAWN);
+                    this.spawns = selectSpawnsForTeam(arena, arenaTeam, FIGHT);
                 }
             }
 
@@ -518,7 +518,7 @@ public final class SpawnManager {
             return new PABlockLocation(Bukkit.getWorlds().get(0).getSpawnLocation());
         }
 
-        Set<PALocation> locs = new HashSet<>(getSpawnsContaining(arena, SPAWN));
+        Set<PALocation> locs = new HashSet<>(getSpawnsContaining(arena, FIGHT));
 
         long x = 0;
         long y = 0;
@@ -537,7 +537,8 @@ public final class SpawnManager {
                 (int) x / locs.size(), (int) y / locs.size(), (int) z / locs.size());
     }
 
-    public static String[] parseSpawnNameArgs(Arena arena, String[] args) throws GameplayException {
+    public static String[] parseSpawnNameFromConfig(Arena arena, String spawnNode) throws GameplayException {
+        String[] args = spawnNode.split("_");
         String teamName = null;
         String className;
         String spawnName;
@@ -551,7 +552,22 @@ public final class SpawnManager {
             className = parseSpawnClassNameArg(arena, args, 2);
         }
 
-        return new String[]{teamName, spawnName, className};
+        return new String[]{spawnName, teamName, className};
+    }
+
+    public static String[] parseSpawnNameArgs(Arena arena, String[] args) throws GameplayException {
+        String teamName = null;
+        String className;
+        String spawnName = args[0];
+
+        if (args.length < 2 || arena.getTeam(args[1]) == null) {
+            className = parseSpawnClassNameArg(arena, args, 1);
+        } else {
+            teamName = args[1];
+            className = parseSpawnClassNameArg(arena, args, 2);
+        }
+
+        return new String[]{spawnName, teamName, className};
     }
 
     private static String parseSpawnClassNameArg(Arena arena, String[] args, int offset) throws GameplayException {
@@ -678,11 +694,11 @@ public final class SpawnManager {
         Set<PALocation> spawns = new HashSet<>();
 
         if (arena.getConfig().getBoolean(CFG.GENERAL_SPAWN_PER_CLASS)) {
-            spawns.addAll(SpawnManager.getSpawnsContaining(arena, team.getName() + aPlayer.getArenaClass().getName() + SPAWN));
+            spawns.addAll(SpawnManager.getSpawnsContaining(arena, team.getName() + aPlayer.getArenaClass().getName() + FIGHT));
         } else if (arena.isFreeForAll()) {
-            spawns.addAll(SpawnManager.getSpawnsLocationStartingWith(arena, SPAWN));
+            spawns.addAll(SpawnManager.getSpawnsLocationStartingWith(arena, FIGHT));
         } else {
-            spawns.addAll(SpawnManager.getSpawnsLocationStartingWith(arena, team.getName() + SPAWN));
+            spawns.addAll(SpawnManager.getSpawnsLocationStartingWith(arena, team.getName() + FIGHT));
         }
 
         for (PALocation loc : spawns) {
@@ -822,7 +838,7 @@ public final class SpawnManager {
 
         if(!regions.isEmpty()) {
             String errorMsg = arena.getSpawns().stream()
-                    .filter(spawn -> StringUtils.startsWithIgnoreCase(spawn.getName(), SPAWN))
+                    .filter(spawn -> StringUtils.startsWithIgnoreCase(spawn.getName(), FIGHT))
                     .filter(spawn -> regions.stream().noneMatch(rg -> rg.containsLocation(spawn.getPALocation())))
                     .map(PASpawn::getPrettyName)
                     .collect(Collectors.joining(", "));
@@ -859,7 +875,7 @@ public final class SpawnManager {
         Set<PASpawn> missing = new HashSet<>();
         int minPlayers = arena.getConfig().getInt(CFG.READY_MINPLAYERS);
         for (int i = 1; i <= minPlayers; i++) {
-            missing.addAll(getMissingSpawns(spawns, SPAWN + i));
+            missing.addAll(getMissingSpawns(spawns, FIGHT + i));
         }
         return missing;
     }
@@ -888,7 +904,7 @@ public final class SpawnManager {
      */
     public static Set<PASpawn> getMissingTeamSpawn(Arena arena, Set<PASpawn> spawns) {
         return arena.getTeams().stream()
-                .map(team -> new PASpawn(null, SPAWN, team.getName(), null))
+                .map(team -> new PASpawn(null, FIGHT, team.getName(), null))
                 .filter(teamSpawn -> spawns.stream()
                         .noneMatch(spawn -> spawn.getName().startsWith(teamSpawn.getName())
                                 && spawn.getTeamName().equals(teamSpawn.getTeamName())))

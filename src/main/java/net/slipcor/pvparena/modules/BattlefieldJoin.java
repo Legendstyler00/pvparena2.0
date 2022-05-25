@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Set;
 
-import static net.slipcor.pvparena.classes.PASpawn.SPAWN;
+import static net.slipcor.pvparena.classes.PASpawn.FIGHT;
 import static net.slipcor.pvparena.config.Debugger.debug;
 
 /**
@@ -77,7 +77,7 @@ public class BattlefieldJoin extends ArenaModule {
 
         arenaPlayer.setArena(this.arena);
         arenaTeam.add(arenaPlayer);
-        final Set<PASpawn> spawns = SpawnManager.selectSpawnsForPlayer(this.arena, arenaPlayer, SPAWN);
+        final Set<PASpawn> spawns = SpawnManager.selectSpawnsForPlayer(this.arena, arenaPlayer, FIGHT);
 
         TeleportManager.teleportPlayerToSpawnForJoin(this.arena, arenaPlayer, spawns, true);
 

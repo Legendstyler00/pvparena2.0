@@ -31,8 +31,8 @@ public class PALocation {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.pitch = pitch;
-        this.yaw = yaw;
+        this.pitch = Math.round(pitch);
+        this.yaw = Math.round(yaw);
     }
 
     public PALocation(final Location bukkitLocation) {
@@ -40,8 +40,8 @@ public class PALocation {
         this.x = bukkitLocation.getX();
         this.y = bukkitLocation.getY();
         this.z = bukkitLocation.getZ();
-        this.pitch = bukkitLocation.getPitch();
-        this.yaw = bukkitLocation.getYaw();
+        this.pitch = Math.round(bukkitLocation.getPitch());
+        this.yaw = Math.round(bukkitLocation.getYaw());
     }
 
     public PALocation add(final double x, final double y, final double z) {

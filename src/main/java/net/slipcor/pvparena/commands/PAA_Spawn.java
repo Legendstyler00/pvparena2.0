@@ -38,8 +38,6 @@ public class PAA_Spawn extends AbstractArenaCommand {
 
     private static final List<String> DEFAULTS_SPAWNS = Stream.of("exit", "spectator").collect(Collectors.toList());
 
-    public static final String DECIMAL = "decimal";
-
     public PAA_Spawn() {
         super(new String[]{"pvparena.cmds.spawn"});
     }
@@ -64,11 +62,11 @@ public class PAA_Spawn extends AbstractArenaCommand {
         try {
             switch (args[0]) {
                 case "set":
-                    // usage: /pa {arenaname} spawn set (teamName) [spawnname] (className)
+                    // usage: /pa {arenaname} spawn set <spawnname> [teamName] [className]
                     this.addSpawn(arena, player, Arrays.copyOfRange(args, 1, args.length));
                     break;
                 case "remove":
-                    // usage: /pa {arenaname} spawn remove (teamName) [spawnname] (className)
+                    // usage: /pa {arenaname} spawn remove <spawnname> [teamName] [className]
                     this.removeSpawn(arena, player, Arrays.copyOfRange(args, 1, args.length));
                     break;
                 default:
@@ -80,10 +78,10 @@ public class PAA_Spawn extends AbstractArenaCommand {
     }
 
     private void removeSpawn(Arena arena, Player player, String[] args) throws GameplayException {
-        // usage: /pa {arenaname} spawn remove (team) [spawnname] (class) | remove a spawn
+        // usage: /pa {arenaname} spawn remove <spawnname> [team] [class] | remove a spawn
         String[] parsedArgs = parseSpawnNameArgs(arena, args);
-        String teamName = parsedArgs[0];
-        String spawnName = parsedArgs[1];
+        String spawnName = parsedArgs[0];
+        String teamName = parsedArgs[1];
         String className = parsedArgs[2];
 
         final PALocation location = SpawnManager.getSpawnByExactName(arena, spawnName, teamName, className);
@@ -96,12 +94,12 @@ public class PAA_Spawn extends AbstractArenaCommand {
     }
 
     private void addSpawn(Arena arena, Player player, String[] args) throws GameplayException {
-        // usage: /pa {arenaname} spawn set (teamName) [spawnname] (className) | set a spawn (for team) (for a specific class)
+        // usage: /pa {arenaname} spawn set <spawnname> [team] [class] | set a spawn (for team) (for a specific class)
         String[] parsedArgs = parseSpawnNameArgs(arena, args);
         this.addSpawn(player, arena, parsedArgs[0], parsedArgs[1], parsedArgs[2]);
     }
 
-    private void addSpawn(Player player, Arena arena, String teamName, String spawnName, String className) {
+    private void addSpawn(Player player, Arena arena, String spawnName, String teamName, String className) {
         debug("Adding spawn \"{}\" for team \"{}\" and class \"{}\"", spawnName, teamName, className);
         ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
         PASpawn newSpawn = new PASpawn(new PALocation(arenaPlayer.getPlayer().getLocation()), spawnName, teamName, className);
@@ -173,11 +171,11 @@ public class PAA_Spawn extends AbstractArenaCommand {
         for (PASpawn spawn : arena.getSpawns()) {
             if (spawn.hasTeamName()) {
                 if(spawn.hasClassName()) {
-                    result.define(new String[]{"set", spawn.getTeamName(), spawn.getName(), spawn.getClassName()});
-                    result.define(new String[]{"remove", spawn.getTeamName(), spawn.getName(), spawn.getClassName()});
+                    result.define(new String[]{"set", spawn.getName(), spawn.getTeamName(), spawn.getClassName()});
+                    result.define(new String[]{"remove", spawn.getName(), spawn.getTeamName(), spawn.getClassName()});
                 } else {
-                    result.define(new String[]{"set", spawn.getTeamName(), spawn.getName()});
-                    result.define(new String[]{"remove", spawn.getTeamName(), spawn.getName()});
+                    result.define(new String[]{"set", spawn.getName(), spawn.getTeamName(),});
+                    result.define(new String[]{"remove", spawn.getName(), spawn.getTeamName(),});
                 }
             } else if (spawn.hasClassName()) {
                 result.define(new String[]{"set", spawn.getName(), spawn.getClassName()});
@@ -203,7 +201,7 @@ public class PAA_Spawn extends AbstractArenaCommand {
 
         complexSpawns.forEach(paSpawn -> {
             if(paSpawn.hasTeamName()) {
-                result.define(new String[]{"set", paSpawn.getTeamName(), paSpawn.getName()});
+                result.define(new String[]{"set", paSpawn.getName(), paSpawn.getTeamName()});
             } else {
                 result.define(new String[]{"set", paSpawn.getName()});
             }

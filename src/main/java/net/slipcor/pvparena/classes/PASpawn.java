@@ -13,7 +13,7 @@ import static java.util.Optional.ofNullable;
 
 public class PASpawn {
 
-    public static final String SPAWN = "spawn";
+    public static final String FIGHT = "fight";
     public static final String SPECTATOR = "spectator";
     public static final String OLD = "old";
     public static final String EXIT = "exit";
@@ -49,10 +49,9 @@ public class PASpawn {
      */
     public static PASpawn deserialize(String spawnNode, String location, Arena arena) {
         try {
-            String[] spawnArgs = spawnNode.split("_");
-            String[] parsedArgs = SpawnManager.parseSpawnNameArgs(arena, spawnArgs);
-            String teamName = parsedArgs[0];
-            String spawnName = parsedArgs[1];
+            String[] parsedArgs = SpawnManager.parseSpawnNameFromConfig(arena, spawnNode);
+            String spawnName = parsedArgs[0];
+            String teamName = parsedArgs[1];
             String className = parsedArgs[2];
             return new PASpawn(Config.parseLocation(location), spawnName, teamName, className);
         } catch (GameplayException e) {

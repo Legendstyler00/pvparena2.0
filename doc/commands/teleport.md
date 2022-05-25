@@ -7,13 +7,13 @@ not during game.
 
 ## Usage
 
-Command |  Definition
-------------- | -------------
-/pa [arena] teleport [spawnPoint] | teleport to a spawn point of an arena
+| Command                           | Definition                            |
+|-----------------------------------|---------------------------------------|
+| /pa [arena] teleport [spawnPoint] | teleport to a spawn point of an arena |
 
 Examples:
-- `/pa free teleport spawn` - teleport to a random spawn of arena "free"
-- `/pa ctf !tp bluelounge` - teleport to the blue lounge of arena "ctf"
+- `/pa free teleport fight` - teleport to a random fight spawn of arena "free"
+- `/pa ctf !tp lounge blue` - teleport to the blue lounge of arena "ctf"
 
 
 ## Details

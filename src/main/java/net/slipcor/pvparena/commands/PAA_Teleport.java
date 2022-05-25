@@ -47,11 +47,11 @@ public class PAA_Teleport extends AbstractArenaCommand {
             return;
         }
 
-        // usage: /pa {arenaname} teleport (teamName) [spawnName] (className) | tp to a spawn
+        // usage: /pa {arenaname} teleport <spawnName> [teamName] [className] | tp to a spawn
 
         try {
             String[] parsedSpawnName = SpawnManager.parseSpawnNameArgs(arena, args);
-            PALocation loc = SpawnManager.getSpawnByExactName(arena, parsedSpawnName[1], parsedSpawnName[0], parsedSpawnName[2]);
+            PALocation loc = SpawnManager.getSpawnByExactName(arena, parsedSpawnName[0], parsedSpawnName[1], parsedSpawnName[2]);
 
             if(loc == null) {
                 throw new GameplayException(Language.parse(MSG.ERROR_SPAWN_UNKNOWN, String.join(" ", parsedSpawnName)));
@@ -94,9 +94,9 @@ public class PAA_Teleport extends AbstractArenaCommand {
         for (PASpawn spawn : arena.getSpawns()) {
             if (spawn.hasTeamName()) {
                 if(spawn.hasClassName()) {
-                    result.define(new String[]{spawn.getTeamName(), spawn.getName(), spawn.getClassName()});
+                    result.define(new String[]{spawn.getName(), spawn.getTeamName(), spawn.getClassName()});
                 } else {
-                    result.define(new String[]{spawn.getTeamName(), spawn.getName()});
+                    result.define(new String[]{spawn.getName(), spawn.getTeamName()});
                 }
             } else if (spawn.hasClassName()) {
                 result.define(new String[]{spawn.getName(), spawn.getClassName()});

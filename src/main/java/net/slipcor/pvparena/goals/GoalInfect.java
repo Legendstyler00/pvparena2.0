@@ -51,7 +51,6 @@ import static net.slipcor.pvparena.config.Debugger.debug;
 public class GoalInfect extends ArenaGoal {
 
     private static final String INFECTED = "infected";
-    private static final String SPAWN = "spawn";
     private static final String GETPROTECT = "getprotect";
     private static final String SETPROTECT = "setprotect";
 

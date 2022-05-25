@@ -22,7 +22,6 @@ import static net.slipcor.pvparena.config.Debugger.debug;
 
 public abstract class AbstractPlayerLivesGoal extends ArenaGoal {
 
-    protected static final String SPAWN = "spawn";
     protected EndRunnable endRunner;
 
     public AbstractPlayerLivesGoal(String goalName) {

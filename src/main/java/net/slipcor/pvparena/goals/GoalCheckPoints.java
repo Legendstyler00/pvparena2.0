@@ -7,10 +7,10 @@ import net.slipcor.pvparena.arena.PlayerStatus;
 import net.slipcor.pvparena.classes.PALocation;
 import net.slipcor.pvparena.classes.PASpawn;
 import net.slipcor.pvparena.commands.AbstractArenaCommand;
+import net.slipcor.pvparena.commands.CommandTree;
 import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
-
 import net.slipcor.pvparena.events.goal.PAGoalEndEvent;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
@@ -22,8 +22,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.IntStream;
 
+import static net.slipcor.pvparena.classes.PASpawn.FIGHT;
 import static net.slipcor.pvparena.config.Debugger.debug;
 
 /**
@@ -68,8 +75,17 @@ public class GoalCheckPoints extends ArenaGoal {
     }
 
     @Override
+    public CommandTree<String> getGoalSubCommands(Arena arena) {
+        int cpLives = this.arena.getConfig().getInt(CFG.GOAL_CHECKPOINTS_LIVES);
+        final CommandTree<String> result = new CommandTree<>(null);
+        IntStream.rangeClosed(1, cpLives)
+                .forEach(intValue -> result.define(new String[]{String.valueOf(intValue)}));
+        return result;
+    }
+
+    @Override
     public Set<PASpawn> checkForMissingSpawns(Set<PASpawn> spawns) {
-        Set<PASpawn> missing = new HashSet<>(SpawnManager.getMissingSpawns(spawns, SPAWN));
+        Set<PASpawn> missing = new HashSet<>(SpawnManager.getMissingSpawns(spawns, FIGHT));
         // check if the first checkpoint is set
         missing.addAll(SpawnManager.getMissingSpawns(spawns, CHECKPOINT + "1"));
         return missing;
@@ -197,7 +213,7 @@ public class GoalCheckPoints extends ArenaGoal {
             ap.setTelePass(true);
             int value = cpLives - this.getPlayerLifeMap().get(ap.getPlayer());
             if (value == 0) {
-                ap.getPlayer().teleport(SpawnManager.getSpawnByExactName(this.arena, SPAWN).toLocation());
+                ap.getPlayer().teleport(SpawnManager.getSpawnByExactName(this.arena, FIGHT).toLocation());
             } else {
                 ap.getPlayer().teleport(SpawnManager.getSpawnByExactName(this.arena, CHECKPOINT + value).toLocation());
             }
