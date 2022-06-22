@@ -244,7 +244,7 @@ public final class ArenaClass {
 
     private static boolean isHelmetItem(Material material) {
         return material.name().endsWith("_HELMET") || material.name().endsWith("_WOOL") ||
-                OTHER_HELMET_LIST.contains(material);
+                material.name().endsWith("_HEAD") || OTHER_HELMET_LIST.contains(material);
     }
 
     private static boolean isChestplateItem(Material material) {
