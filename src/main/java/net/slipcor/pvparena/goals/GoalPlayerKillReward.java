@@ -254,7 +254,7 @@ public class GoalPlayerKillReward extends ArenaGoal {
                 this.getPlayerLifeMap().remove(arenaPlayer.getPlayer());
 
                 arenaPlayer.setStatus(PlayerStatus.LOST);
-                arenaPlayer.addLosses();
+                arenaPlayer.getStats().incLosses();
             }
 
             if (ArenaManager.checkAndCommit(this.arena, false)) {

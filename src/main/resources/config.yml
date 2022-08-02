@@ -25,3 +25,12 @@ globalPrefix: 'PVP Arena'
 signHeaders:
   - '[arena]'
   - '[PVP Arena]'
+database:
+  type: sqlite
+  mysql:
+    hostname: localhost
+    port: 3306
+    user: root
+    password: ''
+    ssl: true
+    database: 'pvparena'

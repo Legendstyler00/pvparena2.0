@@ -17,7 +17,6 @@ Hook into many different aspects of the game!
 |----------------------------------------------------|---------------------------------------------------------------------------------------------------------|--------|
 | [AfterMatch](mods/aftermatch.md)                   | could also be called "Sudden Death"                                                                     | ⚠      |
 | [Announcements](mods/announcements.md)             | announce events happening                                                                               | ⚠      |
-| [ArenaBoards](mods/arenaboards.md)                 | stats display                                                                                           | ⚠      |
 | [ArenaMaps](mods/arenamaps.md)                     | never lose yourself ever again!                                                                         | ⚠      |
 | [AutoSneak](mods/autosneak.md)                     | automatically hide player nametags by forcing sneak mode                                                | ⚠      |
 | [AutoVote](mods/autovote.md)                       | automatism                                                                                              | ⚠      |

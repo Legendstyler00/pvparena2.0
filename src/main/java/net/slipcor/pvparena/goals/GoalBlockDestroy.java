@@ -151,7 +151,7 @@ public class GoalBlockDestroy extends ArenaGoal {
             }
             for (ArenaPlayer ap : currentArenaTeam.getTeamMembers()) {
                 if (ap.getStatus() == PlayerStatus.FIGHT || ap.getStatus() == PlayerStatus.DEAD) {
-                    ap.addLosses();
+                    ap.getStats().incLosses();
                     ap.setStatus(PlayerStatus.LOST);
                 }
             }

@@ -175,7 +175,7 @@ public class GoalCheckPoints extends ArenaGoal {
             if (fighter.equals(arenaPlayer)) {
                 winner = fighter;
             } else {
-                fighter.addLosses();
+                fighter.getStats().incLosses();
                 fighter.setStatus(PlayerStatus.LOST);
             }
         }

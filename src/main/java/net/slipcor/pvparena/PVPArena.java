@@ -11,6 +11,9 @@ import net.slipcor.pvparena.core.Help;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.core.StringParser;
+import net.slipcor.pvparena.statistics.connector.DatabaseConnector;
+import net.slipcor.pvparena.statistics.connector.MySqlConnector;
+import net.slipcor.pvparena.statistics.connector.SQLiteConnector;
 import net.slipcor.pvparena.listeners.BlockListener;
 import net.slipcor.pvparena.listeners.EntityListener;
 import net.slipcor.pvparena.listeners.InventoryListener;
@@ -20,15 +23,16 @@ import net.slipcor.pvparena.loadables.ArenaModule;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
 import net.slipcor.pvparena.loadables.ArenaRegionShapeManager;
 import net.slipcor.pvparena.managers.ArenaManager;
-import net.slipcor.pvparena.managers.WorkflowManager;
-import net.slipcor.pvparena.managers.StatisticsManager;
 import net.slipcor.pvparena.managers.TabManager;
+import net.slipcor.pvparena.managers.WorkflowManager;
 import net.slipcor.pvparena.updater.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,8 +42,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static net.slipcor.pvparena.config.Debugger.debug;
 
 /**
@@ -60,6 +64,7 @@ public class PVPArena extends JavaPlugin {
     private ArenaGoalManager agm;
     private ArenaModuleManager amm;
     private ArenaRegionShapeManager arsm;
+    private DatabaseConnector dbConnector;
 
     private final List<AbstractArenaCommand> arenaCommands = new ArrayList<>();
     private final List<AbstractGlobalCommand> globalCommands = new ArrayList<>();
@@ -98,6 +103,10 @@ public class PVPArena extends JavaPlugin {
      */
     public ArenaRegionShapeManager getArsm() {
         return this.arsm;
+    }
+
+    public DatabaseConnector getDbConnector() {
+        return this.dbConnector;
     }
 
     public List<AbstractArenaCommand> getArenaCommands() {
@@ -222,7 +231,7 @@ public class PVPArena extends JavaPlugin {
 
         Arena playerArena = null;
         if(sender instanceof Player) {
-            playerArena = ArenaPlayer.fromPlayer(sender.getName()).getArena();
+            playerArena = ArenaPlayer.fromPlayer((Player) sender).getArena();
         }
         if (pacmd != null && (playerArena == null || !pacmd.hasVersionForArena())) {
             debug(sender, "committing: " + pacmd.getName());
@@ -318,9 +327,10 @@ public class PVPArena extends JavaPlugin {
     @Override
     public void onDisable() {
         this.shuttingDown = true;
+        ofNullable(this.dbConnector).ifPresent(DatabaseConnector::closeConnection);
         ArenaManager.reset(true);
         Debugger.destroy();
-        Optional.ofNullable(this.getUpdateChecker()).ifPresent(UpdateChecker::runOnDisable);
+        ofNullable(this.getUpdateChecker()).ifPresent(UpdateChecker::runOnDisable);
         Language.logInfo(MSG.LOG_PLUGIN_DISABLED, this.getDescription().getFullName());
     }
 
@@ -379,8 +389,6 @@ public class PVPArena extends JavaPlugin {
         Language.init(this.getConfig().getString("language", "en"));
         Help.init(this.getConfig().getString("language", "en"));
 
-        StatisticsManager.initialize();
-
         this.getServer().getPluginManager().registerEvents(new BlockListener(), this);
         this.getServer().getPluginManager().registerEvents(new EntityListener(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
@@ -391,6 +399,7 @@ public class PVPArena extends JavaPlugin {
         ArenaManager.loadAllArenas();
 
         this.loadConfigValues();
+        this.loadDatabase();
 
         this.updateChecker = new UpdateChecker(this.getFile());
 
@@ -422,6 +431,34 @@ public class PVPArena extends JavaPlugin {
 
         if (this.getConfig().getBoolean("use_shortcuts") || this.getConfig().getBoolean("only_shortcuts")) {
             ArenaManager.readShortcuts(this.getConfig().getConfigurationSection("shortcuts"));
+        }
+    }
+
+    private void loadDatabase() {
+        Configuration config = this.getConfig();
+        if(config.getBoolean("stats")) {
+            String dbType = config.getString("database.type");
+
+            if("sqlite".equalsIgnoreCase(dbType)) {
+                PVPArena.getInstance().getLogger().info("Using SQLite database");
+                this.dbConnector = new SQLiteConnector();
+            } else if("mysql".equalsIgnoreCase(dbType)) {
+                PVPArena.getInstance().getLogger().info("Using MySQL database");
+                ConfigurationSection mysqlSection = config.getConfigurationSection("database.mysql");
+                this.dbConnector = new MySqlConnector(mysqlSection);
+            } else {
+                this.getLogger().severe("Invalid database type in config.yml (valid types: sqlite, mysql)");
+                throw new RuntimeException();
+            }
+
+            if(this.dbConnector.getConnection() != null) {
+                PVPArena.getInstance().getLogger().info("Database successfully connected");
+            } else {
+                this.getLogger().severe("Error during database connection");
+                throw new RuntimeException();
+            }
+
+            this.dbConnector.initDatabase();
         }
     }
 }

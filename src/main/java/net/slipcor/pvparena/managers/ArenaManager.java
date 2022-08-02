@@ -310,18 +310,6 @@ public final class ArenaManager {
     }
 
     /**
-     * Backwards compatible arena loading
-     *
-     * @deprecated use {@link #loadArena(Arena arena)} } instead.
-     */
-    @Deprecated
-    public static void loadArena(final String configFile) {
-        debug("loading arena {}", configFile);
-        final Arena arena = new Arena(configFile);
-        ARENAS.put(arena.getName().toLowerCase(), arena);
-    }
-
-    /**
      * load a specific arena
      *
      * @param arena the arena to load
@@ -343,7 +331,6 @@ public final class ArenaManager {
         arena.setValid(ConfigurationManager.configParse(arena, cfg));
         debug(arena, "valid: {}", arena.isValid());
         if (arena.isValid()) {
-            StatisticsManager.loadStatistics(arena);
             SpawnManager.loadSpawns(arena, cfg);
             SpawnManager.loadBlocks(arena, cfg);
         } else {

@@ -4,7 +4,6 @@ import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.classes.PABlockLocation;
 import net.slipcor.pvparena.classes.PADeathInfo;
 import net.slipcor.pvparena.classes.PALocation;
-import net.slipcor.pvparena.classes.PAStatMap;
 import net.slipcor.pvparena.commands.PAG_Leave;
 import net.slipcor.pvparena.core.ColorUtils;
 import net.slipcor.pvparena.core.Config;
@@ -15,11 +14,22 @@ import net.slipcor.pvparena.loadables.ArenaModuleManager;
 import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.InventoryManager;
 import net.slipcor.pvparena.managers.SpawnManager;
-import net.slipcor.pvparena.managers.StatisticsManager.Type;
-import org.bukkit.*;
+import net.slipcor.pvparena.statistics.model.PlayerArenaStats;
+import net.slipcor.pvparena.statistics.dao.PlayerArenaStatsDao;
+import net.slipcor.pvparena.statistics.dao.PlayerArenaStatsDaoImpl;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -32,7 +42,15 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static net.slipcor.pvparena.config.Debugger.debug;
@@ -70,7 +88,9 @@ public class ArenaPlayer {
 
     private ItemStack[] savedInventory;
     private final Set<PermissionAttachment> tempPermissions = new HashSet<>();
-    private final Map<String, PAStatMap> statistics = new HashMap<>();
+
+    @NotNull
+    private final PlayerArenaStats statistics = new PlayerArenaStats();
 
     private Scoreboard backupBoard;
     private String backupBoardTeam;
@@ -307,7 +327,7 @@ public class ArenaPlayer {
         this.setStatus(PlayerStatus.LOST);
         this.arena.removePlayer(this, this.arena.getConfig().getString(CFG.TP_DEATH), true, false);
 
-        this.addDeath();
+        this.statistics.incDeaths();
 
         PlayerState.fullReset(this.arena, this.player);
 
@@ -378,31 +398,6 @@ public class ArenaPlayer {
                 giveLater.run();
             }
         }
-    }
-
-    public void addDeath() {
-        this.getStatistics(this.arena).incStat(Type.DEATHS);
-    }
-
-    public void addKill() {
-        this.getStatistics(this.arena).incStat(Type.KILLS);
-    }
-
-    public void addLosses() {
-        this.getStatistics(this.arena).incStat(Type.LOSSES);
-    }
-
-    public void addStatistic(final String arenaName, final Type type,
-                             final int value) {
-        if (!this.statistics.containsKey(arenaName)) {
-            this.statistics.put(arenaName, new PAStatMap());
-        }
-
-        this.statistics.get(arenaName).incStat(type, value);
-    }
-
-    public void addWins() {
-        this.getStatistics(this.arena).incStat(Type.WINS);
     }
 
     private void clearDump() {
@@ -549,6 +544,10 @@ public class ArenaPlayer {
         return this.player.getName();
     }
 
+    public String getUUID() {
+        return this.player.getUniqueId().toString();
+    }
+
     public PABlockLocation[] getSelection() {
         return this.selection.clone();
     }
@@ -562,18 +561,9 @@ public class ArenaPlayer {
         return this.state;
     }
 
-    public PAStatMap getStatistics() {
-        return this.getStatistics(this.arena);
-    }
-
-    public PAStatMap getStatistics(final Arena arena) {
-        if (arena == null) {
-            return new PAStatMap();
-        }
-        if (this.statistics.get(arena.getName()) == null) {
-            this.statistics.put(arena.getName(), new PAStatMap());
-        }
-        return this.statistics.get(arena.getName());
+    @NotNull
+    public PlayerArenaStats getStats() {
+        return this.statistics;
     }
 
     public PlayerStatus getStatus() {
@@ -599,16 +589,6 @@ public class ArenaPlayer {
 
     public Set<PermissionAttachment> getTempPermissions() {
         return this.tempPermissions;
-    }
-
-    public int getTotalStatistics(final Type statType) {
-        int sum = 0;
-
-        for (PAStatMap stat : this.statistics.values()) {
-            sum += stat.getStat(statType);
-        }
-
-        return sum;
     }
 
     public boolean hasBackupScoreboard() {
@@ -678,57 +658,6 @@ public class ArenaPlayer {
     public void reset() {
         debug(this, "destroying arena player {}", this.player.getName());
         this.debugPrint();
-        final YamlConfiguration cfg = new YamlConfiguration();
-        try {
-            if (PVPArena.getInstance().getConfig().getBoolean("stats")) {
-
-                final String file = PVPArena.getInstance().getDataFolder()
-                        + "/players.yml";
-                cfg.load(file);
-
-                if (this.arena != null) {
-                    final String arenaName = this.arena.getName();
-                    cfg.set(arenaName + '.' + this.player.getName() + ".losses", this.getStatistics()
-                            .getStat(Type.LOSSES)
-                            + this.getTotalStatistics(Type.LOSSES));
-                    cfg.set(arenaName + '.' + this.player.getName() + ".wins",
-                            this.getStatistics()
-                                    .getStat(Type.WINS)
-                                    + this.getTotalStatistics(Type.WINS));
-                    cfg.set(arenaName + '.' + this.player.getName() + ".kills",
-                            this.getStatistics().getStat(
-                                    Type.KILLS)
-                                    + this.getTotalStatistics(Type.KILLS));
-                    cfg.set(arenaName + '.' + this.player.getName() + ".deaths", this.getStatistics()
-                            .getStat(Type.DEATHS)
-                            + this.getTotalStatistics(Type.DEATHS));
-                    cfg.set(arenaName + '.' + this.player.getName() + ".damage", this.getStatistics()
-                            .getStat(Type.DAMAGE)
-                            + this.getTotalStatistics(Type.DAMAGE));
-                    cfg.set(arenaName + '.' + this.player.getName() + ".maxdamage",
-                            this.getStatistics().getStat(
-                                    Type.MAXDAMAGE)
-                                    + this.getTotalStatistics(Type.MAXDAMAGE));
-                    cfg.set(arenaName + '.' + this.player.getName() + ".damagetake",
-                            this.getStatistics().getStat(
-                                    Type.DAMAGETAKE)
-                                    + this.getTotalStatistics(Type.DAMAGETAKE));
-                    cfg.set(arenaName + '.' + this.player.getName() + ".maxdamagetake",
-                            this.getStatistics().getStat(
-                                    Type.MAXDAMAGETAKE)
-                                    + this.getTotalStatistics(Type.MAXDAMAGETAKE));
-                }
-
-                cfg.save(file);
-            }
-        } catch (final Exception e) {
-            e.printStackTrace();
-        }
-
-        if (this.getPlayer() == null) {
-            debug(this, "reset() ; out! null");
-            return;
-        }
 
         this.telePass = false;
 
@@ -751,14 +680,31 @@ public class ArenaPlayer {
         this.getPlayer().setFireTicks(0);
         try {
             Bukkit.getScheduler().runTaskLater(PVPArena.getInstance(), () -> {
-                if (ArenaPlayer.this.getPlayer() != null && ArenaPlayer.this.getPlayer().getFireTicks() > 0) {
+                if (ArenaPlayer.this.getPlayer().getFireTicks() > 0) {
                     ArenaPlayer.this.getPlayer().setFireTicks(0);
                 }
             }, 5L);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         this.clearDump();
+    }
+
+    public void saveStatistics() {
+        if (PVPArena.getInstance().getConfig().getBoolean("stats")) {
+            PlayerArenaStatsDao statsDao = PlayerArenaStatsDaoImpl.getInstance();
+            Optional<PlayerArenaStats> savedStats = statsDao.findByPlayerAndArena(this.player, this.arena);
+            if(savedStats.isPresent()) {
+                PlayerArenaStats statsToUpdate = savedStats.get();
+                statsToUpdate.mergeWithDiff(this.statistics);
+                statsDao.save(statsToUpdate);
+            } else if (this.arena != null) {
+                this.statistics.setArenaUuid(this.arena.getConfig().getString(CFG.ID));
+                this.statistics.setPlayerUuid(this.player.getUniqueId().toString());
+                statsDao.save(this.statistics);
+            }
+            this.statistics.clearValues();
+        }
     }
 
     /**
@@ -839,16 +785,6 @@ public class ArenaPlayer {
         } else {
             this.selection[0] = new PABlockLocation(loc);
         }
-    }
-
-    public void setStatistic(final String arenaName, final Type type,
-                             final int value) {
-        if (!this.statistics.containsKey(arenaName)) {
-            this.statistics.put(arenaName, new PAStatMap());
-        }
-
-        final PAStatMap map = this.statistics.get(arenaName);
-        map.setStat(type, value);
     }
 
     public void setStatus(final PlayerStatus status) {

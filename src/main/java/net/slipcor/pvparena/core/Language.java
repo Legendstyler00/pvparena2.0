@@ -3,7 +3,7 @@ package net.slipcor.pvparena.core;
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.Config.CFG;
-import net.slipcor.pvparena.managers.StatisticsManager;
+import net.slipcor.pvparena.statistics.model.StatEntry;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -433,15 +433,14 @@ public final class Language {
         STATS_HEAD("nulang.stats.head", "Statistics TOP %1% (%2%)"),
         STATS_TYPENOTFOUND("nulang.stats.typenotfound", "Statistics type not found! Valid values: &e%1%&r"),
 
-        STATTYPE_DAMAGE("nulang.stattype.DAMAGE", StatisticsManager.Type.DAMAGE.getName()),
-        STATTYPE_DAMAGETAKE("nulang.stattype.DAMAGETAKE", StatisticsManager.Type.DAMAGETAKE.getName()),
-        STATTYPE_DEATHS("nulang.stattype.DEATHS", StatisticsManager.Type.DEATHS.getName()),
-        STATTYPE_KILLS("nulang.stattype.KILLS", StatisticsManager.Type.KILLS.getName()),
-        STATTYPE_LOSSES("nulang.stattype.LOSSES", StatisticsManager.Type.LOSSES.getName()),
-        STATTYPE_MAXDAMAGE("nulang.stattype.MAXDAMAGE", StatisticsManager.Type.MAXDAMAGE.getName()),
-        STATTYPE_MAXDAMAGETAKE("nulang.stattype.MAXDAMAGETAKE", StatisticsManager.Type.MAXDAMAGETAKE.getName()),
-        STATTYPE_NULL("nulang.stattype.NULL", StatisticsManager.Type.NULL.getName()),
-        STATTYPE_WINS("nulang.stattype.WINS", StatisticsManager.Type.WINS.getName()),
+        STATTYPE_DAMAGE("nulang.stattype.DAMAGE", StatEntry.DAMAGE.getLabel()),
+        STATTYPE_DAMAGE_TAKEN("nulang.stattype.DAMAGE_TAKEN", StatEntry.DAMAGE_TAKEN.getLabel()),
+        STATTYPE_DEATHS("nulang.stattype.DEATHS", StatEntry.DEATHS.getLabel()),
+        STATTYPE_KILLS("nulang.stattype.KILLS", StatEntry.KILLS.getLabel()),
+        STATTYPE_LOSSES("nulang.stattype.LOSSES", StatEntry.LOSSES.getLabel()),
+        STATTYPE_MAX_DAMAGE("nulang.stattype.MAX_DAMAGE", StatEntry.MAX_DAMAGE.getLabel()),
+        STATTYPE_MAX_DAMAGE_TAKEN("nulang.stattype.MAX_DAMAGE_TAKEN", StatEntry.MAX_DAMAGE_TAKEN.getLabel()),
+        STATTYPE_WINS("nulang.stattype.WINS", StatEntry.WINS.getLabel()),
 
         TEAM_HAS_WON("nulang.team.haswon", "Team %1%&r are the Champions!"),
         TEAM_READY("nulang.team.ready", "Team %1%&r is ready!"),

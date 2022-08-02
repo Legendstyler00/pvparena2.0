@@ -6,11 +6,10 @@ import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.core.StringParser;
 import net.slipcor.pvparena.managers.StatisticsManager;
-import net.slipcor.pvparena.managers.StatisticsManager.Type;
+import net.slipcor.pvparena.statistics.model.StatEntry;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,23 +38,23 @@ public class PAI_Stats extends AbstractArenaCommand {
             return;
         }
 
-        final Type statType = Type.getByString(args[0]);
+        final StatEntry statType = StatEntry.parse(args[0]);
 
         if (statType == null) {
-            Arena.pmsg(sender, MSG.STATS_TYPENOTFOUND, StringParser.joinArray(Type.values(), ", ").replace("NULL, ", ""));
+            Arena.pmsg(sender, MSG.STATS_TYPENOTFOUND, StringParser.joinArray(StatEntry.getStatTypes(), ", "));
             return;
         }
 
-        Map<String, Integer> playersStats = StatisticsManager.getStats(arena, statType);
-
-        int max = 10;
+        long max = 10;
 
         if (args.length > 1) {
             try {
-                max = Integer.parseInt(args[1]);
+                max = Long.parseLong(args[1]);
             } catch (NumberFormatException ignored) {
             }
         }
+
+        Map<String, Long> playersStats = StatisticsManager.getStats(arena, statType, max);
 
         final String s2 = Language.parse(MSG.getByName("STATTYPE_" + statType.name()));
 
@@ -64,10 +63,7 @@ public class PAI_Stats extends AbstractArenaCommand {
 
         Arena.pmsg(sender, s1);
 
-        playersStats.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .limit(max)
-                .forEach(stat -> Arena.pmsg(sender, stat.getKey() + " : " + stat.getValue()));
+        playersStats.forEach((key, value) -> Arena.pmsg(sender, key + " : " + value));
     }
 
     @Override
@@ -93,7 +89,7 @@ public class PAI_Stats extends AbstractArenaCommand {
     @Override
     public CommandTree<String> getSubs(final Arena arena) {
         final CommandTree<String> result = new CommandTree<>(null);
-        for (Type val : Type.values()) {
+        for (StatEntry val : StatEntry.getStatTypes()) {
             result.define(new String[]{val.name()});
         }
         return result;

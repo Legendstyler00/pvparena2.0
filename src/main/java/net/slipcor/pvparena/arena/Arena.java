@@ -618,14 +618,14 @@ public class Arena {
             return Language.parse(MSG.DEATHCAUSE_CUSTOM);
         }
 
-        debug(this, player, "return a damage name for : " + cause.toString());
+        debug(this, player, "return a damage name for : " + cause);
 
         debug(this, player, "damager: " + damager);
 
         ArenaPlayer aPlayer = null;
         ArenaTeam team = null;
         if (damager instanceof Player) {
-            aPlayer = ArenaPlayer.fromPlayer(damager.getName());
+            aPlayer = ArenaPlayer.fromPlayer((Player) damager);
             team = aPlayer.getArenaTeam();
         }
 
@@ -672,9 +672,9 @@ public class Arena {
             default:
                 break;
         }
-        MSG string = MSG.getByName("DEATHCAUSE_" + cause.toString());
+        MSG string = MSG.getByName("DEATHCAUSE_" + cause);
         if (string == null) {
-            PVPArena.getInstance().getLogger().warning("Unknown cause: " + cause.toString());
+            PVPArena.getInstance().getLogger().warning("Unknown cause: " + cause);
             string = MSG.DEATHCAUSE_VOID;
         }
         return Language.parse(string);
@@ -910,7 +910,7 @@ public class Arena {
                 // spam join and leave the arena to make one of them win
                 final Player player = arenaPlayer.getPlayer();
                 if (!force) {
-                    arenaPlayer.addWins();
+                    arenaPlayer.getStats().incWins();
                 }
                 this.callExitEvent(player);
                 this.resetPlayer(arenaPlayer, this.config.getString(CFG.TP_WIN, OLD),
@@ -926,7 +926,7 @@ public class Arena {
 
                 final Player player = arenaPlayer.getPlayer();
                 if (!force) {
-                    arenaPlayer.addLosses();
+                    arenaPlayer.getStats().incLosses();
                 }
                 this.callExitEvent(player);
                 this.resetPlayer(arenaPlayer, this.config.getString(CFG.TP_LOSE, OLD), false, force);
@@ -958,7 +958,7 @@ public class Arena {
         final Set<ArenaPlayer> players = new HashSet<>(arenaTeam.getTeamMembers());
 
         players.forEach(ap -> {
-            ap.addWins();
+            ap.getStats().incWins();
             this.callExitEvent(ap.getPlayer());
             this.resetPlayer(ap, this.config.getString(CFG.TP_WIN, OLD), false, false);
             ap.reset();
@@ -1012,7 +1012,6 @@ public class Arena {
         ArenaManager.advance(Arena.this);
         this.clearRegions();
         ofNullable(this.goal).ifPresent(arenaGoal -> arenaGoal.reset(force));
-        StatisticsManager.save();
 
         try {
             Bukkit.getScheduler().scheduleSyncDelayedTask(PVPArena.getInstance(), () -> {
@@ -1047,6 +1046,10 @@ public class Arena {
 
         if (!soft && (!aPlayer.hasCustomClass() || this.config.getBoolean(CFG.GENERAL_CUSTOMRETURNSGEAR))) {
             aPlayer.reloadInventory(true);
+        }
+
+        if(soft || !force) {
+            aPlayer.saveStatistics();
         }
 
         TeleportManager.teleportPlayerAfterReset(this, destination, soft, force, aPlayer);

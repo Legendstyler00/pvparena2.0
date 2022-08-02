@@ -430,7 +430,7 @@ public class GoalDomination extends ArenaGoal {
             }
             for (ArenaPlayer ap : team.getTeamMembers()) {
 
-                ap.addLosses();
+                ap.getStats().incLosses();
                 ap.setStatus(PlayerStatus.LOST);
             }
         }

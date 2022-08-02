@@ -210,7 +210,7 @@ public class TimedEndRunnable extends ArenaRunnable {
                             if (arenaPlayer.getStatus() != PlayerStatus.FIGHT) {
                                 continue;
                             }
-                            arenaPlayer.addLosses();
+                            arenaPlayer.getStats().incLosses();
                             arenaPlayer.setStatus(PlayerStatus.LOST);
                         }
                     }
@@ -241,7 +241,7 @@ public class TimedEndRunnable extends ArenaRunnable {
                         if (p.getStatus() != PlayerStatus.FIGHT) {
                             continue;
                         }
-                        p.addLosses();
+                        p.getStats().incLosses();
                         if (!hasBroadcasted) {
                             for (String winTeam : winners) {
                                 ArenaModuleManager.announce(this.arena, Language

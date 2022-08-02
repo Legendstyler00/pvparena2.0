@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import static java.util.Optional.ofNullable;
 import static net.slipcor.pvparena.core.ItemStackUtils.getItemStacksFromConfig;
@@ -57,6 +58,7 @@ public class Config {
     public enum CFG {
 
 
+        ID("uuid", UUID.randomUUID().toString(), null),
         Z("configversion", "v0.9.0.0", null),
 
         CHAT_COLORNICK("chat.colorNick", true, null),
@@ -88,7 +90,6 @@ public class Config {
         GENERAL_SMART_SPAWN("general.smartspawn", false, null),
         GENERAL_TIMER("general.timer.end", 0, null),
         GENERAL_TIMER_WINNER("general.timer.winner", "none", null),
-        GENERAL_TYPE("general.type", "none", null),
         GENERAL_GOAL("general.goal", "none", null),
         GENERAL_ADDLIVESPERPLAYER("general.addLivesPerPlayer", false, null),
 

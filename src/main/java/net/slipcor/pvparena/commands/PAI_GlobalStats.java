@@ -2,7 +2,7 @@ package net.slipcor.pvparena.commands;
 
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.Help.HELP;
-import net.slipcor.pvparena.managers.StatisticsManager.Type;
+import net.slipcor.pvparena.statistics.model.StatEntry;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
@@ -64,7 +64,7 @@ public class PAI_GlobalStats extends AbstractGlobalCommand {
     @Override
     public CommandTree<String> getSubs(final Arena arena) {
         final CommandTree<String> result = new CommandTree<>(null);
-        for (Type val : Type.values()) {
+        for (StatEntry val : StatEntry.getStatTypes()) {
             result.define(new String[]{val.name()});
         }
         return result;

@@ -214,9 +214,7 @@ public final class TeleportManager {
                     }
                     player.setNoDamageTicks(noDamageTicks);
                 }
-                if (soft || !force) {
-                    StatisticsManager.update(arena, arenaPlayer);
-                }
+
                 if (!soft) {
                     arenaPlayer.setLocation(null);
                     arenaPlayer.clearFlyState();

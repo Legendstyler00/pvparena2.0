@@ -179,7 +179,7 @@ public class GoalPlayerDeathMatch extends ArenaGoal {
             for (ArenaPlayer arenaPlayer : arenaPlayers) {
                 this.getPlayerLifeMap().remove(arenaPlayer.getPlayer());
 
-                arenaPlayer.addLosses();
+                arenaPlayer.getStats().incLosses();
 
                 debug(arenaPlayer, "no remaining lives -> LOST");
                 arenaPlayer.handleDeathAndLose(deathInfo);
