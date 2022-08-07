@@ -1,5 +1,6 @@
 package net.slipcor.pvparena;
 
+import net.slipcor.pvparena.api.PVPArenaPlaceholderExpansion;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaClass;
 import net.slipcor.pvparena.arena.ArenaPlayer;
@@ -342,6 +343,11 @@ public class PVPArena extends JavaPlugin {
         // TODO: Enable bStats
         // Metrics metrics = new Metrics(this, BSTATS_PLUGIN_ID);
 
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+            new PVPArenaPlaceholderExpansion().register();
+            this.getLogger().info("Successfully hooked with PlaceholderAPI");
+        }
+
         this.saveDefaultConfig();
         if (!this.getConfig().contains("shortcuts")) {
             final List<String> ffa = new ArrayList<>();
@@ -417,7 +423,7 @@ public class PVPArena extends JavaPlugin {
             String wandStr = this.getConfig().getString("wandItem");
             this.wandItem = Material.valueOf(wandStr);
         } catch (IllegalArgumentException | NullPointerException e) {
-            this.getLogger().warning("Wand item is not correctly defined in your general config. Using STICK instead.");
+            this.getLogger().warning("Wand item is not correctly defined in your general config. Using STICK instead");
             this.wandItem = Material.STICK;
         }
 

@@ -342,9 +342,6 @@ public class Config {
         MODULES_CHESTFILLER_MAXITEMS("modules.chestfiller.cfmaxitems", 5, "ChestFiller"),
         MODULES_CHESTFILLER_MINITEMS("modules.chestfiller.cfminitems", 0, "ChestFiller"),
 
-        MODULES_COLORTEAMS_HIDENAME("modules.colorteams.hidename", false, "ColorTeams"),
-        MODULES_COLORTEAMS_SCOREBOARD("modules.colorteams.scoreboard", false, "ColorTeams"),
-
         MODULES_DUEL_FORCESTART("modules.duel.forcestart", true, "Duel"),
 
         MODULES_FIXINVENTORYLOSS_GAMEMODE("modules.fixinventoryloss.gamemode", false, "FixInventoryLoss"),

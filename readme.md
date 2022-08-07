@@ -75,6 +75,7 @@ Place PVP Arena `.jar` file in the plugin repository of your server and restart.
 - [Items in config files](doc/items.md)
 - [Languages](doc/languages.md)
 - [Configuration](doc/configuration.md)
+- [Placeholders](doc/placeholders.md)
 - [Update checker](doc/update-checker.md)
 - [FAQ](doc/faq.md)
 
