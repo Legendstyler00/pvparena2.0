@@ -93,8 +93,9 @@ public class StandardLounge extends ArenaModule {
                     MSG.ERROR_ARENA_ALREADY_PART_OF, ArenaManager.getIndirectArenaName(aPlayer.getArena())));
         }
 
-        if (aPlayer.getArenaClass() == null && this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS) == null) {
-            throw new GameplayException(Language.parse(MSG.ERROR_CLASS_NOT_FOUND, "autoClass"));
+        String autoClassName = this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS);
+        if (autoClassName != null && this.arena.getClasses().stream().noneMatch(cl -> cl.getName().equalsIgnoreCase(autoClassName))) {
+            throw new GameplayException(Language.parse(MSG.ERROR_CLASS_NOT_FOUND, autoClassName));
         }
 
         return true;
