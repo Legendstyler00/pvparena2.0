@@ -9,12 +9,15 @@ import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.exceptions.GameplayException;
 import net.slipcor.pvparena.loadables.ArenaModule;
+import net.slipcor.pvparena.loadables.ModuleType;
 import net.slipcor.pvparena.managers.SpawnManager;
 import net.slipcor.pvparena.managers.TeleportManager;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static net.slipcor.pvparena.config.Debugger.debug;
 
 /**
  * <pre>
@@ -58,6 +61,11 @@ public class StandardSpectate extends ArenaModule {
     }
 
     @Override
+    public ModuleType getType() {
+        return ModuleType.SPECTATE;
+    }
+
+    @Override
     public boolean handleSpectate(Player player) throws GameplayException {
         final ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
         if (arenaPlayer.getArena() != null) {
@@ -77,6 +85,7 @@ public class StandardSpectate extends ArenaModule {
         arenaPlayer.setStatus(PlayerStatus.WATCH);
 
         TeleportManager.teleportPlayerToRandomSpawn(this.arena, arenaPlayer, SpawnManager.getPASpawnsStartingWith(this.arena, SPECTATOR));
+        arenaPlayer.setSpectating(true);
         this.arena.msg(player, MSG.NOTICE_WELCOME_SPECTATOR);
 
         if (arenaPlayer.getState() == null) {
@@ -85,6 +94,14 @@ public class StandardSpectate extends ArenaModule {
             arenaPlayer.createState(player);
             arenaPlayer.dump();
         }
+    }
+
+    @Override
+    public void switchToSpectate(Player player) {
+        debug(player, "becoming spectator using StandardSpectate");
+        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
+        TeleportManager.teleportPlayerToRandomSpawn(this.arena, arenaPlayer, SpawnManager.getPASpawnsStartingWith(this.arena, SPECTATOR));
+        arenaPlayer.setSpectating(true);
     }
 
     @Override

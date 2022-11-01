@@ -97,7 +97,7 @@ public final class ArenaManager {
      * @param player the player to check
      * @return true if not set or player inside, false otherwise
      */
-    public static boolean checkJoin(final Player player, final Arena arena) {
+    public static boolean checkJoinRegion(final Player player, final Arena arena) {
         boolean found = false;
         for (ArenaRegion region : arena.getRegions()) {
             if (region.getType() == RegionType.JOIN) {

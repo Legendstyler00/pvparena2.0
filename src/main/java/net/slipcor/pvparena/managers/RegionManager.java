@@ -68,7 +68,7 @@ public final class RegionManager {
             } else if (arenaPlayer.getStatus() == READY || arenaPlayer.getStatus() == LOUNGE) {
                 this.handleEscapeLoungeRegions(arenaPlayer, pLoc);
 
-            } else if (arenaPlayer.getStatus() == WATCH) {
+            } else if (arenaPlayer.isSpectating()) {
                 this.handleEscapeWatchRegions(arenaPlayer, pLoc);
             }
         }

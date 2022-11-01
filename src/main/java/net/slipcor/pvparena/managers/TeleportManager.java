@@ -21,7 +21,6 @@ import java.util.Random;
 import java.util.Set;
 
 import static net.slipcor.pvparena.classes.PASpawn.OLD;
-import static net.slipcor.pvparena.classes.PASpawn.SPECTATOR;
 import static net.slipcor.pvparena.config.Debugger.debug;
 import static net.slipcor.pvparena.modules.StandardLounge.LOUNGE;
 
@@ -105,16 +104,6 @@ public final class TeleportManager {
 
         if (player.isInsideVehicle()) {
             player.getVehicle().eject();
-        }
-
-        // spectator or spectator1 or spectator2
-        if (spawn.getName().startsWith(SPECTATOR)) {
-            // @TODO Player status must be handled by goal/module. Not here ...
-            if (arena.getFighters().contains(arenaPlayer)) {
-                arenaPlayer.setStatus(PlayerStatus.LOST);
-            } else {
-                arenaPlayer.setStatus(PlayerStatus.WATCH);
-            }
         }
 
         // Check if spawn is inside a battle region (if player status == fight)

@@ -111,8 +111,12 @@ public class WorkflowManager {
                 }
             }
 
-            if(joinModule == null && !ArenaManager.checkJoin(player, arena)) {
+            if(!ArenaManager.checkJoinRegion(player, arena)) {
                 throw new GameplayException(Language.parse(MSG.ERROR_JOIN_REGION));
+            }
+
+            if(joinModule == null) {
+                throw new GameplayException(Language.parse(MSG.ERROR_JOIN_MODULE));
             }
         } catch (GameplayExceptionNotice e) {
             arena.msg(player, MSG.NOTICE_NOTICE, e.getMessage());
@@ -170,51 +174,9 @@ public class WorkflowManager {
             return false;
         }
 
-        if (joinModule == null) {
-            return commitDefaultJoin(arena, player, arenaGoal, arenaPlayer);
-        } else {
-            joinModule.commitJoin(player, arenaTeam);
-        }
+        joinModule.commitJoin(player, arenaTeam);
 
         ArenaModuleManager.parseJoin(arena, player, arenaTeam);
-
-        if (arenaPlayer.getArenaClass() != null && arena.startRunner != null) {
-            arenaPlayer.setStatus(PlayerStatus.READY);
-        }
-
-        return true;
-    }
-
-    private static boolean commitDefaultJoin(Arena arena, Player player, ArenaGoal arenaGoal, ArenaPlayer arenaPlayer) {
-        debug(arena, "join module null");
-
-        ArenaTeam arenaTeam = arenaPlayer.getArenaTeam();
-        // join module null, just put the joiner to some spawn
-        if (!arena.tryJoin(player, arenaTeam)) {
-            return false;
-        }
-
-        if (arena.isFreeForAll()) {
-            arena.msg(player, arena.getConfig().getString(CFG.MSG_YOUJOINED));
-            arena.broadcastExcept(player, Language.parse(arena, CFG.MSG_PLAYERJOINED, player.getName()));
-        } else {
-            arena.msg(player, arena.getConfig().getString(CFG.MSG_YOUJOINEDTEAM).replace("%1%", arenaTeam.getColoredName() + ChatColor.RESET));
-            arena.broadcastExcept(player, Language.parse(arena, CFG.MSG_PLAYERJOINEDTEAM, arenaPlayer.getName(), arenaTeam.getColoredName() + ChatColor.RESET));
-        }
-
-        ArenaModuleManager.parseJoin(arena, player, arenaTeam);
-
-        arenaGoal.initiate(player);
-        ArenaModuleManager.initiate(arena, player);
-
-        if (arena.getFighters().size() >= Math.max(1, arena.getConfig().getInt(CFG.READY_MINPLAYERS))) {
-            arena.setFightInProgress(true);
-
-            arena.getTeams().forEach(aTeam -> SpawnManager.distributeTeams(arena, aTeam));
-            arenaGoal.parseStart();
-
-            arena.getMods().forEach(ArenaModule::parseStart);
-        }
 
         if (arenaPlayer.getArenaClass() != null && arena.startRunner != null) {
             arenaPlayer.setStatus(PlayerStatus.READY);

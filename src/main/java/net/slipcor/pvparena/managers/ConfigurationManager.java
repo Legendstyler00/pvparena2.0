@@ -16,6 +16,7 @@ import net.slipcor.pvparena.loadables.ArenaGoal;
 import net.slipcor.pvparena.loadables.ArenaGoalManager;
 import net.slipcor.pvparena.loadables.ArenaModule;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
+import net.slipcor.pvparena.loadables.ModuleType;
 import net.slipcor.pvparena.regions.ArenaRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -108,6 +109,8 @@ public final class ConfigurationManager {
             }
 
             List<String> list = cfg.getStringList(CFG.LISTS_MODS.getNode(), new ArrayList<>());
+            boolean hasJoinMod = false;
+            boolean hasSpectateMod = false;
             for (String moduleName : list) {
                 ArenaModuleManager moduleManager = PVPArena.getInstance().getAmm();
                 if (!moduleManager.hasLoadable(moduleName)) {
@@ -116,6 +119,19 @@ public final class ConfigurationManager {
                 }
                 ArenaModule module = moduleManager.getNewInstance(moduleName);
                 arena.addModule(module, false);
+                if (module.getType() == ModuleType.JOIN) {
+                    hasJoinMod = true;
+                }
+
+                if (module.getType() == ModuleType.SPECTATE) {
+                    hasSpectateMod = true;
+                }
+            }
+            if (!hasJoinMod) {
+                PVPArena.getInstance().getLogger().warning(String.format("Arena '%s' has no JOIN module! Please add one or arena will not work.", arena.getName()));
+            }
+            if (!hasSpectateMod) {
+                PVPArena.getInstance().getLogger().warning(String.format("Arena '%s' has no SPECTATE module! Please add one or arena will not work.", arena.getName()));
             }
         }
 

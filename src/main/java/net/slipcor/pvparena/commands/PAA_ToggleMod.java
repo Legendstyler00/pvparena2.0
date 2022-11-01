@@ -3,15 +3,16 @@ package net.slipcor.pvparena.commands;
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.Help.HELP;
-import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.loadables.ArenaModule;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
+import net.slipcor.pvparena.loadables.ModuleType;
 import net.slipcor.pvparena.loader.Loadable;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <pre>PVP Arena ACTIVATE Command class</pre>
@@ -47,14 +48,20 @@ public class PAA_ToggleMod extends AbstractArenaCommand {
             boolean isEnabling = !arena.hasMod(name);
             if(isEnabling) {
                 ArenaModule module = moduleManager.getNewInstance(name);
+                this.replaceSameTypeModule(arena, module, sender);
                 arena.addModule(module, true);
                 if (module.isMissingBattleRegion(arena)) {
                     arena.msg(sender, MSG.TOGGLEMOD_NOTICE);
                 }
                 arena.msg(sender, MSG.INFO_MOD_ENABLED, name);
             } else {
-                arena.removeModule(name);
-                arena.msg(sender, MSG.INFO_MOD_DISABLED, name);
+                ArenaModule toRemove = arena.getMods().stream().filter(mod -> name.equals(mod.getName())).findAny().get();
+                if(toRemove.getType() == ModuleType.JOIN || toRemove.getType() == ModuleType.SPECTATE) {
+                    arena.msg(sender, MSG.INFO_MOD_NOT_REMOVABLE, name, toRemove.getType().name());
+                } else {
+                    arena.removeModule(name);
+                    arena.msg(sender, MSG.INFO_MOD_DISABLED, name);
+                }
             }
             return;
         }
@@ -91,5 +98,18 @@ public class PAA_ToggleMod extends AbstractArenaCommand {
             result.define(new String[]{mod.getName()});
         }
         return result;
+    }
+
+    private void replaceSameTypeModule(Arena arena, ArenaModule newMod, CommandSender sender) {
+        if(newMod.getType() == ModuleType.SPECTATE || newMod.getType() == ModuleType.JOIN) {
+            Optional<ArenaModule> sameTypeMod = arena.getMods().stream()
+                    .filter(mod -> mod.getType() == newMod.getType())
+                    .findAny();
+
+            sameTypeMod.ifPresent(mod -> {
+                arena.removeModule(mod.getName());
+                arena.msg(sender, MSG.INFO_MOD_REPLACEMENT, newMod.getName(), mod.getName());
+            });
+        }
     }
 }

@@ -53,8 +53,6 @@ public class ArenaModuleManager {
 
     private void addInternalMods() {
         this.addInternalLoadable(BattlefieldJoin.class);
-        this.addInternalLoadable(CustomSpawn.class);
-        this.addInternalLoadable(RegionTool.class);
         this.addInternalLoadable(StandardLounge.class);
         this.addInternalLoadable(StandardSpectate.class);
         this.addInternalLoadable(WarmupJoin.class);

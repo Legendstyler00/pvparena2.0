@@ -11,6 +11,7 @@ import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.exceptions.GameplayException;
 import net.slipcor.pvparena.loadables.ArenaModule;
+import net.slipcor.pvparena.loadables.ModuleType;
 import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.PermissionManager;
 import net.slipcor.pvparena.managers.SpawnManager;
@@ -53,6 +54,11 @@ public class StandardLounge extends ArenaModule {
     @Override
     public int getPriority() {
         return PRIORITY;
+    }
+
+    @Override
+    public ModuleType getType() {
+        return ModuleType.JOIN;
     }
 
     @Override

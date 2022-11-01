@@ -64,6 +64,10 @@ public abstract class ArenaModule implements IArenaCommandHandler {
         return 0;
     }
 
+    public ModuleType getType() {
+        return ModuleType.OTHER;
+    }
+
     /**
      * hook into an announcement
      *
@@ -157,6 +161,13 @@ public abstract class ArenaModule implements IArenaCommandHandler {
      */
     public boolean handleSpectate(Player player) throws GameplayException {
         return false;
+    }
+
+    /**
+     * Move a fighting player to spectate area using all features of spectate module
+     * @param player the player
+     */
+    public void switchToSpectate(Player player) {
     }
 
     /**

@@ -10,7 +10,9 @@ import net.slipcor.pvparena.core.Config;
 import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.events.PAPlayerClassChangeEvent;
+import net.slipcor.pvparena.loadables.ArenaModule;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
+import net.slipcor.pvparena.loadables.ModuleType;
 import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.InventoryManager;
 import net.slipcor.pvparena.managers.SpawnManager;
@@ -43,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -76,6 +79,7 @@ public class ArenaPlayer {
     private boolean teleporting;
     private boolean mayDropInventory;
     private boolean mayRespawn;
+    private boolean spectating;
 
     private Boolean flying;
 
@@ -128,6 +132,14 @@ public class ArenaPlayer {
 
     public void setMayRespawn(boolean mayRespawn) {
         this.mayRespawn = mayRespawn;
+    }
+
+    public boolean isSpectating() {
+        return this.spectating;
+    }
+
+    public void setSpectating(boolean spectating) {
+        this.spectating = spectating;
     }
 
     /**
@@ -326,14 +338,16 @@ public class ArenaPlayer {
 
         this.setStatus(PlayerStatus.LOST);
         this.arena.removePlayer(this, this.arena.getConfig().getString(CFG.TP_DEATH), true, false);
+        Optional<ArenaModule> spectateMod = this.arena.getMods().stream()
+                .filter(mod -> mod.getType() == ModuleType.SPECTATE)
+                .min(Comparator.comparingInt(ArenaModule::getPriority));
 
-        this.statistics.incDeaths();
+        spectateMod.ifPresent(arenaModule -> arenaModule.switchToSpectate(this.player));
 
         PlayerState.fullReset(this.arena, this.player);
 
         Bukkit.getScheduler().runTaskLater(PVPArena.getInstance(), () -> {
-            boolean found = this.arena.getMods().stream().anyMatch(mod -> mod.getName().contains("Spectate"));
-            if (!found) {
+            if (!spectateMod.isPresent()) {
                 new PAG_Leave().commit(this.arena, this.player, new String[0]);
             }
         }, 5L);
@@ -677,6 +691,7 @@ public class ArenaPlayer {
         }
         this.arena = null;
         this.arenaClass = null;
+        this.spectating = false;
         this.getPlayer().setFireTicks(0);
         try {
             Bukkit.getScheduler().runTaskLater(PVPArena.getInstance(), () -> {

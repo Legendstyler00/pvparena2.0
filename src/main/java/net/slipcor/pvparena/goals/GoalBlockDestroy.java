@@ -281,7 +281,7 @@ public class GoalBlockDestroy extends ArenaGoal {
         sender.sendMessage("lives: " +
                 this.arena.getConfig().getInt(CFG.GOAL_BLOCKDESTROY_LIVES));
         sender.sendMessage("auto color: " +
-                this.arena.getConfig().getString(CFG.GOAL_BLOCKDESTROY_AUTOCOLOR));
+                this.arena.getConfig().getBoolean(CFG.GOAL_BLOCKDESTROY_AUTOCOLOR));
     }
 
     @Override
