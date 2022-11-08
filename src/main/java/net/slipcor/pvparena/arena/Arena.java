@@ -228,7 +228,9 @@ public class Arena {
     private void updateModsInCfg() {
         final List<String> list = this.mods.stream().map(ArenaModule::getName).collect(Collectors.toList());
         this.config.set(CFG.LISTS_MODS, list);
-        this.config.save();
+
+        // createDefaults() saves the config
+        this.config.createDefaults(null, list);
     }
 
     public boolean isLocked() {
