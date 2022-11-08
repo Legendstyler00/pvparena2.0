@@ -405,7 +405,7 @@ public class Config {
         MODULES_VAULT_MINPLAYERS("modules.vault.vminplayers", 2, "Vault"),
         MODULES_VAULT_MINIMUMBET("modules.vault.minbet", 0.0d, "Vault"),
         MODULES_VAULT_MAXIMUMBET("modules.vault.maxbet", 0.0d, "Vault"),
-        MODULES_VAULT_WINPOT("modules.vault.winPot", false, ""),
+        MODULES_VAULT_WINPOT("modules.vault.winPot", false, "Vault"),
         MODULES_VAULT_WINFACTOR("modules.vault.winFactor", 2.0d, "Vault"),
         MODULES_VAULT_WINREWARD("modules.vault.winreward", 0, "Vault"),
         MODULES_VAULT_WINREWARDPLAYERFACTOR("modules.vault.winrewardPlayerFactor", 1.0d, "Vault"),
@@ -585,7 +585,7 @@ public class Config {
         for (CFG config : CFG.getValues()) {
             if (config.hasModule()) {
                 String mod = config.getGoalOrModule();
-                if (goal.contains(mod) || modules.contains(mod)) {
+                if (StringUtils.equalsIgnoreCase(goal, mod) || CollectionUtils.containsIgnoreCase(modules, mod)) {
                     this.cfg.addDefault(config.getNode(), config.getValue());
                 }
             } else {

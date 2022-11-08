@@ -128,6 +128,7 @@ public final class Language {
         ERROR_CLASS_NOTENOUGHEXP("nulang.error.class.notenoughexp", "You don't have enough EXP to choose &a%1%&r!"),
         ERROR_CLASS_NOT_FOUND("nulang.error.class.notfound", "Class not found: &a%1%&r"),
         ERROR_CLASS_NOT_GIVEN("nulang.error.class.notgiven", "No class was given!"),
+        ERROR_CLASS_NEEDS_AUTOCLASS("nulang.error.class.needsautoclass", "%1% module requires autoclass setting to be defined"),
         ERROR_COMMAND_BLOCKED("nulang.error.cmdblocked", "&cCommand blocked: %1%"),
         ERROR_COMMAND_INVALID("nulang.error.invalidcmd", "Invalid command: %1%"),
         ERROR_COMMAND_UNKNOWN("nulang.error.unknowncmd", "Unknown command"),
@@ -459,7 +460,7 @@ public final class Language {
         TIME_MINUTES("nulang.time.minutes", "minutes"),
         TIME_SECONDS("nulang.time.seconds", "seconds"),
 
-        TIMER_COUNTDOWN_INTERRUPTED("nulang.timer.countdowninterrupt", "Countdown interrupted! Hit the ready block!"),
+        TIMER_COUNTDOWN_INTERRUPTED("nulang.timer.countdowninterrupt", "Countdown interrupted! Waiting for ready players..."),
         TIMER_ENDING_IN("nulang.timer.ending", "The match will end in %1%!"),
         TIMER_RESETTING_IN("nulang.timer.resetting", "The arena will reset in %1%!"),
         TIMER_STARTING_IN("nulang.timer.starting", "Starting in %1%!"),

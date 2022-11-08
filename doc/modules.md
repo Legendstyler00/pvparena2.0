@@ -43,6 +43,7 @@ Hook into many different aspects of the game!
 | [Points](mods/points.md)                           | allow to restrict certain classes to require players to fight for better classes                        |          | ⚠      |
 | [PowerUps](mods/powerups.md)                       | spawn items giving special powers                                                                       |          | ✔      |
 | [Projectiles](mods/projectiles.md)                 | add knockback to throwable items (snowballs, eggs, etc)                                                 |          | ✔      |
+| [QuickLounge](mods/quicklounge.md)                 | join a lounge which starts the game automatically                                                       | JOIN     | ✔      |
 | [RealSpectate](mods/realspectate.md)               | spectate the game, CounterStrike style!                                                                 |          | ✔      |
 | [RedstoneTriggers](mods/redstonetriggers.md)       | add win/lose triggered by redstone                                                                      | SPECTATE | ⚠      |
 | [RespawnRelay](mods/respawnrelay.md)               | add a relay for respawning players                                                                      |          | ⚠      |
