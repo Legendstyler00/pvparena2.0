@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class Config {
 
 
         ID("uuid", UUID.randomUUID().toString(), null),
-        Z("configversion", "v0.9.0.0", null),
+        VERSION("configversion", "v0.9.0.0", null),
 
         CHAT_COLORNICK("chat.colorNick", true, null),
         CHAT_DEFAULTTEAM("chat.defaultTeam", false, null),
@@ -493,13 +494,6 @@ public class Config {
             this.node = node;
             this.value = value;
             this.type = "list";
-            this.goalOrModule = source;
-        }
-
-        CFG(final String node, final Map<String, String> value, final String source) {
-            this.node = node;
-            this.value = node;
-            this.type = "stringMap";
             this.goalOrModule = source;
         }
 
@@ -999,60 +993,64 @@ public class Config {
     }
 
     /**
-     *
+     * Parse a region in config file
+     * Region has the following format:
+     * ----
+     * regionName:
+     *   coords: world,x1,y1,z1,x2,y2,z2
+     *   type: BATTLE
+     *   shape: CUBOID
+     *   flags:
+     *     - NOCAMP
+     *   protections:
+     *     - BREAK
+     *     - PICKUP
      */
     public static ArenaRegion parseRegion(final Arena arena,
                                           final YamlConfiguration config, final String regionName) {
 
-        final String coords = config.getString("arenaregion." + regionName);
-        final String[] parts = coords.split(",");
+        ConfigurationSection section = config.getConfigurationSection("arenaregion." + regionName);
+        String coords = section.getString("coords");
+        final String[] coordParts = coords.split(",");
 
-        final ArenaRegionShape shape = PVPArena.getInstance().getArsm().getNewInstance(parts[7]);
-
-        if (parts.length < 11) {
-            PVPArena.getInstance().getLogger().severe(arena.getName() + " caused an error while loading region " + regionName);
-            throw new IllegalArgumentException(
-                    "Input string must contain only world, x1, y1, z1, x2, y2, z2, shape and FLAGS: "
-                            + coords);
+        if (coordParts.length < 7) {
+            PVPArena.getInstance().getLogger().severe(arena.getName() + " caused an error while loading coordinates of region " + regionName);
+            throw new IllegalArgumentException("Input string must contain only world, x1, y1, z1, x2, y2, z2. Current: " + coords);
         }
-        if (shape == null) {
-            PVPArena.getInstance().getLogger().severe(arena.getName() + " caused an error while loading region " + regionName);
-            throw new IllegalArgumentException(
-                    "Input string does not contain valid region shape: "
-                            + coords);
-        }
-        final Integer x1 = parseInteger(parts[1]);
-        final Integer y1 = parseInteger(parts[2]);
-        final Integer z1 = parseInteger(parts[3]);
-        final Integer x2 = parseInteger(parts[4]);
-        final Integer y2 = parseInteger(parts[5]);
-        final Integer z2 = parseInteger(parts[6]);
-        final Integer flags = parseInteger(parts[8]);
-        final Integer prots = parseInteger(parts[9]);
 
-        if (Bukkit.getWorld(parts[0]) == null) {
+        if (Bukkit.getWorld(coordParts[0]) == null) {
             PVPArena.getInstance().getLogger().severe(String.format("%s caused an error while loading region %s",
                     arena.getName(), regionName));
-            throw new IllegalArgumentException(String.format("World %s not recognized. Is it loaded ?", parts[0]));
+            throw new IllegalArgumentException(String.format("World %s not recognized. Is it loaded ?", coordParts[0]));
         }
 
-        if (x1 == null || y1 == null
-                || z1 == null || x2 == null || y2 == null || z2 == null
-                || flags == null || prots == null) {
-            PVPArena.getInstance().getLogger().severe( String.format("%s caused an error while loading region %s", arena.getName(), regionName));
+        final Integer x1 = parseInteger(coordParts[1]);
+        final Integer y1 = parseInteger(coordParts[2]);
+        final Integer z1 = parseInteger(coordParts[3]);
+        final Integer x2 = parseInteger(coordParts[4]);
+        final Integer y2 = parseInteger(coordParts[5]);
+        final Integer z2 = parseInteger(coordParts[6]);
+
+        if (x1 == null || y1 == null || z1 == null || x2 == null || y2 == null || z2 == null) {
+            PVPArena.getInstance().getLogger().severe( String.format("%s caused an error while loading coordinates of region %s", arena.getName(), regionName));
             throw new IllegalArgumentException("Some of the parsed values are null!");
         }
 
-        final PABlockLocation[] l = {new PABlockLocation(parts[0], x1, y1, z1),
-                new PABlockLocation(parts[0], x2, y2, z2)};
+        ArenaRegionShape shape = PVPArena.getInstance().getArsm().getNewInstance(section.getString("shape"));
+        if (shape == null) {
+            PVPArena.getInstance().getLogger().severe(arena.getName() + " caused an error while loading region " + regionName);
+            throw new IllegalArgumentException("Input string does not contain valid region shape: " + coords);
+        }
 
-        final ArenaRegion region = new ArenaRegion(arena, regionName, shape, l);
-        region.applyFlags(flags);
-        region.applyProtections(prots);
-        region.setType(RegionType.valueOf(parts[10]));
+        final PABlockLocation[] regionPoints = {new PABlockLocation(coordParts[0], x1, y1, z1),
+                new PABlockLocation(coordParts[0], x2, y2, z2)};
+
+        final ArenaRegion region = new ArenaRegion(arena, regionName, shape, regionPoints);
+        region.setType(RegionType.valueOf(section.getString("type")));
+        region.applyFlags(section.getStringList("flags"));
+        region.applyProtections(section.getStringList("protections"));
+
         region.saveToConfig();
-
-        // "world,x1,y1,z1,x2,y2,z2,shape,FLAGS,PROTS,TYPE"
 
         return region;
     }
@@ -1095,36 +1093,30 @@ public class Config {
         return StringParser.joinArray(result, ",");
     }
 
-    public static String parseToString(final ArenaRegion region,
-                                       final Set<RegionFlag> flags, final Set<RegionProtection> protections) {
-        final String[] result = new String[11];
-        result[0] = region.getWorldName();
-        result[1] = String.valueOf(region.locs[0].getX());
-        result[2] = String.valueOf(region.locs[0].getY());
-        result[3] = String.valueOf(region.locs[0].getZ());
-        result[4] = String.valueOf(region.locs[1].getX());
-        result[5] = String.valueOf(region.locs[1].getY());
-        result[6] = String.valueOf(region.locs[1].getZ());
-        result[7] = region.getShape().getName();
-        result[10] = region.getType().name();
+    public static Map<String, Object> parseToConfigMap(final ArenaRegion region,
+                                                       final Set<RegionFlag> flags, final Set<RegionProtection> protections) {
+        Map<String, Object> configMap = new LinkedHashMap<>();
 
-        int sum = 0;
+        final String[] coordinates = new String[7];
+        coordinates[0] = region.getWorldName();
+        coordinates[1] = String.valueOf(region.locs[0].getX());
+        coordinates[2] = String.valueOf(region.locs[0].getY());
+        coordinates[3] = String.valueOf(region.locs[0].getZ());
+        coordinates[4] = String.valueOf(region.locs[1].getX());
+        coordinates[5] = String.valueOf(region.locs[1].getY());
+        coordinates[6] = String.valueOf(region.locs[1].getZ());
 
-        for (RegionFlag f : flags) {
-            sum += Math.pow(2, f.ordinal());
+        configMap.put("coords", String.join(",", coordinates));
+        configMap.put("shape", region.getShape().getName());
+        configMap.put("type", region.getType().name());
+
+        if(!flags.isEmpty()) {
+            configMap.put("flags", flags.stream().map(RegionFlag::name).toArray());
         }
 
-        result[8] = String.valueOf(sum);
+        configMap.put("protections", protections.stream().map(RegionProtection::name).toArray());
 
-        sum = 0;
-
-        for (RegionProtection p : protections) {
-            sum += Math.pow(2, p.ordinal());
-        }
-        result[9] = String.valueOf(sum);
-
-        // "world,x1,y1,z1,x2,y2,z2,shape,FLAGS,PROTS,TYPE"
-        return StringParser.joinArray(result, ",");
+        return configMap;
     }
 
     /**

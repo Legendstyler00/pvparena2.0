@@ -14,7 +14,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * <pre>Arena Runnable class</pre>
@@ -54,16 +57,10 @@ public abstract class ArenaRunnable extends BukkitRunnable {
         this.arena = arena;
         this.global = global;
 
-        ConfigurationSection section = null;
+        Optional<ConfigurationSection> section = ofNullable(Language.getConfig())
+                .map(cs -> cs.getConfigurationSection("time_intervals"));
 
-        if (arena == null) {
-            if (Language.getConfig() != null) {
-                section = Language.getConfig().getConfigurationSection("time_intervals");
-            }
-        } else {
-            section = arena.getConfig().getYamlConfiguration().getConfigurationSection("time_intervals");
-        }
-        if (section == null) {
+        if (!section.isPresent()) {
             PVPArena.getInstance().getLogger().warning("Language strings 'time_intervals' not found, loading defaults!");
             MESSAGES.put(1, "1..");
             MESSAGES.put(2, "2..");
@@ -85,8 +82,8 @@ public abstract class ArenaRunnable extends BukkitRunnable {
             MESSAGES.put(3000, "50 " + this.sMinutes);
             MESSAGES.put(3600, "60 " + this.sMinutes);
         } else {
-            for (String key : section.getKeys(true)) {
-                String content = section.getString(key);
+            for (String key : section.get().getKeys(true)) {
+                String content = section.get().getString(key);
                 try {
                     Integer value = Integer.parseInt(key);
                     MESSAGES.put(value, content.replace("%m", this.sMinutes).replace("%s", this.sSeconds));

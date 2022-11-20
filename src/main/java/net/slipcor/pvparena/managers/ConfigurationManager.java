@@ -139,35 +139,12 @@ public final class ConfigurationManager {
             config.addDefault(CLASSITEMS, generateDefaultClasses());
         }
 
-        if (config.get("time_intervals") == null) {
-            String prefix = "time_intervals.";
-            config.addDefault(prefix + "1", "1..");
-            config.addDefault(prefix + "2", "2..");
-            config.addDefault(prefix + "3", "3..");
-            config.addDefault(prefix + "4", "4..");
-            config.addDefault(prefix + "5", "5..");
-            config.addDefault(prefix + "10", "10 %s");
-            config.addDefault(prefix + "20", "20 %s");
-            config.addDefault(prefix + "30", "30 %s");
-            config.addDefault(prefix + "60", "60 %s");
-            config.addDefault(prefix + "120", "2 %m");
-            config.addDefault(prefix + "180", "3 %m");
-            config.addDefault(prefix + "240", "4 %m");
-            config.addDefault(prefix + "300", "5 %m");
-            config.addDefault(prefix + "600", "10 %m");
-            config.addDefault(prefix + "1200", "20 %m");
-            config.addDefault(prefix + "1800", "30 %m");
-            config.addDefault(prefix + "2400", "40 %m");
-            config.addDefault(prefix + "3000", "50 %m");
-            config.addDefault(prefix + "3600", "60 %m");
-        }
-
         debug(arena, "setting default config for goal {}", arena.getGoal());
         arena.getGoal().setDefaults(config);
 
         config.options().copyDefaults(true);
 
-        cfg.set(CFG.Z, "1.3.3.217");
+        cfg.set(CFG.VERSION, "1.3.3.217");
         cfg.save();
         cfg.load();
 
@@ -221,19 +198,22 @@ public final class ConfigurationManager {
             debug(arena, "arenaregion null");
         } else {
             debug(arena, "arenaregion not null");
-            final Map<String, Object> regs = config.getConfigurationSection(
-                    "arenaregion").getValues(false);
-            for (String rName : regs.keySet()) {
+            final Set<String> regionKeys = config.getConfigurationSection(
+                    "arenaregion").getKeys(false);
+            for (String rName : regionKeys) {
                 debug(arena, "arenaregion '" + rName + '\'');
-                final ArenaRegion region = Config.parseRegion(arena, config,
-                        rName);
+                try {
+                    final ArenaRegion region = Config.parseRegion(arena, config, rName);
 
-                if (region.getWorld() == null) {
-                    PVPArena.getInstance().getLogger().severe(
-                            "Error while loading arena, world null: " + rName);
-                } else {
-                    arena.addRegion(region);
+                    if (region.getWorld() == null) {
+                        PVPArena.getInstance().getLogger().severe("Error while loading arena, world null: " + rName);
+                    } else {
+                        arena.addRegion(region);
+                    }
+                } catch (Exception e) {
+                    PVPArena.getInstance().getLogger().warning(String.format("Can't parse region %s of arena %s. Skipping.", rName, arena.getName()));
                 }
+
             }
         }
 

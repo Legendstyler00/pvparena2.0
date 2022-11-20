@@ -50,7 +50,7 @@ public class PAA_Create extends AbstractGlobalCommand {
             return;
         }
 
-        // usage: /pa create [arenaname] {legacy_arenatype}
+        // usage: /pa create [arenaname] {goal}
 
         Arena arena = ArenaManager.getArenaByName(args[0]);
 

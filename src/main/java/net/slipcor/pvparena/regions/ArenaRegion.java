@@ -233,22 +233,22 @@ public class ArenaRegion {
         return true;
     }
 
-    public void applyFlags(final int flags) {
-        for (RegionFlag rf : RegionFlag.values()) {
-            if ((flags & (int) Math.pow(2, rf.ordinal())) != 0) {
+    public void applyFlags(List<String> flags) {
+        flags.forEach(flag -> {
+            try {
+                RegionFlag rf = RegionFlag.valueOf(flag);
                 this.flags.add(rf);
-            }
-        }
+            } catch (IllegalArgumentException ignored) {}
+        });
     }
 
-    public void applyProtections(final int protections) {
-        for (RegionProtection rp : RegionProtection.values()) {
-            if ((protections & (int) Math.pow(2, rp.ordinal())) == 0) {
-                this.protections.remove(rp);
-            } else {
-                this.protections.add(rp);
-            }
-        }
+    public void applyProtections(List<String> protections) {
+        protections.forEach(protection -> {
+            try {
+                RegionFlag rp = RegionFlag.valueOf(protection);
+                this.flags.add(rp);
+            } catch (IllegalArgumentException ignored) {}
+        });
     }
 
     public void flagAdd(final RegionFlag regionFlag) {
@@ -391,8 +391,8 @@ public class ArenaRegion {
     }
 
     public void saveToConfig() {
-        this.arena.getConfig().setManually("arenaregion." + this.name,
-                Config.parseToString(this, this.flags, this.protections));
+        this.arena.getConfig().getConfigurationSection("arenaregion")
+                .createSection(this.name, Config.parseToConfigMap(this, this.flags, this.protections));
         this.arena.getConfig().save();
     }
 
