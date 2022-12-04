@@ -6,6 +6,8 @@ import net.slipcor.pvparena.core.Help.HELP;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 import net.slipcor.pvparena.loadables.ArenaGoalManager;
+import net.slipcor.pvparena.loadables.ArenaModule;
+import net.slipcor.pvparena.loadables.ArenaModuleManager;
 import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.PermissionManager;
 import org.bukkit.command.CommandSender;
@@ -66,6 +68,7 @@ public class PAA_Create extends AbstractGlobalCommand {
             arena.setOwner(sender.getName());
         }
 
+        debug(arena, "adding goal for new arena");
         ArenaGoalManager goalManager = PVPArena.getInstance().getAgm();
         if (args.length > 1) {
             if (goalManager.hasLoadable(args[1])) {
@@ -81,6 +84,10 @@ public class PAA_Create extends AbstractGlobalCommand {
             arena.setGoal(goal, false);
         }
 
+        debug(arena, "adding default modules for new arena");
+        this.addDefaultModule(sender, arena, "standardspectate");
+        this.addDefaultModule(sender, arena, "standardlounge");
+
         debug(arena, "creating new config file for arena");
         File file = new File(String.format("%s/arenas/%s.yml", PVPArena.getInstance().getDataFolder().getPath(), arena.getName()));
         try {
@@ -95,9 +102,6 @@ public class PAA_Create extends AbstractGlobalCommand {
 
         if (ArenaManager.loadArena(arena)) {
             Arena.pmsg(sender, MSG.ARENA_CREATE_DONE, arena.getName(), arena.getGoal().getName());
-            final PAA_ToggleMod cmd = new PAA_ToggleMod();
-            cmd.commit(arena, sender, new String[]{"standardspectate"});
-            cmd.commit(arena, sender, new String[]{"standardlounge"});
         }
     }
 
@@ -135,5 +139,16 @@ public class PAA_Create extends AbstractGlobalCommand {
                 result.define(new String[]{"{String}", goalName})
         );
         return result;
+    }
+
+    private void addDefaultModule(CommandSender sender, Arena arena, String moduleName) {
+        ArenaModuleManager moduleManager = PVPArena.getInstance().getAmm();
+        if (moduleManager.hasLoadable(moduleName)) {
+            ArenaModule module = moduleManager.getNewInstance(moduleName);
+            arena.addModule(module, false);
+            arena.msg(sender, MSG.INFO_MOD_ENABLED, moduleName);
+        } else {
+            arena.msg(sender, MSG.ERROR_UNKNOWN_MODULE, moduleName);
+        }
     }
 }

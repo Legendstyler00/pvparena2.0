@@ -316,14 +316,6 @@ public class ArenaGoal implements IArenaCommandHandler {
     }
 
     /**
-     * hook into the config parsing
-     *
-     * @param config the arena config
-     */
-    public void configParse(final YamlConfiguration config) {
-    }
-
-    /**
      * hook into disconnecting a player
      *
      * @param player the player being disconnected
@@ -497,6 +489,14 @@ public class ArenaGoal implements IArenaCommandHandler {
      * @param config the arena config
      */
     public void setDefaults(final YamlConfiguration config) {
+        if (config.get("teams") == null) {
+            if (this.arena.isFreeForAll()) {
+                config.set("teams.free", "WHITE");
+            } else {
+                config.set("teams.red", "RED");
+                config.set("teams.blue", "BLUE");
+            }
+        }
     }
 
     /**

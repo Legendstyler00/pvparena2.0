@@ -136,17 +136,11 @@ public final class ConfigurationManager {
         }
 
         if (config.get(CLASSITEMS) == null && PVPArena.getInstance().getConfig().get(CLASSITEMS) == null) {
-            config.addDefault(CLASSITEMS, generateDefaultClasses());
+            config.createSection(CLASSITEMS, generateDefaultClasses());
         }
 
         debug(arena, "setting default config for goal {}", arena.getGoal());
         arena.getGoal().setDefaults(config);
-
-        config.options().copyDefaults(true);
-
-        cfg.set(CFG.VERSION, "1.3.3.217");
-        cfg.save();
-        cfg.load();
 
         final Map<String, Object> classes = config.getConfigurationSection(CLASSITEMS).getValues(false);
         arena.getClasses().clear();
@@ -217,43 +211,26 @@ public final class ConfigurationManager {
             }
         }
 
-        cfg.save();
-
-        arena.getGoal().configParse(config);
-
-        if (cfg.getYamlConfiguration().getConfigurationSection("teams") == null) {
-            if (arena.isFreeForAll()) {
-                config.set("teams.free", "WHITE");
-            } else {
-                config.set("teams.red", "RED");
-                config.set("teams.blue", "BLUE");
-            }
-        }
-
-        cfg.reloadMaps();
-
-        final Map<String, Object> tempMap = cfg
-                .getYamlConfiguration().getConfigurationSection("teams")
-                .getValues(true);
-
         if (arena.isFreeForAll()) {
             if (!arena.getConfig().getBoolean(CFG.PERMS_TEAMKILL) && !"Infect".equals(arena.getConfig().getString(CFG.GENERAL_GOAL))) {
                 PVPArena.getInstance().getLogger().warning("Arena " + arena.getName() + " is running in NO-PVP mode! Make sure people can die!");
             }
         } else {
-            for (Map.Entry<String, Object> stringObjectEntry : tempMap.entrySet()) {
-                final ArenaTeam team = new ArenaTeam(stringObjectEntry.getKey(),
-                        (String) stringObjectEntry.getValue());
-                arena.getTeams().add(team);
-                debug(arena, "added team " + team.getName() + " => "
-                        + team.getColorCodeString());
-            }
+            cfg.getYamlConfiguration()
+                    .getConfigurationSection("teams")
+                    .getValues(false)
+                    .entrySet()
+                    .forEach(entry -> {
+                        ArenaTeam team = new ArenaTeam(entry.getKey(), (String) entry.getValue());
+                        arena.getTeams().add(team);
+                        debug(arena, String.format("added team %s => %s", team.getName(), team.getColorCodeString()));
+                    });
         }
 
         debug(arena, "loading modules for arena");
         ArenaModuleManager.configParse(arena, config);
         cfg.save();
-        cfg.reloadMaps();
+        cfg.load();
 
         arena.setPrefix(cfg.getString(CFG.GENERAL_PREFIX));
         return true;

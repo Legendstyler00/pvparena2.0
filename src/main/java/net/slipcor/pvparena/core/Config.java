@@ -7,6 +7,7 @@ import net.slipcor.pvparena.classes.PABlockLocation;
 import net.slipcor.pvparena.classes.PALocation;
 import net.slipcor.pvparena.classes.PASpawn;
 import net.slipcor.pvparena.commands.CommandTree;
+import net.slipcor.pvparena.config.ConfigComparator;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 import net.slipcor.pvparena.loadables.ArenaRegionShape;
 import net.slipcor.pvparena.regions.ArenaRegion;
@@ -28,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import static java.util.Optional.ofNullable;
@@ -49,6 +51,7 @@ import static net.slipcor.pvparena.managers.SpawnManager.ROOT_SPAWNS_NODE;
  */
 
 public class Config {
+    public static final String CONFIG_VERSION = "2.0.0";
     private final YamlConfiguration cfg;
     private final File configFile;
     private final Map<String, Boolean> booleans;
@@ -60,7 +63,7 @@ public class Config {
 
 
         ID("uuid", UUID.randomUUID().toString(), null),
-        VERSION("configversion", "v0.9.0.0", null),
+        VERSION("configversion", Config.CONFIG_VERSION, null),
 
         CHAT_COLORNICK("chat.colorNick", true, null),
         CHAT_DEFAULTTEAM("chat.defaultTeam", false, null),
@@ -571,11 +574,11 @@ public class Config {
         this.ints = new HashMap<>();
         this.doubles = new HashMap<>();
         this.strings = new HashMap<>();
+
+        this.cfg.options().copyDefaults(true);
     }
 
     public void createDefaults(final String goal, final List<String> modules) {
-        this.cfg.options().indent(2);
-
         for (CFG config : CFG.getValues()) {
             if (config.hasModule()) {
                 String mod = config.getGoalOrModule();
@@ -586,6 +589,7 @@ public class Config {
                 this.cfg.addDefault(config.getNode(), config.getValue());
             }
         }
+
         this.save();
     }
 
@@ -595,9 +599,6 @@ public class Config {
      * @param goal new goal to config
      */
     public void updateGoal(ArenaGoal goal) {
-        // remove previous goal nodes (no need anymore)
-        this.setManually("goal", null);
-        this.cfg.addDefault("goal", null);
         // add new goal name
         this.set(CFG.GENERAL_GOAL, goal.getName());
         // add default new goal nodes
@@ -649,13 +650,23 @@ public class Config {
     }
 
     /**
-     * Save the YamlConfiguration to the config-file.
+     * Sort and save the YamlConfiguration to the config-file.
      *
      * @return true, if the save succeeded, false otherwise.
      */
     public boolean save() {
+        YamlConfiguration outputConfig = new YamlConfiguration();
+        outputConfig.options().copyDefaults(true);
+        outputConfig.options().indent(2);
+
+        Map<String, Object> configMap = new TreeMap<>(new ConfigComparator());
+        configMap.putAll(this.cfg.getValues(false));
+        configMap.entrySet().spliterator().forEachRemaining(entry ->
+            outputConfig.set(entry.getKey(), entry.getValue())
+        );
+
         try {
-            this.cfg.save(this.configFile);
+            outputConfig.save(this.configFile);
             return true;
         } catch (final Exception e) {
             e.printStackTrace();
