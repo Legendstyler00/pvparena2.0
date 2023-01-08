@@ -1,12 +1,18 @@
 package net.slipcor.pvparena.modules;
 
 import net.slipcor.pvparena.PVPArena;
+import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.arena.ArenaTeam;
+import net.slipcor.pvparena.arena.PlayerStatus;
+import net.slipcor.pvparena.classes.PALocation;
+import net.slipcor.pvparena.commands.PAI_Ready;
 import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.exceptions.GameplayException;
 import net.slipcor.pvparena.loadables.ModuleType;
+import net.slipcor.pvparena.managers.SpawnManager;
+import net.slipcor.pvparena.managers.TeleportManager;
 import org.bukkit.entity.Player;
 
 /**
@@ -48,6 +54,34 @@ public class QuickLounge extends StandardLounge {
         }
 
         return super.handleJoin(player);
+    }
+
+    @Override
+    public void commitJoinDuringMatch(Player player, ArenaTeam arenaTeam) {
+        final ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
+        arenaPlayer.setLocation(new PALocation(arenaPlayer.getPlayer().getLocation()));
+
+        // ArenaPlayer.prepareInventory(arena, ap.getPlayer());
+        arenaPlayer.setArena(this.arena);
+        arenaTeam.add(arenaPlayer);
+
+        this.broadcastLoungeMessages(player, arenaTeam);
+
+        if (arenaPlayer.getState() == null) {
+            this.initPlayerState(arenaPlayer);
+            arenaPlayer.setStatus(PlayerStatus.LOUNGE);
+
+            try {
+                PAI_Ready.checkReadyRequirementsDuringFight(arena, arenaPlayer);
+            } catch (GameplayException e) {
+                arena.msg(player, e.getMessage());
+
+                // Ready conditions are not satisfied => teleport player to lounge
+                TeleportManager.teleportPlayerToSpawnForJoin(this.arena, arenaPlayer, SpawnManager.selectSpawnsForPlayer(this.arena, arenaPlayer, LOUNGE), true);
+            }
+        } else {
+            PVPArena.getInstance().getLogger().warning("Player has a state while joining: " + arenaPlayer.getName());
+        }
     }
 
     @Override

@@ -79,7 +79,7 @@ public class GoalDomination extends ArenaGoal {
 
     @Override
     public boolean allowsJoinInBattle() {
-        return this.arena.getConfig().getBoolean(CFG.PERMS_JOININBATTLE);
+        return this.arena.getConfig().getBoolean(CFG.JOIN_ALLOW_DURING_MATCH);
     }
 
     private void barStart(Location location, String title, ChatColor color, int range) {

@@ -239,6 +239,13 @@ public class ArenaModuleManager {
         }
     }
 
+    public static void parseJoinDuringMatch(final Arena arena, final Player player,
+                                 final ArenaTeam team) {
+        for (ArenaModule mod : arena.getMods()) {
+            mod.parseJoinDuringMatch(player, team);
+        }
+    }
+
     public static void parsePlayerDeath(final Arena arena, final Player player,
                                         final EntityDamageEvent cause) {
         for (ArenaModule mod : arena.getMods()) {

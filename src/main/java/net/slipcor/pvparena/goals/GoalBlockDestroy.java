@@ -75,7 +75,7 @@ public class GoalBlockDestroy extends ArenaGoal {
 
     @Override
     public boolean allowsJoinInBattle() {
-        return this.arena.getConfig().getBoolean(CFG.PERMS_JOININBATTLE);
+        return this.arena.getConfig().getBoolean(CFG.JOIN_ALLOW_DURING_MATCH);
     }
 
     @Override

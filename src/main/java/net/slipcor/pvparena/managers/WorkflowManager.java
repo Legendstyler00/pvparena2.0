@@ -174,12 +174,16 @@ public class WorkflowManager {
             return false;
         }
 
-        joinModule.commitJoin(player, arenaTeam);
+        if(arena.isFightInProgress()) {
+            joinModule.commitJoinDuringMatch(player, arenaTeam);
+            ArenaModuleManager.parseJoinDuringMatch(arena, player, arenaTeam);
+        } else {
+            joinModule.commitJoin(player, arenaTeam);
+            ArenaModuleManager.parseJoin(arena, player, arenaTeam);
 
-        ArenaModuleManager.parseJoin(arena, player, arenaTeam);
-
-        if (arenaPlayer.getArenaClass() != null && arena.startRunner != null) {
-            arenaPlayer.setStatus(PlayerStatus.READY);
+            if (arenaPlayer.getArenaClass() != null && arena.startRunner != null) {
+                arenaPlayer.setStatus(PlayerStatus.READY);
+            }
         }
 
         return true;

@@ -126,6 +126,39 @@ public class StandardLounge extends ArenaModule {
         TeleportManager.teleportPlayerToSpawnForJoin(this.arena, arenaPlayer, SpawnManager.selectSpawnsForPlayer(this.arena, arenaPlayer, LOUNGE), true);
 
         this.arena.msg(player, Language.parse(this.arena, CFG.MSG_LOUNGE));
+        this.broadcastLoungeMessages(player, arenaTeam);
+
+        if (arenaPlayer.getState() == null) {
+            this.initPlayerState(arenaPlayer);
+        } else {
+            PVPArena.getInstance().getLogger().warning("Player has a state while joining: " + arenaPlayer.getName());
+        }
+    }
+
+    protected void initPlayerState(ArenaPlayer arenaPlayer) {
+        // Important: clear inventory before setting player state to deal with armor modifiers (like health)
+        Player player = arenaPlayer.getPlayer();
+        ArenaPlayer.backupAndClearInventory(this.arena, player);
+        arenaPlayer.createState(player);
+        arenaPlayer.dump();
+
+
+        if (arenaPlayer.getArenaTeam() != null && arenaPlayer.getArenaClass() == null) {
+            String autoClassCfg = this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS);
+            if (autoClassCfg != null) {
+                this.arena.getAutoClass(autoClassCfg, arenaPlayer.getArenaTeam()).ifPresent(autoClass ->
+                        this.arena.chooseClass(player, null, autoClass)
+                );
+            }
+        }
+    }
+
+    @Override
+    public void commitJoinDuringMatch(Player player, ArenaTeam team) {
+        this.commitJoin(player, team);
+    }
+
+    protected void broadcastLoungeMessages(Player player, ArenaTeam arenaTeam) {
         if (this.arena.isFreeForAll()) {
             this.arena.msg(player,
                     Language.parse(this.arena, CFG.MSG_YOUJOINED,
@@ -157,26 +190,6 @@ public class StandardLounge extends ArenaModule {
                             Integer.toString(this.arena.getConfig().getInt(CFG.READY_MAXPLAYERS))
                     ));
         }
-
-        if (arenaPlayer.getState() == null) {
-
-            // Important: clear inventory before setting player state to deal with armor modifiers (like health)
-            ArenaPlayer.backupAndClearInventory(this.arena, player);
-            arenaPlayer.createState(player);
-            arenaPlayer.dump();
-
-
-            if (arenaPlayer.getArenaTeam() != null && arenaPlayer.getArenaClass() == null) {
-                String autoClassCfg = this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS);
-                if (autoClassCfg != null) {
-                    this.arena.getAutoClass(autoClassCfg, arenaPlayer.getArenaTeam()).ifPresent(autoClass ->
-                            this.arena.chooseClass(player, null, autoClass)
-                    );
-                }
-            }
-        } else {
-            PVPArena.getInstance().getLogger().warning("Player has a state while joining: " + arenaPlayer.getName());
-        }
     }
 
     @Override
@@ -184,5 +197,10 @@ public class StandardLounge extends ArenaModule {
         if (this.arena.startRunner != null) {
             this.arena.countDown();
         }
+    }
+
+    @Override
+    public void parseJoinDuringMatch(final Player player, final ArenaTeam team) {
+        // Do nothing
     }
 }

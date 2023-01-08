@@ -567,7 +567,7 @@ public class Arena {
     }
 
     public void hasNotPlayed(final ArenaPlayer player) {
-        if (this.config.getBoolean(CFG.JOIN_ONLYIFHASPLAYED)) {
+        if (this.config.getBoolean(CFG.JOIN_ALLOW_REJOIN)) {
             return;
         }
         this.playedPlayers.remove(player.getName());
@@ -753,7 +753,7 @@ public class Arena {
             return Language.parse(MSG.ERROR_READY_4_MISSING_PLAYERS);
         }
 
-        if (this.config.getBoolean(CFG.READY_CHECKEACHPLAYER)) {
+        if (!this.isFightInProgress() && this.config.getBoolean(CFG.READY_CHECKEACHPLAYER)) {
             for (ArenaTeam team : this.teams) {
                 for (ArenaPlayer ap : team.getTeamMembers()) {
                     if (ap.getStatus() != PlayerStatus.READY) {
@@ -766,21 +766,23 @@ public class Arena {
         if (!this.isFreeForAll()) {
             final Set<String> activeTeams = new HashSet<>();
 
-            for (ArenaTeam team : this.teams) {
-                for (ArenaPlayer ap : team.getTeamMembers()) {
-                    if (!this.config.getBoolean(CFG.READY_CHECKEACHTEAM) || ap.getStatus() == PlayerStatus.READY) {
-                        activeTeams.add(team.getName());
-                        break;
+            if (!this.isFightInProgress()) {
+                for (ArenaTeam team : this.teams) {
+                    for (ArenaPlayer ap : team.getTeamMembers()) {
+                        if (!this.config.getBoolean(CFG.READY_CHECKEACHTEAM) || ap.getStatus() == PlayerStatus.READY) {
+                            activeTeams.add(team.getName());
+                            break;
+                        }
                     }
+                }
+
+                if (activeTeams.size() < 2) {
+                    return Language.parse(MSG.ERROR_READY_2_TEAM_ALONE);
                 }
             }
 
             if (this.config.getBoolean(CFG.USES_EVENTEAMS) && !TeamManager.checkEven(this)) {
                 return Language.parse(MSG.NOTICE_WAITING_EQUAL);
-            }
-
-            if (activeTeams.size() < 2) {
-                return Language.parse(MSG.ERROR_READY_2_TEAM_ALONE);
             }
         }
 
@@ -805,6 +807,12 @@ public class Arena {
                 }
             }
         }
+
+        if(this.isFightInProgress()) {
+            // Bypass ready ratio checks if joining during match
+            return null;
+        }
+
         final int readyPlayers = this.countReadyPlayers();
 
         if (players > readyPlayers) {
@@ -1156,6 +1164,13 @@ public class Arena {
             this.broadcast(Language.parse(MSG.ERROR_ERROR, error));
             //reset(true);
         }
+    }
+
+    public void addPlayerDuringMatch(ArenaPlayer arenaPlayer) {
+        arenaPlayer.setStatus(PlayerStatus.FIGHT);
+        this.getGoal().initiate(arenaPlayer.getPlayer());
+        SpawnManager.distributePlayer(this, arenaPlayer);
+        this.msg(arenaPlayer.getPlayer(), MSG.FIGHT_BEGINS);
     }
 
     public void stop(final boolean force) {

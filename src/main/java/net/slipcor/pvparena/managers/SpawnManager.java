@@ -718,9 +718,6 @@ public final class SpawnManager {
             return;
         }
 
-        // Trick to avoid death screen
-        Bukkit.getScheduler().scheduleSyncDelayedTask(PVPArena.getInstance(), () -> arenaPlayer.getPlayer().closeInventory(), 1);
-
         if (overrideSpawn == null) {
             distributePlayer(arena, arenaPlayer);
         } else {

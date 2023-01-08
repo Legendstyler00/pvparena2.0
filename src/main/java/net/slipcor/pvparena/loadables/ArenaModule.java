@@ -230,6 +230,17 @@ public abstract class ArenaModule implements IArenaCommandHandler {
     }
 
     /**
+     * commit an arena join after the beginning of the match
+     * allowed only if join.allowDuringMatch is true
+     *
+     * @param player the joining player
+     * @param team   the chosen team
+     */
+    public void commitJoinDuringMatch(Player player, ArenaTeam team) {
+        throw new IllegalStateException(this.name);
+    }
+
+    /**
      * commit a spectator join
      *
      * @param player the spectating player
@@ -430,6 +441,16 @@ public abstract class ArenaModule implements IArenaCommandHandler {
     public void parseJoin(final Player player, final ArenaTeam team) {
     }
 
+    /**
+     * hook into a player joining the arena during a running match
+     * Calls parseJoin by default
+     *
+     * @param player the joining player
+     * @param team   the chosen team
+     */
+    public void parseJoinDuringMatch(final Player player, final ArenaTeam team) {
+        this.parseJoin(player, team);
+    }
     /**
      * hook into a player dying
      *

@@ -18,7 +18,6 @@ import net.slipcor.pvparena.core.RandomUtils;
 import net.slipcor.pvparena.core.StringUtils;
 import net.slipcor.pvparena.events.goal.PAGoalEndEvent;
 import net.slipcor.pvparena.events.goal.PAGoalSabotageIgniteEvent;
-import net.slipcor.pvparena.events.goal.PAGoalScoreEvent;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
 import net.slipcor.pvparena.managers.PermissionManager;
@@ -88,7 +87,7 @@ public class GoalSabotage extends ArenaGoal implements Listener {
 
     @Override
     public boolean allowsJoinInBattle() {
-        return this.arena.getConfig().getBoolean(CFG.PERMS_JOININBATTLE);
+        return this.arena.getConfig().getBoolean(CFG.JOIN_ALLOW_DURING_MATCH);
     }
 
     @Override

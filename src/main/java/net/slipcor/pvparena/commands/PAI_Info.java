@@ -116,6 +116,7 @@ public class PAI_Info extends AbstractArenaCommand {
         if (displayMode == null || "join".equals(displayMode)) {
             arena.msg(sender, MSG.INFO_SECTION, "join");
             arena.msg(sender, "range: " + cfg.getInt(CFG.JOIN_RANGE) + " | " +
+                    StringParser.colorVar("allowDuringMatch", cfg.getBoolean(CFG.JOIN_ALLOW_DURING_MATCH)) + " | " +
                     StringParser.colorVar("forceregionjoin", cfg.getBoolean(CFG.JOIN_FORCE)));
 
         }
@@ -125,7 +126,6 @@ public class PAI_Info extends AbstractArenaCommand {
             arena.msg(sender,
                     StringParser.colorVar("explicitarena", cfg.getBoolean(CFG.PERMS_EXPLICIT_PER_ARENA)) + " | " +
                     StringParser.colorVar("explicitclass", cfg.getBoolean(CFG.PERMS_EXPLICITCLASS)) + " | " +
-                    StringParser.colorVar("joininbattle", cfg.getBoolean(CFG.PERMS_JOININBATTLE)) + " | " +
                     StringParser.colorVar("teamkill", cfg.getBoolean(CFG.PERMS_TEAMKILL)));
 
         }

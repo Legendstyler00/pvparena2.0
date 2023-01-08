@@ -108,7 +108,8 @@ public class Config {
 
         JOIN_RANGE("join.range", 0, null),
         JOIN_FORCE("join.forceregionjoin", false, null),
-        JOIN_ONLYIFHASPLAYED("join.onlyifhasplayed", false, null),
+        JOIN_ALLOW_REJOIN("join.allowRejoin", false, null),
+        JOIN_ALLOW_DURING_MATCH("join.allowDuringMatch", false, null),
 
         LISTS_BLACKLIST("block.blacklist", new ArrayList<>(), null),
         LISTS_CMDWHITELIST("cmds.whitelist", new ArrayList<>(), null),
@@ -122,12 +123,10 @@ public class Config {
         MSG_YOUJOINED("msg.youjoined", "You have joined the FreeForAll Arena!", null),
         MSG_YOUJOINEDTEAM("msg.youjoinedteam", "You have joined team %1%!", null),
 
-        PERMS_ALWAYSJOININBATTLE("perms.alwaysJoinInBattle", false, null),
         PERMS_EXPLICIT_PER_ARENA("perms.explicitArenaNeeded", false, null),
         PERMS_EXPLICITCLASS("perms.explicitClassNeeded", false, null),
         PERMS_FLY("perms.fly", false, null),
         PERMS_LOUNGEINTERACT("perms.loungeinteract", false, null),
-        PERMS_JOININBATTLE("perms.joinInBattle", false, null),
         PERMS_JOINWITHSCOREBOARD("perms.joinWithScoreboard", true, null),
         PERMS_TEAMKILL("perms.teamkill", true, null),
         PERMS_SPECTALK("perms.specTalk", true, null),
