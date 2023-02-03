@@ -12,7 +12,6 @@ import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.events.goal.PAGoalPlayerDeathEvent;
 import net.slipcor.pvparena.managers.WorkflowManager;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import static net.slipcor.pvparena.config.Debugger.debug;
 
@@ -48,8 +47,8 @@ public class GoalTeamLives extends AbstractTeamKillGoal {
     }
 
     @Override
-    public Boolean shouldRespawnPlayer(Player player, PADeathInfo deathInfo) {
-        final ArenaTeam respawnTeam = ArenaPlayer.fromPlayer(player).getArenaTeam();
+    public Boolean shouldRespawnPlayer(ArenaPlayer arenaPlayer, PADeathInfo deathInfo) {
+        final ArenaTeam respawnTeam = arenaPlayer.getArenaTeam();
 
         if (this.getTeamLives(respawnTeam) != null) {
             return true;
@@ -58,13 +57,12 @@ public class GoalTeamLives extends AbstractTeamKillGoal {
     }
 
     @Override
-    public void commitPlayerDeath(final Player respawnPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
+    public void commitPlayerDeath(final ArenaPlayer respawnPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
         final PAGoalPlayerDeathEvent gEvent;
-        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(respawnPlayer);
-        gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, doesRespawn);
+        gEvent = new PAGoalPlayerDeathEvent(this.arena, this, respawnPlayer, deathInfo, doesRespawn);
         Bukkit.getPluginManager().callEvent(gEvent);
 
-        ArenaTeam respawnTeam = arenaPlayer.getArenaTeam();
+        ArenaTeam respawnTeam = respawnPlayer.getArenaTeam();
         this.reduceLives(this.arena, respawnTeam);
 
         if (this.getTeamLives(respawnTeam) != null) {
@@ -77,12 +75,12 @@ public class GoalTeamLives extends AbstractTeamKillGoal {
                 }
             }
 
-            arenaPlayer.setMayDropInventory(true);
-            arenaPlayer.setMayRespawn(true);
+            respawnPlayer.setMayDropInventory(true);
+            respawnPlayer.setMayRespawn(true);
 
         } else {
-            debug(arenaPlayer, "no remaining lives -> LOST");
-            arenaPlayer.handleDeathAndLose(deathInfo);
+            debug(respawnPlayer, "no remaining lives -> LOST");
+            respawnPlayer.handleDeathAndLose(deathInfo);
         }
     }
 

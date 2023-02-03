@@ -158,7 +158,7 @@ public class GoalFood extends ArenaGoal {
     }
 
     @Override
-    public Boolean shouldRespawnPlayer(Player player, PADeathInfo deathInfo) {
+    public Boolean shouldRespawnPlayer(ArenaPlayer arenaPlayer, PADeathInfo deathInfo) {
         return true;
     }
 
@@ -272,15 +272,14 @@ public class GoalFood extends ArenaGoal {
     }
 
     @Override
-    public void commitPlayerDeath(final Player respawnPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
+    public void commitPlayerDeath(final ArenaPlayer respawnPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
 
         if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
             this.broadcastSimpleDeathMessage(respawnPlayer, deathInfo);
         }
 
-        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(respawnPlayer);
-        arenaPlayer.setMayDropInventory(true);
-        arenaPlayer.setMayRespawn(true);
+        respawnPlayer.setMayDropInventory(true);
+        respawnPlayer.setMayRespawn(true);
     }
 
     @Override
@@ -348,10 +347,9 @@ public class GoalFood extends ArenaGoal {
     }
 
     @Override
-    public void initiate(final Player player) {
-        final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
-        if (this.getTeamLifeMap().get(aPlayer.getArenaTeam()) == null) {
-            this.getTeamLifeMap().put(aPlayer.getArenaTeam(), this.arena.getConfig()
+    public void initiate(final ArenaPlayer arenaPlayer) {
+        if (this.getTeamLifeMap().get(arenaPlayer.getArenaTeam()) == null) {
+            this.getTeamLifeMap().put(arenaPlayer.getArenaTeam(), this.arena.getConfig()
                     .getInt(CFG.GOAL_FOOD_FMAXITEMS));
         }
     }
@@ -572,9 +570,9 @@ public class GoalFood extends ArenaGoal {
     }
 
     @Override
-    public void unload(final Player player) {
+    public void unload(final ArenaPlayer arenaPlayer) {
         if (this.allowsJoinInBattle()) {
-            this.arena.hasNotPlayed(ArenaPlayer.fromPlayer(player));
+            this.arena.hasNotPlayed(arenaPlayer);
         }
     }
 

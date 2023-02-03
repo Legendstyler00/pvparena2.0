@@ -18,7 +18,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.Set;
@@ -101,9 +100,8 @@ public abstract class AbstractTeamKillGoal extends ArenaGoal {
     }
 
     @Override
-    public void initiate(final Player player) {
-        final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
-        this.updateLives(aPlayer.getArenaTeam(), this.getTeamLivesCfg());
+    public void initiate(final ArenaPlayer arenaPlayer) {
+        this.updateLives(arenaPlayer.getArenaTeam(), this.getTeamLivesCfg());
     }
 
     @Override

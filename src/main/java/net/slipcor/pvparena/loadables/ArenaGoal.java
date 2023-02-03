@@ -4,6 +4,7 @@ import net.slipcor.pvparena.api.IArenaCommandHandler;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.arena.ArenaTeam;
+import net.slipcor.pvparena.arena.PlayerStatus;
 import net.slipcor.pvparena.classes.PABlock;
 import net.slipcor.pvparena.classes.PADeathInfo;
 import net.slipcor.pvparena.classes.PASpawn;
@@ -34,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static net.slipcor.pvparena.classes.PASpawn.FIGHT;
 import static net.slipcor.pvparena.config.Debugger.trace;
@@ -52,7 +54,7 @@ public class ArenaGoal implements IArenaCommandHandler {
     protected String name;
     protected Arena arena;
     protected Map<ArenaTeam, Integer> teamLifeMap = new HashMap<>();
-    protected Map<Player, Integer> playerLifeMap = new HashMap<>();
+    protected Map<ArenaPlayer, Integer> playerLifeMap = new HashMap<>();
 
 
     /**
@@ -239,11 +241,11 @@ public class ArenaGoal implements IArenaCommandHandler {
     /**
      * check if the goal should commit a player death
      *
-     * @param player    the dying player
-     * @param deathInfo death info
+     * @param arenaPlayer the dying player
+     * @param deathInfo   death info
      * @return true if player should respawn, false otherwise, null if goal doesn't handle respawn
      */
-    public Boolean shouldRespawnPlayer(Player player, PADeathInfo deathInfo) {
+    public Boolean shouldRespawnPlayer(ArenaPlayer arenaPlayer, PADeathInfo deathInfo) {
         return null;
     }
 
@@ -289,11 +291,11 @@ public class ArenaGoal implements IArenaCommandHandler {
     /**
      * commit a player death
      *
-     * @param player      the dying player
+     * @param arenaPlayer the dying player
      * @param doesRespawn true if the player will respawn
      * @param deathInfo   death information object containing cause and damager
      */
-    public void commitPlayerDeath(Player player, boolean doesRespawn, PADeathInfo deathInfo) {
+    public void commitPlayerDeath(ArenaPlayer arenaPlayer, boolean doesRespawn, PADeathInfo deathInfo) {
         throw new IllegalStateException(this.getName());
     }
 
@@ -347,8 +349,19 @@ public class ArenaGoal implements IArenaCommandHandler {
      * @return the goal life map
      */
     @NotNull
-    public Map<Player, Integer> getPlayerLifeMap() {
+    public Map<ArenaPlayer, Integer> getPlayerLifeMap() {
         return this.playerLifeMap;
+    }
+
+    /**
+     * Get the goal life map having only active players (so without offline ones)
+     * @return the filtered goal life map
+     */
+    @NotNull
+    public Map<ArenaPlayer, Integer> getActivePlayerLifeMap() {
+        return this.playerLifeMap.entrySet().stream()
+                .filter(entry -> entry.getKey().getStatus() == PlayerStatus.FIGHT)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     /**
@@ -360,7 +373,7 @@ public class ArenaGoal implements IArenaCommandHandler {
      */
     public int getLives(ArenaPlayer arenaPlayer) {
         if (this.arena.isFreeForAll()) {
-            return this.getPlayerLifeMap().getOrDefault(arenaPlayer.getPlayer(), 0);
+            return this.getPlayerLifeMap().getOrDefault(arenaPlayer, 0);
         } else {
             return this.getTeamLifeMap().getOrDefault(arenaPlayer.getArenaTeam(), 0);
         }
@@ -413,17 +426,17 @@ public class ArenaGoal implements IArenaCommandHandler {
      * hook into initializing a player being put directly to the battlefield
      * (contrary to lounge/spectate)
      *
-     * @param player the player being put
+     * @param arenaPlayer the player being put
      */
-    public void initiate(final Player player) {
+    public void initiate(final ArenaPlayer arenaPlayer) {
     }
 
     /**
      * hook into an arena joining the game after it has begin
      *
-     * @param player the joining player
+     * @param arenaPlayer the joining player
      */
-    public void lateJoin(final Player player) {
+    public void lateJoin(final ArenaPlayer arenaPlayer) {
     }
 
     /**
@@ -438,18 +451,18 @@ public class ArenaGoal implements IArenaCommandHandler {
     /**
      * hook into a player leaving the arena
      *
-     * @param player the leaving player
+     * @param arenaPlayer the leaving player
      */
-    public void parseLeave(final Player player) {
+    public void parseLeave(final ArenaPlayer arenaPlayer) {
     }
 
     /**
      * hook into a player dying
      *
-     * @param player    the dying player
-     * @param deathInfo the last damage cause
+     * @param arenaPlayer the dying player
+     * @param deathInfo   the last damage cause
      */
-    public void parsePlayerDeath(Player player, PADeathInfo deathInfo) {
+    public void parsePlayerDeath(ArenaPlayer arenaPlayer, PADeathInfo deathInfo) {
     }
 
     /**
@@ -515,7 +528,7 @@ public class ArenaGoal implements IArenaCommandHandler {
      * @param player the player to update
      * @param lives  the value being set
      */
-    public void setPlayerLives(final Player player, final int lives) {
+    public void setPlayerLives(final ArenaPlayer player, final int lives) {
         this.playerLifeMap.put(player, lives);
     }
 
@@ -532,11 +545,11 @@ public class ArenaGoal implements IArenaCommandHandler {
     /**
      * hook into arena player unloading
      *
-     * @param player the player to unload
+     * @param arenaPlayer the player to unload
      */
-    public void unload(final Player player) {
-        if (player != null) {
-            this.getPlayerLifeMap().remove(player);
+    public void unload(final ArenaPlayer arenaPlayer) {
+        if (arenaPlayer != null) {
+            this.getPlayerLifeMap().remove(arenaPlayer);
         }
     }
 
@@ -548,23 +561,23 @@ public class ArenaGoal implements IArenaCommandHandler {
         }
     }
 
-    protected void updateLives(final Player player, final int value) {
+    protected void updateLives(final ArenaPlayer arenaPlayer, final int value) {
         if (this.arena.getConfig().getBoolean(CFG.GENERAL_ADDLIVESPERPLAYER)) {
-            this.getPlayerLifeMap().put(player, this.arena.getFighters().size() * value);
+            this.getPlayerLifeMap().put(arenaPlayer, this.arena.getFighters().size() * value);
         } else {
-            this.getPlayerLifeMap().put(player, value);
+            this.getPlayerLifeMap().put(arenaPlayer, value);
         }
     }
 
-    protected void broadcastSimpleDeathMessage(Player player, PADeathInfo deathInfo) {
-        this.broadcastDeathMessage(Language.MSG.FIGHT_KILLED_BY, player, deathInfo, null);
+    protected void broadcastSimpleDeathMessage(ArenaPlayer arenaPlayer, PADeathInfo deathInfo) {
+        this.broadcastDeathMessage(Language.MSG.FIGHT_KILLED_BY, arenaPlayer, deathInfo, null);
     }
 
-    protected void broadcastDeathMessage(Language.MSG deathMessage, Player player, PADeathInfo deathInfo, Integer remainingLives) {
-        final ArenaTeam respawnTeam = ArenaPlayer.fromPlayer(player).getArenaTeam();
+    protected void broadcastDeathMessage(Language.MSG deathMessage, ArenaPlayer arenaPlayer, PADeathInfo deathInfo, Integer remainingLives) {
+        final ArenaTeam respawnTeam = arenaPlayer.getArenaTeam();
 
-        String deathCause = this.arena.parseDeathCause(player, deathInfo.getCause(), deathInfo.getDamager());
-        String coloredPlayerName = respawnTeam.colorizePlayer(player) + ChatColor.YELLOW;
+        String deathCause = this.arena.parseDeathCause(arenaPlayer.getPlayer(), deathInfo.getCause(), deathInfo.getDamager());
+        String coloredPlayerName = respawnTeam.colorizePlayer(arenaPlayer) + ChatColor.YELLOW;
 
         if (deathMessage == Language.MSG.FIGHT_KILLED_BY_REMAINING || deathMessage == Language.MSG.FIGHT_KILLED_BY_REMAINING_FRAGS) {
             this.arena.broadcast(Language.parse(deathMessage,

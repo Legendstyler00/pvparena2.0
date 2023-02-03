@@ -52,6 +52,16 @@ public class ArenaTeam {
     /**
      * colorize a player name
      *
+     * @param arenaPlayer the player to colorize
+     * @return the colorized player name
+     */
+    public String colorizePlayer(final ArenaPlayer arenaPlayer) {
+        return this.color + arenaPlayer.getName();
+    }
+
+    /**
+     * colorize a player name
+     *
      * @param player the player to colorize
      * @return the colorized player name
      */
@@ -104,8 +114,8 @@ public class ArenaTeam {
         return this.players;
     }
 
-    public boolean hasPlayer(final Player player) {
-        return this.players.contains(ArenaPlayer.fromPlayer(player));
+    public boolean hasPlayer(final ArenaPlayer aPlayer) {
+        return this.players.contains(aPlayer);
     }
 
     public boolean isEveryoneReady() {

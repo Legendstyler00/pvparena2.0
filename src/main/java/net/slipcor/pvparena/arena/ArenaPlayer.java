@@ -16,9 +16,9 @@ import net.slipcor.pvparena.loadables.ModuleType;
 import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.InventoryManager;
 import net.slipcor.pvparena.managers.SpawnManager;
-import net.slipcor.pvparena.statistics.model.PlayerArenaStats;
 import net.slipcor.pvparena.statistics.dao.PlayerArenaStatsDao;
 import net.slipcor.pvparena.statistics.dao.PlayerArenaStatsDaoImpl;
+import net.slipcor.pvparena.statistics.model.PlayerArenaStats;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -54,6 +54,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static net.slipcor.pvparena.config.Debugger.debug;
@@ -183,6 +184,21 @@ public class ArenaPlayer {
         debug(damagee, "last damaging player is null");
         debug(damagee, "last damaging event: {}", damageEvent.getEventName());
         return null;
+    }
+
+    public boolean canLeaveWithoutEndingArena() {
+        Supplier<Long> fightingPlayersSupplier = () -> this.arena.getFighters()
+                .stream()
+                .filter(pl -> pl.getStatus() == PlayerStatus.FIGHT)
+                .count();
+
+        Supplier<Long> fightingTeammatesSupplier = () -> this.getArenaTeam()
+                .getTeamMembers()
+                .stream()
+                .filter(pl -> pl.getStatus() == PlayerStatus.FIGHT)
+                .count();
+
+        return (this.arena.isFreeForAll() && fightingPlayersSupplier.get() > 2) || fightingTeammatesSupplier.get() > 1;
     }
 
     /**
@@ -319,7 +335,7 @@ public class ArenaPlayer {
     public void handleDeathAndLose(PADeathInfo deathInfo) {
         ArenaTeam team = this.getArenaTeam();
 
-        final String playerName = (team == null) ? this.getName() : team.colorizePlayer(this.player);
+        final String playerName = (team == null) ? this.getName() : team.colorizePlayer(this);
         if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
             this.arena.broadcast(Language.parse(
                     Language.MSG.FIGHT_KILLED_BY,
@@ -840,5 +856,18 @@ public class ArenaPlayer {
     public void unsetSelection() {
         this.selection[0] = null;
         this.selection[1] = null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        ArenaPlayer that = (ArenaPlayer) o;
+        return this.player.getUniqueId().equals(that.player.getUniqueId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.player.getUniqueId());
     }
 }

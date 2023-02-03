@@ -93,7 +93,7 @@ public class PAI_Ready extends AbstractArenaCommand {
         }
 
         arena.msg(aPlayer.getPlayer(), MSG.READY_DONE);
-        arena.broadcast(Language.parse(MSG.PLAYER_READY, aPlayer.getArenaTeam().colorizePlayer(aPlayer.getPlayer())));
+        arena.broadcast(Language.parse(MSG.PLAYER_READY, aPlayer.getArenaTeam().colorizePlayer(aPlayer)));
         aPlayer.setStatus(PlayerStatus.READY);
 
         if (aPlayer.getArenaTeam().isEveryoneReady()) {

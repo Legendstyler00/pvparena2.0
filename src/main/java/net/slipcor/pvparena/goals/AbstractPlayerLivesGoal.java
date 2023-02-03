@@ -16,7 +16,6 @@ import net.slipcor.pvparena.runnables.EndRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import static net.slipcor.pvparena.config.Debugger.debug;
 
@@ -29,9 +28,9 @@ public abstract class AbstractPlayerLivesGoal extends ArenaGoal {
     }
 
     @Override
-    public Boolean shouldRespawnPlayer(Player player, PADeathInfo deathInfo) {
-        int pos = this.getPlayerLifeMap().get(player);
-        debug(this.arena, player, "lives before death: " + pos);
+    public Boolean shouldRespawnPlayer(ArenaPlayer arenaPlayer, PADeathInfo deathInfo) {
+        int pos = this.getPlayerLifeMap().get(arenaPlayer);
+        debug(arenaPlayer, "lives before death: " + pos);
         return pos > 1;
     }
 
@@ -65,21 +64,20 @@ public abstract class AbstractPlayerLivesGoal extends ArenaGoal {
     }
 
     @Override
-    public void commitPlayerDeath(Player player, boolean doesRespawn, PADeathInfo deathInfo) {
+    public void commitPlayerDeath(ArenaPlayer arenaPlayer, boolean doesRespawn, PADeathInfo deathInfo) {
 
-        if (!this.getPlayerLifeMap().containsKey(player)) {
+        if (!this.getPlayerLifeMap().containsKey(arenaPlayer)) {
             return;
         }
 
-        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
         final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, doesRespawn);
         Bukkit.getPluginManager().callEvent(gEvent);
 
-        final int currentPlayerOrTeamLive = this.getPlayerLifeMap().get(player);
+        final int currentPlayerOrTeamLive = this.getPlayerLifeMap().get(arenaPlayer);
 
-        debug(this.arena, player, "lives before death: " + currentPlayerOrTeamLive);
+        debug(arenaPlayer, "lives before death: " + currentPlayerOrTeamLive);
         if (currentPlayerOrTeamLive <= 1) {
-            this.getPlayerLifeMap().remove(player);
+            this.getPlayerLifeMap().remove(arenaPlayer);
 
             debug(arenaPlayer, "no remaining lives -> LOST");
             arenaPlayer.handleDeathAndLose(deathInfo);
@@ -87,13 +85,13 @@ public abstract class AbstractPlayerLivesGoal extends ArenaGoal {
             WorkflowManager.handleEnd(this.arena, false);
         } else {
             int nextPlayerOrTeamLive = currentPlayerOrTeamLive - 1;
-            this.getPlayerLifeMap().put(player, nextPlayerOrTeamLive);
+            this.getPlayerLifeMap().put(arenaPlayer, nextPlayerOrTeamLive);
 
             if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
                 if (this.arena.getConfig().getBoolean(CFG.GENERAL_SHOWREMAININGLIVES)) {
-                    this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING, player, deathInfo, nextPlayerOrTeamLive);
+                    this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING, arenaPlayer, deathInfo, nextPlayerOrTeamLive);
                 } else {
-                    this.broadcastSimpleDeathMessage(player, deathInfo);
+                    this.broadcastSimpleDeathMessage(arenaPlayer, deathInfo);
                 }
             }
 
@@ -108,24 +106,24 @@ public abstract class AbstractPlayerLivesGoal extends ArenaGoal {
     }
 
     @Override
-    public void initiate(final Player player) {
-        this.updateLives(player, this.arena.getConfig().getInt(CFG.GOAL_PLIVES_LIVES));
+    public void initiate(final ArenaPlayer arenaPlayer) {
+        this.updateLives(arenaPlayer, this.arena.getConfig().getInt(CFG.GOAL_PLIVES_LIVES));
     }
 
     @Override
-    public void parseLeave(final Player player) {
-        if (player == null) {
+    public void parseLeave(final ArenaPlayer arenaPlayer) {
+        if (arenaPlayer == null) {
             PVPArena.getInstance().getLogger().warning(this.getName() + ": player NULL");
             return;
         }
-        this.getPlayerLifeMap().remove(player);
+        this.getPlayerLifeMap().remove(arenaPlayer);
     }
 
     @Override
     public void parseStart() {
         for (ArenaTeam team : this.arena.getTeams()) {
             for (ArenaPlayer ap : team.getTeamMembers()) {
-                this.updateLives(ap.getPlayer(), this.arena.getConfig().getInt(CFG.GOAL_PLIVES_LIVES));
+                this.updateLives(ap, this.arena.getConfig().getInt(CFG.GOAL_PLIVES_LIVES));
             }
         }
     }

@@ -479,9 +479,9 @@ public class ArenaRegion {
         Arena.pmsg(player, MSG.NOTICE_YOU_DEATH);
         ArenaGoal goal = this.arena.getGoal();
         if (goal.getName().endsWith("DeathMatch")) {
-            if (goal.getPlayerLifeMap().containsKey(arenaPlayer.getPlayer())) {
-                final int lives = goal.getPlayerLifeMap().get(arenaPlayer.getPlayer()) + 1;
-                goal.getPlayerLifeMap().put(arenaPlayer.getPlayer(), lives);
+            if (goal.getPlayerLifeMap().containsKey(arenaPlayer)) {
+                final int lives = goal.getPlayerLifeMap().get(arenaPlayer) + 1;
+                goal.getPlayerLifeMap().put(arenaPlayer, lives);
             } else if (goal.getTeamLifeMap().containsKey(arenaPlayer.getArenaTeam())) {
                 final int lives = goal.getTeamLifeMap().get(arenaPlayer.getArenaTeam()) + 1;
                 goal.getTeamLifeMap().put(arenaPlayer.getArenaTeam(), lives);

@@ -1,12 +1,10 @@
 package net.slipcor.pvparena.goals;
 
 import net.slipcor.pvparena.PVPArena;
-import net.slipcor.pvparena.arena.ArenaClass;
 import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.arena.ArenaTeam;
 import net.slipcor.pvparena.arena.PlayerStatus;
 import net.slipcor.pvparena.classes.PASpawn;
-import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
@@ -63,7 +61,7 @@ public class GoalTeamPlayerLives extends AbstractPlayerLivesGoal {
     public int getLives(ArenaPlayer arenaPlayer) {
         // sum of all team members lives
         return arenaPlayer.getArenaTeam().getTeamMembers().stream()
-                .mapToInt(ap -> this.getPlayerLifeMap().getOrDefault(ap.getPlayer(), 0))
+                .mapToInt(ap -> this.getPlayerLifeMap().getOrDefault(ap, 0))
                 .sum();
     }
 
@@ -80,7 +78,7 @@ public class GoalTeamPlayerLives extends AbstractPlayerLivesGoal {
     public Map<String, Double> timedEnd(final Map<String, Double> scores) {
 
         for (ArenaPlayer ap : this.arena.getFighters()) {
-            double score = this.getPlayerLifeMap().getOrDefault(ap.getPlayer(), 0);
+            double score = this.getPlayerLifeMap().getOrDefault(ap, 0);
             if (ap.getArenaTeam() != null) {
                 if (scores.containsKey(ap.getArenaTeam().getName())) {
                     scores.put(ap.getArenaTeam().getName(), scores.get(ap.getName()) + score);

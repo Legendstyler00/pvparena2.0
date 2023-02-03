@@ -203,7 +203,8 @@ public class WorkflowManager {
             applyKillerModifiers(arena, killer);
         }
 
-        Boolean shouldGoalRespawnPlayer = goal.shouldRespawnPlayer(player, deathInfo);
+        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
+        Boolean shouldGoalRespawnPlayer = goal.shouldRespawnPlayer(arenaPlayer, deathInfo);
         boolean goalHandlesDeath = (shouldGoalRespawnPlayer != null);
         boolean doesRespawn = goalHandlesDeath && shouldGoalRespawnPlayer;
 
@@ -214,11 +215,10 @@ public class WorkflowManager {
 
         // Player inventory before death. Will be refilled or not.
         List<ItemStack> droppedInv = new ArrayList<>();
-        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
 
         if (goalHandlesDeath) {
             debug(arena, player, "handled by: " + goal.getName());
-            goal.commitPlayerDeath(player, doesRespawn, deathInfo);
+            goal.commitPlayerDeath(arenaPlayer, doesRespawn, deathInfo);
 
             if (arena.getConfig().getBoolean(CFG.PLAYER_DROPSINVENTORY) && arenaPlayer.mayDropInventory()) {
                 droppedInv = InventoryManager.drop(player);
@@ -250,7 +250,7 @@ public class WorkflowManager {
             if (arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
                 String deathCause = arena.parseDeathCause(player, event.getCause(), killer);
                 arena.broadcast(Language.parse(MSG.FIGHT_KILLED_BY,
-                        respawnTeam.colorizePlayer(player) + ChatColor.YELLOW,
+                        respawnTeam.colorizePlayer(arenaPlayer) + ChatColor.YELLOW,
                         deathCause));
             }
 
@@ -258,7 +258,7 @@ public class WorkflowManager {
         }
 
         debug(arena, player, "parsing death: " + goal.getName());
-        goal.parsePlayerDeath(player, deathInfo);
+        goal.parsePlayerDeath(arenaPlayer, deathInfo);
         ArenaModuleManager.parsePlayerDeath(arena, player, event);
     }
 

@@ -56,7 +56,7 @@ public class GoalTeamDeathConfirm extends AbstractTeamKillGoal {
     }
 
     @Override
-    public Boolean shouldRespawnPlayer(Player player, PADeathInfo deathInfo) {
+    public Boolean shouldRespawnPlayer(ArenaPlayer arenaPlayer, PADeathInfo deathInfo) {
         Player killer = deathInfo.getKiller();
         if (killer != null && this.arena.hasPlayer(killer)) {
             return true;
@@ -65,22 +65,20 @@ public class GoalTeamDeathConfirm extends AbstractTeamKillGoal {
     }
 
     @Override
-    public void commitPlayerDeath(final Player respawnPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
-        final ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(respawnPlayer);
-
-        final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, false);
+    public void commitPlayerDeath(final ArenaPlayer respawnPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
+        final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, respawnPlayer, deathInfo, false);
         Bukkit.getPluginManager().callEvent(gEvent);
 
-        final ArenaTeam respawnTeam = arenaPlayer.getArenaTeam();
+        final ArenaTeam respawnTeam = respawnPlayer.getArenaTeam();
 
-        this.drop(respawnPlayer, respawnTeam);
+        this.drop(respawnPlayer.getPlayer(), respawnTeam);
 
         if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
             this.broadcastSimpleDeathMessage(respawnPlayer, deathInfo);
         }
 
-        arenaPlayer.setMayDropInventory(true);
-        arenaPlayer.setMayRespawn(true);
+        respawnPlayer.setMayDropInventory(true);
+        respawnPlayer.setMayRespawn(true);
     }
 
     private void drop(final Player player, final ArenaTeam team) {
@@ -158,9 +156,9 @@ public class GoalTeamDeathConfirm extends AbstractTeamKillGoal {
     }
 
     @Override
-    public void unload(final Player player) {
+    public void unload(final ArenaPlayer arenaPlayer) {
         if (this.allowsJoinInBattle()) {
-            this.arena.hasNotPlayed(ArenaPlayer.fromPlayer(player));
+            this.arena.hasNotPlayed(arenaPlayer);
         }
     }
 }

@@ -175,7 +175,7 @@ public class GoalSabotage extends ArenaGoal implements Listener {
 
                 } else if(this.winningTeam == null) {
                     this.arena.broadcast(Language.parse(MSG.GOAL_SABOTAGE_IGNITED,
-                            pTeam.colorizePlayer(player) + ChatColor.YELLOW,
+                            pTeam.colorizePlayer(aPlayer) + ChatColor.YELLOW,
                             team.getColoredName() + ChatColor.YELLOW));
 
                     final PAGoalSabotageIgniteEvent gEvent = new PAGoalSabotageIgniteEvent(this.arena, this, ArenaPlayer.fromPlayer(player), team);
@@ -362,19 +362,17 @@ public class GoalSabotage extends ArenaGoal implements Listener {
     }
 
     @Override
-    public void initiate(final Player player) {
-        final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
-        final ArenaTeam team = aPlayer.getArenaTeam();
+    public void initiate(final ArenaPlayer arenaPlayer) {
+        final ArenaTeam team = arenaPlayer.getArenaTeam();
         if (!this.getLighterMap().containsKey(team)) {
-            debug(this.arena, player, "adding team " + team.getName());
+            debug(arenaPlayer, "adding team " + team.getName());
             SpawnManager.getBlockByExactName(this.arena, TNT, team.getName()).toLocation().getBlock().setType(Material.TNT);
             this.distributeLighter(team, null);
         }
     }
 
     @Override
-    public void parsePlayerDeath(final Player player, final PADeathInfo event) {
-        ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
+    public void parsePlayerDeath(final ArenaPlayer aPlayer, final PADeathInfo event) {
         ArenaTeam team = aPlayer.getArenaTeam();
         boolean holdingLighter = this.isPlayerHoldingLighter(aPlayer);
 
@@ -428,8 +426,8 @@ public class GoalSabotage extends ArenaGoal implements Listener {
     }
 
     @Override
-    public void unload(final Player player) {
-        this.disconnect(ArenaPlayer.fromPlayer(player));
+    public void unload(final ArenaPlayer arenaPlayer) {
+        this.disconnect(arenaPlayer);
     }
 
     @EventHandler(ignoreCancelled = true)

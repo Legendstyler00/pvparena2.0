@@ -23,7 +23,6 @@ import net.slipcor.pvparena.managers.WorkflowManager;
 import net.slipcor.pvparena.runnables.EndRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import java.util.Map;
@@ -67,7 +66,7 @@ public class GoalTank extends ArenaGoal {
 
     @Override
     public boolean checkEnd() {
-        final int count = this.getPlayerLifeMap().size();
+        final int count = this.getActivePlayerLifeMap().size();
         return (count <= 1 || this.tank.getStatus() != PlayerStatus.FIGHT);
     }
 
@@ -80,11 +79,11 @@ public class GoalTank extends ArenaGoal {
     }
 
     @Override
-    public Boolean shouldRespawnPlayer(final Player player, PADeathInfo deathInfo) {
-        if (this.getPlayerLifeMap().containsKey(player)) {
-            final int iLives = this.getPlayerLifeMap().get(player);
-            debug(this.arena, player, "lives before death: " + iLives);
-            return iLives > 1 && !this.tank.getName().equals(ArenaPlayer.fromPlayer(player).getName());
+    public Boolean shouldRespawnPlayer(final ArenaPlayer arenaPlayer, PADeathInfo deathInfo) {
+        if (this.getPlayerLifeMap().containsKey(arenaPlayer)) {
+            final int iLives = this.getPlayerLifeMap().get(arenaPlayer);
+            debug(arenaPlayer, "lives before death: " + iLives);
+            return iLives > 1 && !this.tank.getName().equals(arenaPlayer.getName());
         }
         return true;
     }
@@ -138,13 +137,12 @@ public class GoalTank extends ArenaGoal {
     }
 
     @Override
-    public void commitPlayerDeath(final Player player, final boolean doesRespawn, PADeathInfo deathInfo) {
-        if (!this.getPlayerLifeMap().containsKey(player)) {
+    public void commitPlayerDeath(final ArenaPlayer arenaPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
+        if (!this.getPlayerLifeMap().containsKey(arenaPlayer)) {
             return;
         }
-        int iLives = this.getPlayerLifeMap().get(player);
-        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
-        debug(this.arena, player, "lives before death: " + iLives);
+        int iLives = this.getPlayerLifeMap().get(arenaPlayer);
+        debug(arenaPlayer, "lives before death: " + iLives);
         if (iLives <= 1 || this.tank.getName().equals(arenaPlayer.getName())) {
 
             if (this.tank.getName().equals(arenaPlayer.getName())) {
@@ -156,7 +154,7 @@ public class GoalTank extends ArenaGoal {
             }
 
 
-            this.getPlayerLifeMap().remove(player);
+            this.getPlayerLifeMap().remove(arenaPlayer);
 
             debug(arenaPlayer, "no remaining lives -> LOST");
             arenaPlayer.handleDeathAndLose(deathInfo);
@@ -167,10 +165,10 @@ public class GoalTank extends ArenaGoal {
             final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, true);
             Bukkit.getPluginManager().callEvent(gEvent);
             iLives--;
-            this.getPlayerLifeMap().put(player, iLives);
+            this.getPlayerLifeMap().put(arenaPlayer, iLives);
 
             if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
-                this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING, player, deathInfo, iLives);
+                this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING, arenaPlayer, deathInfo, iLives);
             }
 
             arenaPlayer.setMayDropInventory(true);
@@ -194,7 +192,7 @@ public class GoalTank extends ArenaGoal {
 
     @Override
     public int getLives(ArenaPlayer arenaPlayer) {
-        return this.getPlayerLifeMap().getOrDefault(arenaPlayer.getPlayer(), 0);
+        return this.getPlayerLifeMap().getOrDefault(arenaPlayer, 0);
     }
 
     @Override
@@ -206,18 +204,18 @@ public class GoalTank extends ArenaGoal {
     }
 
     @Override
-    public void initiate(final Player player) {
-        this.getPlayerLifeMap().put(player, this.arena.getConfig().getInt(CFG.GOAL_TANK_LIVES));
+    public void initiate(final ArenaPlayer arenaPlayer) {
+        this.getPlayerLifeMap().put(arenaPlayer, this.arena.getConfig().getInt(CFG.GOAL_TANK_LIVES));
     }
 
     @Override
-    public void parseLeave(final Player player) {
-        if (player == null) {
+    public void parseLeave(final ArenaPlayer arenaPlayer) {
+        if (arenaPlayer == null) {
             PVPArena.getInstance().getLogger().warning(
                     this.getName() + ": player NULL");
             return;
         }
-        this.getPlayerLifeMap().remove(player);
+        this.getPlayerLifeMap().remove(arenaPlayer);
     }
 
     @Override
@@ -235,7 +233,7 @@ public class GoalTank extends ArenaGoal {
                 if (pos-- == 0) {
                     tank = arenaPlayer;
                 }
-                this.getPlayerLifeMap().put(arenaPlayer.getPlayer(), this.arena.getConfig().getInt(CFG.GOAL_TANK_LIVES));
+                this.getPlayerLifeMap().put(arenaPlayer, this.arena.getConfig().getInt(CFG.GOAL_TANK_LIVES));
             }
         }
         final ArenaTeam tankTeam = new ArenaTeam(TANK, "PINK");
@@ -282,7 +280,7 @@ public class GoalTank extends ArenaGoal {
     public Map<String, Double> timedEnd(final Map<String, Double> scores) {
 
         for (ArenaPlayer arenaPlayer : this.arena.getFighters()) {
-            double score = this.getPlayerLifeMap().getOrDefault(arenaPlayer.getPlayer(), 0);
+            double score = this.getPlayerLifeMap().getOrDefault(arenaPlayer, 0);
             if (this.tank.getName().equals(arenaPlayer.getName())) {
                 score *= this.arena.getFighters().size();
             }
@@ -297,7 +295,7 @@ public class GoalTank extends ArenaGoal {
     }
 
     @Override
-    public void unload(final Player player) {
-        this.getPlayerLifeMap().remove(player);
+    public void unload(final ArenaPlayer arenaPlayer) {
+        this.getPlayerLifeMap().remove(arenaPlayer);
     }
 }

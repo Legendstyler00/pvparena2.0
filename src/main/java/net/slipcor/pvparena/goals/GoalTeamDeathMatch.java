@@ -13,7 +13,6 @@ import net.slipcor.pvparena.events.goal.PAGoalPlayerDeathEvent;
 import net.slipcor.pvparena.managers.WorkflowManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 
 /**
  * <pre>
@@ -52,38 +51,37 @@ public class GoalTeamDeathMatch extends AbstractTeamKillGoal {
     }
 
     @Override
-    public Boolean shouldRespawnPlayer(Player player, PADeathInfo deathInfo) {
+    public Boolean shouldRespawnPlayer(ArenaPlayer arenaPlayer, PADeathInfo deathInfo) {
         return true;
     }
 
     @Override
-    public void commitPlayerDeath(final Player player, final boolean doesRespawn, PADeathInfo deathInfo) {
+    public void commitPlayerDeath(final ArenaPlayer respawnPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
 
-        ArenaPlayer respawnPlayer = ArenaPlayer.fromPlayer(player);
-        Player killer = deathInfo.getKiller();
-        if (killer == null || player.equals(killer)) {
+        ArenaPlayer killer = ArenaPlayer.fromPlayer(deathInfo.getKiller());
+        if (killer == null || respawnPlayer.equals(killer)) {
             if (!this.arena.getConfig().getBoolean(CFG.GOAL_TDM_SUICIDESCORE)) {
-                this.broadcastSimpleDeathMessage(player, deathInfo);
+                this.broadcastSimpleDeathMessage(respawnPlayer, deathInfo);
                 this.respawnPlayer(respawnPlayer);
                 final PAGoalPlayerDeathEvent gEvent;
                 gEvent = new PAGoalPlayerDeathEvent(this.arena, this, respawnPlayer, deathInfo, doesRespawn);
                 Bukkit.getPluginManager().callEvent(gEvent);
                 return;
             }
-            killer = player;
+            killer = respawnPlayer;
         }
 
         final ArenaTeam respawnTeam = respawnPlayer.getArenaTeam();
-        final ArenaTeam killerTeam = ArenaPlayer.fromPlayer(killer).getArenaTeam();
+        final ArenaTeam killerTeam = killer.getArenaTeam();
 
         if (killerTeam.equals(respawnTeam)) { // suicide
             for (ArenaTeam newKillerTeam : this.arena.getTeams()) {
-                if (!newKillerTeam.equals(respawnTeam) && this.reduceLives(newKillerTeam, player, deathInfo, killer)) {
+                if (!newKillerTeam.equals(respawnTeam) && this.reduceLives(newKillerTeam, respawnPlayer, deathInfo, killer)) {
                     this.makePlayerLose(respawnPlayer);
                     return;
                 }
             }
-        } else if (this.reduceLives(killerTeam, player, deathInfo, killer)) {
+        } else if (this.reduceLives(killerTeam, respawnPlayer, deathInfo, killer)) {
             this.makePlayerLose(respawnPlayer);
             return;
         }
@@ -94,9 +92,9 @@ public class GoalTeamDeathMatch extends AbstractTeamKillGoal {
         if (this.getTeamLifeMap().get(killerTeam) != null) {
             if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
                 if (killerTeam.equals(respawnTeam) || !this.arena.getConfig().getBoolean(CFG.GENERAL_SHOWREMAININGLIVES)) {
-                    this.broadcastSimpleDeathMessage(player, deathInfo);
+                    this.broadcastSimpleDeathMessage(respawnPlayer, deathInfo);
                 } else {
-                    this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING_TEAM_FRAGS, player, deathInfo, this.getTeamLifeMap().get(killerTeam));
+                    this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING_TEAM_FRAGS, respawnPlayer, deathInfo, this.getTeamLifeMap().get(killerTeam));
                 }
             }
             this.respawnPlayer(respawnPlayer);
@@ -118,7 +116,7 @@ public class GoalTeamDeathMatch extends AbstractTeamKillGoal {
      * @param arenaTeam the killing team
      * @return true if the player should not respawn but be removed
      */
-    private boolean reduceLives(ArenaTeam arenaTeam, Player respawnPlayer, PADeathInfo deathInfo, Player killer) {
+    private boolean reduceLives(ArenaTeam arenaTeam, ArenaPlayer respawnPlayer, PADeathInfo deathInfo, ArenaPlayer killer) {
         final int iLives = this.getTeamLifeMap().get(arenaTeam);
 
         if (iLives <= 1) {
@@ -133,7 +131,7 @@ public class GoalTeamDeathMatch extends AbstractTeamKillGoal {
                     }
                 }
             }
-            String deathCause = this.arena.parseDeathCause(respawnPlayer, deathInfo.getCause(), killer);
+            String deathCause = this.arena.parseDeathCause(respawnPlayer.getPlayer(), deathInfo.getCause(), killer.getPlayer());
             this.arena.broadcast(Language.parse(MSG.FIGHT_KILLED_BY, arenaTeam.colorizePlayer(respawnPlayer) + ChatColor.YELLOW, deathCause));
             WorkflowManager.handleEnd(this.arena, false);
             return true;
@@ -144,9 +142,9 @@ public class GoalTeamDeathMatch extends AbstractTeamKillGoal {
     }
 
     @Override
-    public void unload(final Player player) {
+    public void unload(final ArenaPlayer arenaPlayer) {
         if (this.allowsJoinInBattle()) {
-            this.arena.hasNotPlayed(ArenaPlayer.fromPlayer(player));
+            this.arena.hasNotPlayed(arenaPlayer);
         }
     }
 }

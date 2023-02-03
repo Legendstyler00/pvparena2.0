@@ -396,10 +396,10 @@ public class GoalBlockDestroy extends ArenaGoal {
     }
 
     @Override
-    public void unload(final Player player) {
-        this.disconnect(ArenaPlayer.fromPlayer(player));
+    public void unload(final ArenaPlayer arenaPlayer) {
+        this.disconnect(arenaPlayer);
         if (this.allowsJoinInBattle()) {
-            this.arena.hasNotPlayed(ArenaPlayer.fromPlayer(player));
+            this.arena.hasNotPlayed(arenaPlayer);
         }
     }
 
@@ -456,7 +456,7 @@ public class GoalBlockDestroy extends ArenaGoal {
                 final String sTeam = pTeam.getName();
                 try {
                     this.arena.broadcast(Language.parse(MSG.GOAL_BLOCKDESTROY_SCORE,
-                            this.arena.getTeam(sTeam).colorizePlayer(player)
+                            this.arena.getTeam(sTeam).colorizePlayer(arenaPlayer)
                                     + ChatColor.YELLOW, arenaTeam.getColoredName()
                                     + ChatColor.YELLOW, String
                                     .valueOf(this.getTeamLifeMap().get(arenaTeam) - 1)));

@@ -144,14 +144,14 @@ public class GoalCheckPoints extends ArenaGoal {
 
     private void maybeAddScoreAndBroadCast(final ArenaPlayer arenaPlayer, int checkpoint) {
 
-        if (!this.getPlayerLifeMap().containsKey(arenaPlayer.getPlayer())) {
+        if (!this.getPlayerLifeMap().containsKey(arenaPlayer)) {
             return;
         }
 
 
         final int max = this.arena.getConfig().getInt(CFG.GOAL_CHECKPOINTS_LIVES);
 
-        final int position = max - this.getPlayerLifeMap().get(arenaPlayer.getPlayer()) + 1;
+        final int position = max - this.getPlayerLifeMap().get(arenaPlayer) + 1;
 
         if (checkpoint == position) {
             this.arena.broadcast(Language.parse(MSG.GOAL_CHECKPOINTS_SCORE,
@@ -211,7 +211,7 @@ public class GoalCheckPoints extends ArenaGoal {
 
         if (args.length < 2 && this.arena.getFighters().contains(ap)) {
             ap.setTelePass(true);
-            int value = cpLives - this.getPlayerLifeMap().get(ap.getPlayer());
+            int value = cpLives - this.getPlayerLifeMap().get(ap);
             if (value == 0) {
                 ap.getPlayer().teleport(SpawnManager.getSpawnByExactName(this.arena, FIGHT).toLocation());
             } else {
@@ -296,17 +296,16 @@ public class GoalCheckPoints extends ArenaGoal {
     }
 
     @Override
-    public void initiate(final Player player) {
-        final ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
-        if (!this.getPlayerLifeMap().containsKey(arenaPlayer.getPlayer())) {
-            this.getPlayerLifeMap().put(arenaPlayer.getPlayer(), this.arena.getConfig()
+    public void initiate(final ArenaPlayer arenaPlayer) {
+        if (!this.getPlayerLifeMap().containsKey(arenaPlayer)) {
+            this.getPlayerLifeMap().put(arenaPlayer, this.arena.getConfig()
                     .getInt(CFG.GOAL_CHECKPOINTS_LIVES));
         }
     }
 
     @Override
-    public void lateJoin(final Player player) {
-        this.initiate(player);
+    public void lateJoin(final ArenaPlayer arenaPlayer) {
+        this.initiate(arenaPlayer);
     }
 
     @Override
@@ -314,7 +313,7 @@ public class GoalCheckPoints extends ArenaGoal {
         this.getPlayerLifeMap().clear();
         for (ArenaPlayer arenaPlayer : this.arena.getFighters()) {
             debug(this.arena, "adding player " + arenaPlayer.getName());
-            this.getPlayerLifeMap().put(arenaPlayer.getPlayer(),
+            this.getPlayerLifeMap().put(arenaPlayer,
                     this.arena.getConfig().getInt(CFG.GOAL_CHECKPOINTS_LIVES, 3));
         }
 
@@ -326,12 +325,12 @@ public class GoalCheckPoints extends ArenaGoal {
     private void reduceLivesCheckEndAndCommit(final Arena arena, final ArenaPlayer arenaPlayer) {
 
         debug(arena, "reducing lives of player " + arenaPlayer);
-        if (this.getPlayerLifeMap().get(arenaPlayer.getPlayer()) != null) {
-            final int iLives = this.getPlayerLifeMap().get(arenaPlayer.getPlayer()) - 1;
+        if (this.getPlayerLifeMap().get(arenaPlayer) != null) {
+            final int iLives = this.getPlayerLifeMap().get(arenaPlayer) - 1;
             if (iLives > 0) {
-                this.getPlayerLifeMap().put(arenaPlayer.getPlayer(), iLives);
+                this.getPlayerLifeMap().put(arenaPlayer, iLives);
             } else {
-                this.getPlayerLifeMap().remove(arenaPlayer.getPlayer());
+                this.getPlayerLifeMap().remove(arenaPlayer);
                 this.commitWin(arena, arenaPlayer);
             }
         }
@@ -347,8 +346,7 @@ public class GoalCheckPoints extends ArenaGoal {
 
         for (ArenaPlayer arenaPlayer : this.arena.getFighters()) {
             double score = this.arena.getConfig().getInt(CFG.GOAL_CHECKPOINTS_LIVES)
-                    - (this.getPlayerLifeMap()
-                    .getOrDefault(arenaPlayer.getPlayer(), 0));
+                    - (this.getPlayerLifeMap().getOrDefault(arenaPlayer, 0));
             if (scores.containsKey(arenaPlayer.getName())) {
                 scores.put(arenaPlayer.getName(), scores.get(arenaPlayer.getName()) + score);
             } else {

@@ -110,11 +110,10 @@ public abstract class AbstractFlagGoal extends ArenaGoal {
     }
 
     @Override
-    public void initiate(final Player player) {
-        final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
-        final ArenaTeam team = aPlayer.getArenaTeam();
+    public void initiate(final ArenaPlayer arenaPlayer) {
+        final ArenaTeam team = arenaPlayer.getArenaTeam();
         if (!this.getTeamLifeMap().containsKey(team)) {
-            this.getTeamLifeMap().put(aPlayer.getArenaTeam(), this.arena.getConfig().getInt(this.getFlagLivesCfg()));
+            this.getTeamLifeMap().put(arenaPlayer.getArenaTeam(), this.arena.getConfig().getInt(this.getFlagLivesCfg()));
         }
     }
 
@@ -453,18 +452,18 @@ public abstract class AbstractFlagGoal extends ArenaGoal {
     /**
      * get the team name of the flag a player holds
      *
-     * @param player the player to check
+     * @param arenaPlayer the player to check
      * @return a team name
      */
-    protected ArenaTeam getHeldFlagTeam(final Player player) {
+    protected ArenaTeam getHeldFlagTeam(final ArenaPlayer arenaPlayer) {
         if (this.getFlagMap().isEmpty()) {
             return null;
         }
 
-        debug(player, "getting held FLAG of player {}", player);
+        debug(arenaPlayer, "getting held FLAG of player {}", arenaPlayer);
         for (ArenaTeam arenaTeam : this.getFlagMap().keySet()) {
-            debug(player, "team {} is in {}s hands", arenaTeam, this.getFlagMap().get(arenaTeam));
-            if (player.getName().equals(this.getFlagMap().get(arenaTeam))) {
+            debug(arenaPlayer, "team {} is in {}s hands", arenaTeam, this.getFlagMap().get(arenaTeam));
+            if (arenaPlayer.getName().equals(this.getFlagMap().get(arenaTeam))) {
                 return arenaTeam;
             }
         }
@@ -593,22 +592,23 @@ public abstract class AbstractFlagGoal extends ArenaGoal {
     }
 
     @Override
-    public void unload(final Player player) {
-        this.disconnect(ArenaPlayer.fromPlayer(player));
+    public void unload(final ArenaPlayer arenaPlayer) {
+        this.disconnect(arenaPlayer);
         if (this.allowsJoinInBattle()) {
-            this.arena.hasNotPlayed(ArenaPlayer.fromPlayer(player));
+            this.arena.hasNotPlayed(arenaPlayer);
         }
     }
 
     protected boolean isIrrelevantInventoryClickEvent(InventoryClickEvent event) {
-        final Player player = (Player) event.getWhoClicked();
-        final Arena arena = ArenaPlayer.fromPlayer(player).getArena();
+        Player player = (Player) event.getWhoClicked();
+        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
+        Arena arena = arenaPlayer.getArena();
 
         if (arena == null || !arena.getName().equals(this.arena.getName())) {
             return true;
         }
 
-        if (event.isCancelled() || this.getHeldFlagTeam(player) == null) {
+        if (event.isCancelled() || this.getHeldFlagTeam(arenaPlayer) == null) {
             return true;
         }
 

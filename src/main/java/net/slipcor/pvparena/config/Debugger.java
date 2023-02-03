@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.function.Supplier;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -53,6 +54,12 @@ public class Debugger {
     public static void debug(Arena arena, String string) {
         if (active) {
             formatAndPrint(arena, null, FINE, string);
+        }
+    }
+
+    public static void debug(Arena arena, Supplier<String> stringSupplier) {
+        if (active) {
+            formatAndPrint(arena, null, FINE, stringSupplier.get());
         }
     }
 

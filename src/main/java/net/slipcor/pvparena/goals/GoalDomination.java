@@ -591,11 +591,10 @@ public class GoalDomination extends ArenaGoal {
     }
 
     @Override
-    public void initiate(final Player player) {
-        final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
-        final ArenaTeam team = aPlayer.getArenaTeam();
+    public void initiate(final ArenaPlayer arenaPlayer) {
+        final ArenaTeam team = arenaPlayer.getArenaTeam();
         if (!this.getTeamLifeMap().containsKey(team)) {
-            this.getTeamLifeMap().put(aPlayer.getArenaTeam(), this.arena.getConfig()
+            this.getTeamLifeMap().put(arenaPlayer.getArenaTeam(), this.arena.getConfig()
                     .getInt(CFG.GOAL_DOM_LIVES));
 
             final Set<PABlockLocation> spawns = SpawnManager.getBlocksStartingWith(this.arena, FLAG, null);

@@ -223,6 +223,7 @@ public final class SpawnManager {
                         PVPArena.getInstance().getLogger().warning(String.format("Element #%s is null: [%s]",
                                 this.index, StringParser.joinArray(this.spawns, ",")));
                     } else {
+                        arenaPlayer.setStatus(PlayerStatus.FIGHT);
                         TeleportManager.teleportPlayerToSpawn(arena, arenaPlayer, spawn);
                     }
                 });

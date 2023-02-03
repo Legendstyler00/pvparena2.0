@@ -203,7 +203,7 @@ public final class PlayerState {
 
         if (aPlayer.getArena() != null) {
             ArenaModuleManager.unload(aPlayer.getArena(), player);
-            aPlayer.getArena().getGoal().unload(player);
+            aPlayer.getArena().getGoal().unload(aPlayer);
         }
 
 

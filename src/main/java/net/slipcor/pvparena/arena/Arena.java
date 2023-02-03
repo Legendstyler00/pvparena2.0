@@ -574,12 +574,17 @@ public class Arena {
     }
 
     public boolean hasPlayer(final Player player) {
+        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
         for (ArenaTeam team : this.teams) {
-            if (team.hasPlayer(player)) {
+            if (team.hasPlayer(arenaPlayer)) {
                 return true;
             }
         }
-        return this.equals(ArenaPlayer.fromPlayer(player).getArena());
+        return this.equals(arenaPlayer.getArena());
+    }
+
+    public boolean hasPlayerInTeams(ArenaPlayer aPlayer) {
+        return this.teams.stream().anyMatch(t -> t.hasPlayer(aPlayer));
     }
 
     public void increasePlayerCount() {
@@ -637,7 +642,7 @@ public class Arena {
             case ENTITY_ATTACK:
             case ENTITY_SWEEP_ATTACK:
                 if (damager instanceof Player && team != null) {
-                    return team.colorizePlayer(aPlayer.getPlayer()) + ChatColor.YELLOW;
+                    return team.colorizePlayer(aPlayer) + ChatColor.YELLOW;
                 }
 
                 try {
@@ -657,7 +662,7 @@ public class Arena {
                 }
             case PROJECTILE:
                 if (damager instanceof Player && team != null) {
-                    return team.colorizePlayer(aPlayer.getPlayer()) + ChatColor.YELLOW;
+                    return team.colorizePlayer(aPlayer) + ChatColor.YELLOW;
                 }
                 try {
                     Entity eventDamager = ((EntityDamageByEntityEvent) lastDamageCause).getDamager();
@@ -693,14 +698,14 @@ public class Arena {
             return;
         }
 
-        this.goal.parseLeave(player);
+        final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
+        this.goal.parseLeave(aPlayer);
 
         if (!this.fightInProgress) {
             this.startCount--;
             this.playedPlayers.remove(player.getName());
         }
         debug(this, player, "fully removing player from arena");
-        final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
         if (!silent) {
 
             final ArenaTeam team = aPlayer.getArenaTeam();
@@ -716,7 +721,7 @@ public class Arena {
                 this.broadcastExcept(
                         player,
                         Language.parse(MSG.FIGHT_PLAYER_LEFT,
-                                team.colorizePlayer(player) + ChatColor.YELLOW));
+                                team.colorizePlayer(aPlayer) + ChatColor.YELLOW));
             }
             this.msg(player, MSG.NOTICE_YOU_LEFT);
         }
@@ -1168,7 +1173,7 @@ public class Arena {
 
     public void addPlayerDuringMatch(ArenaPlayer arenaPlayer) {
         arenaPlayer.setStatus(PlayerStatus.FIGHT);
-        this.getGoal().initiate(arenaPlayer.getPlayer());
+        this.getGoal().initiate(arenaPlayer);
         SpawnManager.distributePlayer(this, arenaPlayer);
         this.msg(arenaPlayer.getPlayer(), MSG.FIGHT_BEGINS);
     }
@@ -1196,84 +1201,6 @@ public class Arena {
     @Override
     public int hashCode() {
         return Objects.hash(this.name);
-    }
-
-
-
-    /**
-     * last resort to put a player into an arena (when no goal/module wants to)
-     *
-     * @param player the player to put
-     * @param team   the arena team to put into
-     * @return true if joining successful
-     */
-    public boolean tryJoin(final Player player, final ArenaTeam team) {
-        final ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
-
-        debug(this, player, "trying to join player");
-
-        final String clear = this.config.getString(CFG.PLAYER_CLEAR_INVENTORY);
-
-        if ("ALL".equals(clear) || clear.contains(player.getGameMode().name())) {
-            ArenaPlayer.backupAndClearInventory(this, player);
-            arenaPlayer.dump();
-        }
-
-        final PAJoinEvent event = new PAJoinEvent(this, player, false);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            debug("! Join event cancelled by a plugin !");
-            return false;
-        }
-
-        if (arenaPlayer.getStatus() == PlayerStatus.NULL) {
-            // joining DIRECTLY - save loc !!
-            arenaPlayer.setLocation(new PALocation(player.getLocation()));
-        } else {
-            // should not happen; just make sure it does not. If noone reports this
-            // for some time, we can remove this check. It should never happen
-            // anything different. Just saying.
-            PVPArena.getInstance().getLogger().warning("Status not null for tryJoin: " + player.getName());
-        }
-
-        if (arenaPlayer.getArenaClass() == null) {
-            String autoClass = this.config.getDefinedString(CFG.READY_AUTOCLASS);
-            if (!this.getAutoClass(autoClass, arenaPlayer.getArenaTeam()).isPresent()) {
-                this.msg(player, MSG.ERROR_CLASS_NOT_FOUND, "autoClass");
-                return false;
-            }
-        }
-
-        arenaPlayer.setArena(this);
-        team.add(arenaPlayer);
-        arenaPlayer.setStatus(PlayerStatus.FIGHT);
-
-        final Set<PASpawn> availableSpawns = SpawnManager.selectSpawnsForPlayer(this, arenaPlayer, FIGHT);
-
-        if(availableSpawns.isEmpty()){
-            PVPArena.getInstance().getLogger().severe("No available spawn found !");
-            return  false;
-        }
-        TeleportManager.teleportPlayerToRandomSpawn(this, arenaPlayer, availableSpawns);
-
-        if (arenaPlayer.getState() == null) {
-
-            ArenaPlayer.backupAndClearInventory(this, player);
-            arenaPlayer.createState(player);
-            arenaPlayer.dump();
-
-            if (arenaPlayer.getArenaTeam() != null && arenaPlayer.getArenaClass() == null) {
-                String autoClassCfg = this.config.getDefinedString(CFG.READY_AUTOCLASS);
-                if (this.config.getBoolean(CFG.USES_PLAYER_OWN_INVENTORY) && this.getArenaClass(player.getName()) != null) {
-                    this.chooseClass(player, null, player.getName());
-                } else if (autoClassCfg != null) {
-                    this.getAutoClass(autoClassCfg, arenaPlayer.getArenaTeam()).ifPresent(autoClass ->
-                        this.chooseClass(player, null, autoClass)
-                    );
-                }
-            }
-        }
-        return true;
     }
 
     public void addBlock(final PABlock paBlock) {

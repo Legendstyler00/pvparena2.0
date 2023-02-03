@@ -74,7 +74,7 @@ public class GoalInfect extends ArenaGoal {
 
     @Override
     public boolean checkEnd() {
-        final int count = this.getPlayerLifeMap().size();
+        final int count = this.getActivePlayerLifeMap().size();
 
         return count <= 1 || this.anyTeamEmpty(); // yep. only one player left. go!
     }
@@ -213,11 +213,11 @@ public class GoalInfect extends ArenaGoal {
     }
 
     @Override
-    public Boolean shouldRespawnPlayer(final Player player, PADeathInfo deathInfo) {
-        if (this.getPlayerLifeMap().containsKey(player)) {
-            final int iLives = this.getPlayerLifeMap().get(player);
-            debug(this.arena, player, "lives before death: " + iLives);
-            return iLives > 1 || !INFECTED.equals(ArenaPlayer.fromPlayer(player).getArenaTeam().getName());
+    public Boolean shouldRespawnPlayer(final ArenaPlayer arenaPlayer, PADeathInfo deathInfo) {
+        if (this.getPlayerLifeMap().containsKey(arenaPlayer)) {
+            final int iLives = this.getPlayerLifeMap().get(arenaPlayer);
+            debug(arenaPlayer, "lives before death: " + iLives);
+            return iLives > 1 || !INFECTED.equals(arenaPlayer.getArenaTeam().getName());
         }
         return true;
     }
@@ -347,20 +347,20 @@ public class GoalInfect extends ArenaGoal {
     }
 
     @Override
-    public void commitPlayerDeath(final Player player, final boolean doesRespawn, PADeathInfo deathInfo) {
-        if (!this.getPlayerLifeMap().containsKey(player)) {
+    public void commitPlayerDeath(final ArenaPlayer aPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
+        if (!this.getPlayerLifeMap().containsKey(aPlayer)) {
             return;
         }
-        int iLives = this.getPlayerLifeMap().get(player);
-        debug(this.arena, player, "lives before death: " + iLives);
-        ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
+        Player player = aPlayer.getPlayer();
+        int iLives = this.getPlayerLifeMap().get(aPlayer);
+        debug(aPlayer, "lives before death: " + iLives);
         if (iLives <= 1 || INFECTED.equals(aPlayer.getArenaTeam().getName())) {
             if (iLives <= 1 && INFECTED.equals(aPlayer.getArenaTeam().getName())) {
 
                 final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, aPlayer, deathInfo, false);
                 Bukkit.getPluginManager().callEvent(gEvent);
                 // kill, remove!
-                this.getPlayerLifeMap().remove(player);
+                this.getPlayerLifeMap().remove(aPlayer);
 
                 debug(aPlayer, "no remaining lives -> LOST");
                 aPlayer.handleDeathAndLose(deathInfo);
@@ -371,9 +371,9 @@ public class GoalInfect extends ArenaGoal {
                 PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, aPlayer, deathInfo, false);
                 Bukkit.getPluginManager().callEvent(gEvent);
                 // dying player -> infected
-                this.getPlayerLifeMap().put(player.getPlayer(), this.arena.getConfig().getInt(CFG.GOAL_INFECTED_ILIVES));
+                this.getPlayerLifeMap().put(aPlayer, this.arena.getConfig().getInt(CFG.GOAL_INFECTED_ILIVES));
                 this.arena.msg(player, MSG.GOAL_INFECTED_YOU);
-                this.arena.broadcast(Language.parse(MSG.GOAL_INFECTED_PLAYER, player.getName()));
+                this.arena.broadcast(Language.parse(MSG.GOAL_INFECTED_PLAYER, aPlayer.getName()));
 
                 final ArenaTeam oldTeam = aPlayer.getArenaTeam();
                 final ArenaTeam respawnTeam = this.arena.getTeam(INFECTED);
@@ -392,12 +392,11 @@ public class GoalInfect extends ArenaGoal {
                 }
 
                 if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
-                    this.broadcastSimpleDeathMessage(player, deathInfo);
+                    this.broadcastSimpleDeathMessage(aPlayer, deathInfo);
                 }
 
-                ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
-                arenaPlayer.setMayDropInventory(true);
-                arenaPlayer.setMayRespawn(true);
+                aPlayer.setMayDropInventory(true);
+                aPlayer.setMayRespawn(true);
 
                 if (this.anyTeamEmpty()) {
                     WorkflowManager.handleEnd(this.arena, false);
@@ -408,30 +407,28 @@ public class GoalInfect extends ArenaGoal {
             PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this,  aPlayer, deathInfo, true);
             Bukkit.getPluginManager().callEvent(gEvent);
             iLives--;
-            this.getPlayerLifeMap().put(player, iLives);
+            this.getPlayerLifeMap().put(aPlayer, iLives);
 
             if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
-                this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING, player, deathInfo, iLives);
+                this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING, aPlayer, deathInfo, iLives);
             }
 
-            ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
-            arenaPlayer.setMayDropInventory(true);
-            arenaPlayer.setMayRespawn(true);
+            aPlayer.setMayDropInventory(true);
+            aPlayer.setMayRespawn(true);
 
 
             // player died => commit death!
             WorkflowManager.handleEnd(this.arena, false);
         } else {
             iLives--;
-            this.getPlayerLifeMap().put(player.getPlayer(), iLives);
+            this.getPlayerLifeMap().put(aPlayer, iLives);
 
             if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
-                this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING, player, deathInfo, iLives);
+                this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING, aPlayer, deathInfo, iLives);
             }
 
-            ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
-            arenaPlayer.setMayDropInventory(true);
-            arenaPlayer.setMayRespawn(true);
+            aPlayer.setMayDropInventory(true);
+            aPlayer.setMayRespawn(true);
         }
     }
 
@@ -464,18 +461,18 @@ public class GoalInfect extends ArenaGoal {
     }
 
     @Override
-    public void initiate(final Player player) {
-        this.updateLives(player, this.arena.getConfig().getInt(CFG.GOAL_INFECTED_NLIVES));
+    public void initiate(final ArenaPlayer arenaPlayer) {
+        this.updateLives(arenaPlayer, this.arena.getConfig().getInt(CFG.GOAL_INFECTED_NLIVES));
     }
 
     @Override
-    public void parseLeave(final Player player) {
-        if (player == null) {
+    public void parseLeave(final ArenaPlayer arenaPlayer) {
+        if (arenaPlayer == null) {
             PVPArena.getInstance().getLogger().warning(
                     this.getName() + ": player NULL");
             return;
         }
-        this.getPlayerLifeMap().remove(player);
+        this.getPlayerLifeMap().remove(arenaPlayer);
     }
 
     @Override
@@ -496,12 +493,10 @@ public class GoalInfect extends ArenaGoal {
             debug(this.arena, "team " + team.getName() + " random " + pos);
             for (ArenaPlayer arenaPlayer : team.getTeamMembers()) {
                 debug(this.arena, arenaPlayer.getPlayer(), "#" + pos + ": " + arenaPlayer);
-                this.getPlayerLifeMap().put(arenaPlayer.getPlayer(),
-                        this.arena.getConfig().getInt(CFG.GOAL_INFECTED_NLIVES));
+                this.getPlayerLifeMap().put(arenaPlayer, this.arena.getConfig().getInt(CFG.GOAL_INFECTED_NLIVES));
                 if (pos-- == 0) {
                     infected = arenaPlayer;
-                    this.getPlayerLifeMap().put(arenaPlayer.getPlayer(),
-                            this.arena.getConfig().getInt(CFG.GOAL_INFECTED_ILIVES));
+                    this.getPlayerLifeMap().put(arenaPlayer, this.arena.getConfig().getInt(CFG.GOAL_INFECTED_ILIVES));
                 }
             }
         }
@@ -548,7 +543,7 @@ public class GoalInfect extends ArenaGoal {
     public Map<String, Double> timedEnd(final Map<String, Double> scores) {
 
         for (ArenaPlayer arenaPlayer : this.arena.getFighters()) {
-            double score = this.getPlayerLifeMap().getOrDefault(arenaPlayer.getPlayer(), 0);
+            double score = this.getPlayerLifeMap().getOrDefault(arenaPlayer, 0);
             if (arenaPlayer.getArenaTeam() != null && INFECTED.equals(arenaPlayer.getArenaTeam().getName())) {
                 score *= this.arena.getFighters().size();
             }

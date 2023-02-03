@@ -221,16 +221,14 @@ public class GoalLiberation extends ArenaGoal {
     }
 
     @Override
-    public Boolean shouldRespawnPlayer(Player player, PADeathInfo deathInfo) {
-        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
+    public Boolean shouldRespawnPlayer(ArenaPlayer arenaPlayer, PADeathInfo deathInfo) {
         ArenaTeam arenaTeam = arenaPlayer.getArenaTeam();
         final int pos = this.getTeamLifeMap().get(arenaTeam);
-        debug(this.arena, player, "lives before death: " + pos);
+        debug(arenaPlayer, "lives before death: " + pos);
         if (pos <= 1) {
             this.getTeamLifeMap().put(arenaTeam, 1);
 
-            final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
-            final ArenaTeam team = aPlayer.getArenaTeam();
+            final ArenaTeam team = arenaPlayer.getArenaTeam();
             boolean someoneAlive = false;
 
             for (ArenaPlayer temp : team.getTeamMembers()) {
@@ -315,19 +313,18 @@ public class GoalLiberation extends ArenaGoal {
     }
 
     @Override
-    public void commitPlayerDeath(final Player player, final boolean doesRespawn, PADeathInfo deathInfo) {
-
-        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
+    public void commitPlayerDeath(final ArenaPlayer arenaPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
         ArenaTeam arenaTeam = arenaPlayer.getArenaTeam();
+        Player player = arenaPlayer.getPlayer();
 
         if (!this.getTeamLifeMap().containsKey(arenaTeam)) {
-            debug(this.arena, player, "cmd: not in life map!");
+            debug(arenaPlayer, "cmd: not in life map!");
             return;
         }
         final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, false);
         Bukkit.getPluginManager().callEvent(gEvent);
         int lives = this.getTeamLifeMap().get(arenaTeam);
-        debug(this.arena, player, "lives before death: " + lives);
+        debug(arenaPlayer, "lives before death: " + lives);
 
         if (lives <= 1) {
             this.getTeamLifeMap().put(arenaTeam, 1);
@@ -348,7 +345,7 @@ public class GoalLiberation extends ArenaGoal {
             if (someoneAlive) {
 
                 if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
-                    this.broadcastSimpleDeathMessage(player, deathInfo);
+                    this.broadcastSimpleDeathMessage(arenaPlayer, deathInfo);
                 }
 
                 if (this.arena.getConfig().getBoolean(CFG.PLAYER_DROPSINVENTORY)) {
@@ -365,7 +362,7 @@ public class GoalLiberation extends ArenaGoal {
                 arenaPlayer.revive(deathInfo);
 
                 if (this.arena.getConfig().getBoolean(CFG.GOAL_LIBERATION_JAILED_SCOREBOARD)) {
-                    arenaPlayer.getPlayer().getScoreboard().getObjective("lives").getScore(arenaPlayer.getName()).setScore(101);
+                    player.getScoreboard().getObjective("lives").getScore(arenaPlayer.getName()).setScore(101);
                 }
             } else {
                 this.getTeamLifeMap().remove(arenaTeam);
@@ -375,7 +372,7 @@ public class GoalLiberation extends ArenaGoal {
                 arenaPlayer.setStatus(PlayerStatus.LOST);
 
                 if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
-                    this.broadcastSimpleDeathMessage(player, deathInfo);
+                    this.broadcastSimpleDeathMessage(arenaPlayer, deathInfo);
                 }
 
                 WorkflowManager.handleEnd(this.arena, false);
@@ -386,7 +383,7 @@ public class GoalLiberation extends ArenaGoal {
             this.getTeamLifeMap().put(arenaTeam, lives);
 
             if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
-                this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING, player, deathInfo, lives);
+                this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING, arenaPlayer, deathInfo, lives);
             }
 
             arenaPlayer.setMayDropInventory(true);
@@ -437,19 +434,17 @@ public class GoalLiberation extends ArenaGoal {
     }
 
     @Override
-    public void initiate(final Player player) {
-        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
+    public void initiate(final ArenaPlayer arenaPlayer) {
         ArenaTeam arenaTeam = arenaPlayer.getArenaTeam();
         this.getTeamLifeMap().put(arenaTeam, this.arena.getConfig().getInt(CFG.GOAL_LLIVES_LIVES));
     }
 
     @Override
-    public void parseLeave(final Player player) {
-        if (player == null) {
+    public void parseLeave(final ArenaPlayer arenaPlayer) {
+        if (arenaPlayer == null) {
             PVPArena.getInstance().getLogger().warning(this.getName() + ": player NULL");
             return;
         }
-        ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
         ArenaTeam arenaTeam = arenaPlayer.getArenaTeam();
         this.getTeamLifeMap().remove(arenaTeam);
     }

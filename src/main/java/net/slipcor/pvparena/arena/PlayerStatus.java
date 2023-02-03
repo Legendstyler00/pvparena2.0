@@ -12,6 +12,7 @@ package net.slipcor.pvparena.arena;
  * - WATCH = watching a fight from the spectator area
  * - DEAD = dead and soon respawning
  * - LOST = lost and thus spectating
+ * - OFFLINE = in the arena but disconnected from the server (only if allowRejoin is true)
  * </pre>
  */
 public enum PlayerStatus {
@@ -22,5 +23,6 @@ public enum PlayerStatus {
     FIGHT,
     WATCH,
     DEAD,
-    LOST
+    LOST,
+    OFFLINE
 }
