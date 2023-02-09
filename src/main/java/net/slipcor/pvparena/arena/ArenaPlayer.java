@@ -73,7 +73,7 @@ import static net.slipcor.pvparena.config.Debugger.debug;
 public class ArenaPlayer {
     private static final Map<UUID, ArenaPlayer> totalPlayers = new HashMap<>();
 
-    private final Player player;
+    private Player player;
 
     private boolean telePass;
     private boolean ignoreAnnouncements;
@@ -141,6 +141,12 @@ public class ArenaPlayer {
 
     public void setSpectating(boolean spectating) {
         this.spectating = spectating;
+    }
+
+    public void reloadBukkitPlayer() {
+        this.player.loadData();
+        UUID playerUUID = this.player.getUniqueId();
+        this.player = Bukkit.getPlayer(playerUUID);
     }
 
     /**
@@ -689,6 +695,7 @@ public class ArenaPlayer {
         debug(this, "destroying arena player {}", this.player.getName());
         this.debugPrint();
 
+        this.unload();
         this.telePass = false;
 
         if (this.state != null) {
@@ -719,6 +726,10 @@ public class ArenaPlayer {
         }
 
         this.clearDump();
+    }
+
+    public void unload() {
+        totalPlayers.remove(this.getPlayer().getUniqueId());
     }
 
     public void saveStatistics() {

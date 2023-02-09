@@ -631,6 +631,7 @@ public class PlayerListener implements Listener {
             if(arena.isFightInProgress() && arena.getConfig().getBoolean(CFG.JOIN_ALLOW_REJOIN) &&
                     arena.hasPlayerInTeams(aPlayer) && aPlayer.getStatus() == OFFLINE) {
 
+                    aPlayer.reloadBukkitPlayer();
                     aPlayer.setStatus(FIGHT);
                     arena.getScoreboard().setupPlayer(aPlayer);
                     SpawnManager.respawn(aPlayer, null);
@@ -672,10 +673,14 @@ public class PlayerListener implements Listener {
                     }
                 } catch (GameplayException e) {
                     arena.msg(Bukkit.getConsoleSender(), MSG.ERROR_ERROR, e.getMessage());
+                    arenaPlayer.unload();
                 }
             } else {
                 arena.playerLeave(player, CFG.TP_EXIT, false, true, false);
+                arenaPlayer.unload();
             }
+        } else {
+            arenaPlayer.unload();
         }
     }
 
@@ -688,6 +693,7 @@ public class PlayerListener implements Listener {
             return; // no fighting player => OUT
         }
         arena.playerLeave(player, CFG.TP_EXIT, false, true, false);
+        arenaPlayer.unload();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
