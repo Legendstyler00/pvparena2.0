@@ -55,7 +55,7 @@ public class PAA_ToggleMod extends AbstractArenaCommand {
                 }
                 arena.msg(sender, MSG.INFO_MOD_ENABLED, name);
             } else {
-                ArenaModule toRemove = arena.getMods().stream().filter(mod -> name.equals(mod.getName())).findAny().get();
+                ArenaModule toRemove = arena.getMods().stream().filter(mod -> name.equalsIgnoreCase(mod.getName())).findAny().get();
                 if(toRemove.getType() == ModuleType.JOIN || toRemove.getType() == ModuleType.SPECTATE) {
                     arena.msg(sender, MSG.INFO_MOD_NOT_REMOVABLE, name, toRemove.getType().name());
                 } else {
