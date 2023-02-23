@@ -3,41 +3,37 @@ package net.slipcor.pvparena.modules;
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.arena.ArenaTeam;
+import net.slipcor.pvparena.arena.PlayerStatus;
 import net.slipcor.pvparena.classes.PALocation;
-import net.slipcor.pvparena.classes.PASpawn;
+import net.slipcor.pvparena.commands.PAI_Ready;
 import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.exceptions.GameplayException;
-import net.slipcor.pvparena.loadables.ArenaModule;
-import net.slipcor.pvparena.loadables.ModuleType;
-import net.slipcor.pvparena.managers.ArenaManager;
-import net.slipcor.pvparena.managers.PermissionManager;
+import net.slipcor.pvparena.loadables.JoinModule;
 import net.slipcor.pvparena.managers.SpawnManager;
 import net.slipcor.pvparena.managers.TeleportManager;
-import net.slipcor.pvparena.managers.WorkflowManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
-import static net.slipcor.pvparena.classes.PASpawn.FIGHT;
 import static net.slipcor.pvparena.config.Debugger.debug;
 
 /**
  * <pre>
- * Arena Module class "BattlefieldJoin"
+ * Arena Module class "QuickLounge"
  * </pre>
  * <p/>
- * Enables direct joining to the battlefield
+ * Enables direct joining to battlefield with an auto-start. Autoclass is required. JoinInBattle is required.
  *
- * @author slipcor
+ * @author Eredrim
  */
-public class BattlefieldJoin extends ArenaModule {
+public class BattlefieldJoin extends JoinModule {
 
     private static final int PRIORITY = 1;
 
-    Runnable runner;
+    private LocalDateTime arenaStartTime;
 
     public BattlefieldJoin() {
         super("BattlefieldJoin");
@@ -54,80 +50,99 @@ public class BattlefieldJoin extends ArenaModule {
     }
 
     @Override
-    public ModuleType getType() {
-        return ModuleType.JOIN;
-    }
+    public boolean overridesStart() { return true; }
 
     @Override
     public boolean handleJoin(Player player) throws GameplayException {
-        if (this.arena.isLocked() && !PermissionManager.hasAdminPerm(player) && !PermissionManager.hasBuilderPerm(player, this.arena)) {
-            throw new GameplayException(Language.parse(MSG.ERROR_DISABLED));
+        if(this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS) == null) {
+            throw new GameplayException(Language.parse(MSG.ERROR_REQ_NEEDS_AUTOCLASS, this.name));
         }
 
-        final ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
+        if(!this.arena.getGoal().allowsJoinInBattle()) {
+            throw new GameplayException(Language.parse(MSG.ERROR_REQ_NEEDS_JOINDURINGMATCHGOAL, this.name));
+        }
 
-        if (arenaPlayer.getArena() != null) {
-            debug(arenaPlayer.getArena(), player, this.getName());
-            throw new GameplayException(Language.parse(
-                    MSG.ERROR_ARENA_ALREADY_PART_OF, ArenaManager.getIndirectArenaName(arenaPlayer.getArena())));
+        if(this.arena.getConfig().getBoolean(CFG.USES_EVENTEAMS)) {
+            throw new GameplayException(Language.parse(MSG.ERROR_REQ_INCOMPATIBLESETTING, this.name, CFG.USES_EVENTEAMS.getNode()));
         }
 
         return true;
     }
 
     @Override
-    public void commitJoin(final Player player, final ArenaTeam arenaTeam) {
-        // battlefield --> spawn
+    public void commitJoin(Player player, ArenaTeam arenaTeam) {
         final ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
         arenaPlayer.setLocation(new PALocation(arenaPlayer.getPlayer().getLocation()));
-
         arenaPlayer.setArena(this.arena);
         arenaTeam.add(arenaPlayer);
-        final Set<PASpawn> spawns = SpawnManager.selectSpawnsForPlayer(this.arena, arenaPlayer, FIGHT);
+        arenaPlayer.setStatus(PlayerStatus.LOUNGE);
 
-        TeleportManager.teleportPlayerToSpawnForJoin(this.arena, arenaPlayer, spawns, true);
+        TeleportManager.teleportPlayerToSpawnForJoin(this.arena, arenaPlayer, SpawnManager.selectSpawnsForPlayer(this.arena, arenaPlayer, "fight"), true);
+
+        this.broadcastJoinMessages(player, arenaTeam);
 
         if (arenaPlayer.getState() == null) {
-            // Important: clear inventory before setting player state to deal with armor modifiers (like health)
-            ArenaPlayer.backupAndClearInventory(this.arena, player);
-            arenaPlayer.createState(player);
-            arenaPlayer.dump();
-
-            if (arenaPlayer.getArenaTeam() != null && arenaPlayer.getArenaClass() == null) {
-                String autoClassCfg = this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS);
-                if (this.arena.getConfig().getBoolean(CFG.USES_PLAYER_OWN_INVENTORY) && this.arena.getArenaClass(arenaPlayer.getName()) != null) {
-                    this.arena.chooseClass(player, null, player.getName());
-                } else if (autoClassCfg != null) {
-                    this.arena.getAutoClass(autoClassCfg, arenaPlayer.getArenaTeam()).ifPresent(autoClass ->
-                            this.arena.chooseClass(player, null, autoClass)
-                    );
-                }
-            }
+            this.initPlayerState(arenaPlayer);
         } else {
-            PVPArena.getInstance().getLogger().warning(String.format("Player %s already have a state while joining arena %s",
-                    arenaPlayer.getName(), this.arena.getName()));
-        }
-
-        class RunLater implements Runnable {
-
-            @Override
-            public void run() {
-                Boolean check = WorkflowManager.handleStart(BattlefieldJoin.this.arena, player, true);
-                if (check == null || !check) {
-                    Bukkit.getScheduler().runTaskLater(PVPArena.getInstance(), this, 10L);
-                }
-            }
-
-        }
-
-        if (this.runner == null) {
-            this.runner = new RunLater();
-            Bukkit.getScheduler().runTaskLater(PVPArena.getInstance(), this.runner, 10L);
+            PVPArena.getInstance().getLogger().warning("Player has a state while joining: " + arenaPlayer.getName());
         }
     }
 
     @Override
-    public void reset(boolean force) {
-        this.runner = null;
+    public void commitJoinDuringMatch(Player player, ArenaTeam arenaTeam) {
+        final int joinDuration = this.arena.getConfig().getInt(CFG.MODULES_BATTLEFIELDJOIN_JOINDURATION, 0);
+        LocalDateTime now = LocalDateTime.now();
+        long joinDiffSeconds = ChronoUnit.SECONDS.between(this.arenaStartTime, now);
+        boolean isRejoinAllowed = this.arena.getConfig().getBoolean(CFG.JOIN_ALLOW_REJOIN) && this.arena.hasAlreadyPlayed(player.getName());
+
+        if(joinDuration <= 0 || joinDiffSeconds <= joinDuration || isRejoinAllowed) {
+            final ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
+
+            if (arenaPlayer.getState() == null) {
+                arenaPlayer.setLocation(new PALocation(arenaPlayer.getPlayer().getLocation()));
+                arenaPlayer.setArena(this.arena);
+                arenaTeam.add(arenaPlayer);
+
+                this.initPlayerState(arenaPlayer);
+                arenaPlayer.setStatus(PlayerStatus.LOUNGE);
+
+                try {
+                    PAI_Ready.checkReadyRequirementsDuringFight(this.arena, arenaPlayer);
+                    this.broadcastJoinMessages(player, arenaTeam);
+                } catch (GameplayException e) {
+                    this.arena.msg(player, e.getMessage());
+                    arenaPlayer.reset();
+                }
+            } else {
+                PVPArena.getInstance().getLogger().warning("Player has a state while joining: " + arenaPlayer.getName());
+            }
+        } else {
+            this.arena.msg(player, MSG.ERROR_FIGHT_IN_PROGRESS);
+        }
+    }
+
+    @Override
+    public void commitStart() {
+        // Players are already on the battlefield
+        debug("hooking commitStart in BattlefieldJoin");
+        this.arena.getTeams().forEach(team -> {
+            team.getTeamMembers().forEach(arenaPlayer -> arenaPlayer.setStatus(PlayerStatus.FIGHT));
+        });
+
+        final int joinDuration = this.arena.getConfig().getInt(CFG.MODULES_BATTLEFIELDJOIN_JOINDURATION, 0);
+        this.arenaStartTime = LocalDateTime.now();
+        if(joinDuration > 0) {
+            this.arena.broadcast(Language.parse(MSG.MODULE_BATTLEFIELDJOIN_REMAININGTIME, joinDuration));
+        }
+    }
+
+    @Override
+    public void parseJoin(final Player player, final ArenaTeam team) {
+        // Auto starting countdown when first player joins
+        if(this.arena.getFighters().size() >= this.arena.getConfig().getInt(CFG.READY_MINPLAYERS)) {
+            if (this.arena.startRunner == null) {
+                this.arena.countDown();
+            }
+        }
     }
 }

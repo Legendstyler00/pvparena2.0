@@ -293,6 +293,8 @@ public class Config {
         MODULES_ARENAVOTE_SECONDS("modules.arenavote.seconds", 30, "AutoVote"),
         MODULES_ARENAVOTE_WORLD("modules.arenavote.world", "none", "AutoVote"),
 
+        MODULES_BATTLEFIELDJOIN_JOINDURATION("modules.battlefieldjoin.joinDuration", 30, "BattlefieldJoin"),
+
         MODULES_BATTLEFIELDGUARD_ENTERDEATH("modules.battlefieldguard.enterdeath", false, "BattleFieldGuard"),
 
         MODULES_BETTERFIGHT_MESSAGES("modules.betterfight.usemessages", false, "BetterFight"),

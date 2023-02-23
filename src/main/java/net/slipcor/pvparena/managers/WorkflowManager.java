@@ -14,6 +14,8 @@ import net.slipcor.pvparena.exceptions.GameplayExceptionNotice;
 import net.slipcor.pvparena.loadables.ArenaGoal;
 import net.slipcor.pvparena.loadables.ArenaModule;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
+import net.slipcor.pvparena.loadables.JoinModule;
+import net.slipcor.pvparena.loadables.ModuleType;
 import net.slipcor.pvparena.runnables.InventoryRefillRunnable;
 import net.slipcor.pvparena.runnables.PVPActivateRunnable;
 import net.slipcor.pvparena.runnables.SpawnCampRunnable;
@@ -389,8 +391,16 @@ public class WorkflowManager {
         debug(arena, sender, "teleporting all players to their spawns");
 
         ArenaGoal goal = arena.getGoal();
+        JoinModule joinModule = arena.getMods().stream()
+                .filter(mod -> mod.getType() == ModuleType.JOIN)
+                .findAny()
+                .map(mod -> (JoinModule) mod)
+                .get();
+
         if (goal.overridesStart()) {
             goal.commitStart(); // override spawning
+        } else if (joinModule.overridesStart()) {
+            joinModule.commitStart(); // override spawning
         } else {
             for (ArenaTeam team : arena.getTeams()) {
                 SpawnManager.distributeTeams(arena, team);

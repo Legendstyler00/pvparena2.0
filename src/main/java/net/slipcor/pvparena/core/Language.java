@@ -128,7 +128,9 @@ public final class Language {
         ERROR_CLASS_NOTENOUGHEXP("nulang.error.class.notenoughexp", "You don't have enough EXP to choose &a%1%&r!"),
         ERROR_CLASS_NOT_FOUND("nulang.error.class.notfound", "Class not found: &a%1%&r"),
         ERROR_CLASS_NOT_GIVEN("nulang.error.class.notgiven", "No class was given!"),
-        ERROR_CLASS_NEEDS_AUTOCLASS("nulang.error.class.needsautoclass", "%1% module requires autoclass setting to be defined"),
+        ERROR_REQ_NEEDS_AUTOCLASS("nulang.error.class.needsautoclass", "%1% module requires autoclass setting to be defined"),
+        ERROR_REQ_NEEDS_JOINDURINGMATCHGOAL("nulang.error.class.needsjoinduringmatchgoal", "%1% module requires a goal that allows join during match"),
+        ERROR_REQ_INCOMPATIBLESETTING("nulang.error.class.incompatiblesetting", "%1% module is not compatible with %2% setting"),
         ERROR_COMMAND_BLOCKED("nulang.error.cmdblocked", "&cCommand blocked: %1%"),
         ERROR_COMMAND_INVALID("nulang.error.invalidcmd", "Invalid command: %1%"),
         ERROR_COMMAND_UNKNOWN("nulang.error.unknowncmd", "Unknown command"),
@@ -599,6 +601,8 @@ public final class Language {
         MODULE_AUTOVOTE_PLAYERVOTED("nulang.mod.autovote.playervoted", "%2% voted for arena %1%!"),
         MODULE_AUTOVOTE_VOTENOW("lang.votenow", "Vote for your arena! %1% left!\nVote with /pa [arenaname] vote\nAvailable arenas: %2%"),
         MODULE_AUTOVOTE_YOUVOTED("nulang.mod.autovote.youvoted", "You voted for arena %1%!"),
+
+        MODULE_BATTLEFIELDJOIN_REMAININGTIME("nulang.battlefieldjoin.lang.remainingtime", "Players can continue joining the arena during the next %1% seconds"),
 
         MODULE_BANVOTE_BANNED("nulang.banvote.lang.playerbanned", "Player banned: %1%"),
         MODULE_BANVOTE_KICKED("nulang.banvote.lang.playerkicked", "Player kicked: %1%"),

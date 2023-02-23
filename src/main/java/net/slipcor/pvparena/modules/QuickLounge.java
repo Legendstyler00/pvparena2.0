@@ -50,7 +50,7 @@ public class QuickLounge extends StandardLounge {
     @Override
     public boolean handleJoin(Player player) throws GameplayException {
         if(this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS) == null) {
-            throw new GameplayException(Language.parse(MSG.ERROR_CLASS_NEEDS_AUTOCLASS, this.name));
+            throw new GameplayException(Language.parse(MSG.ERROR_REQ_NEEDS_AUTOCLASS, this.name));
         }
 
         return super.handleJoin(player);
@@ -65,7 +65,7 @@ public class QuickLounge extends StandardLounge {
         arenaPlayer.setArena(this.arena);
         arenaTeam.add(arenaPlayer);
 
-        this.broadcastLoungeMessages(player, arenaTeam);
+        this.broadcastJoinMessages(player, arenaTeam);
 
         if (arenaPlayer.getState() == null) {
             this.initPlayerState(arenaPlayer);

@@ -10,13 +10,12 @@ import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.exceptions.GameplayException;
-import net.slipcor.pvparena.loadables.ArenaModule;
+import net.slipcor.pvparena.loadables.JoinModule;
 import net.slipcor.pvparena.loadables.ModuleType;
 import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.PermissionManager;
 import net.slipcor.pvparena.managers.SpawnManager;
 import net.slipcor.pvparena.managers.TeleportManager;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -37,7 +36,7 @@ import static net.slipcor.pvparena.config.Debugger.debug;
  * @author slipcor
  */
 
-public class StandardLounge extends ArenaModule {
+public class StandardLounge extends JoinModule {
 
     private static final int PRIORITY = 2;
     public static final String LOUNGE = "lounge";
@@ -126,7 +125,7 @@ public class StandardLounge extends ArenaModule {
         TeleportManager.teleportPlayerToSpawnForJoin(this.arena, arenaPlayer, SpawnManager.selectSpawnsForPlayer(this.arena, arenaPlayer, LOUNGE), true);
 
         this.arena.msg(player, Language.parse(this.arena, CFG.MSG_LOUNGE));
-        this.broadcastLoungeMessages(player, arenaTeam);
+        this.broadcastJoinMessages(player, arenaTeam);
 
         if (arenaPlayer.getState() == null) {
             this.initPlayerState(arenaPlayer);
@@ -135,61 +134,9 @@ public class StandardLounge extends ArenaModule {
         }
     }
 
-    protected void initPlayerState(ArenaPlayer arenaPlayer) {
-        // Important: clear inventory before setting player state to deal with armor modifiers (like health)
-        Player player = arenaPlayer.getPlayer();
-        ArenaPlayer.backupAndClearInventory(this.arena, player);
-        arenaPlayer.createState(player);
-        arenaPlayer.dump();
-
-
-        if (arenaPlayer.getArenaTeam() != null && arenaPlayer.getArenaClass() == null) {
-            String autoClassCfg = this.arena.getConfig().getDefinedString(CFG.READY_AUTOCLASS);
-            if (autoClassCfg != null) {
-                this.arena.getAutoClass(autoClassCfg, arenaPlayer.getArenaTeam()).ifPresent(autoClass ->
-                        this.arena.chooseClass(player, null, autoClass)
-                );
-            }
-        }
-    }
-
     @Override
     public void commitJoinDuringMatch(Player player, ArenaTeam team) {
         this.commitJoin(player, team);
-    }
-
-    protected void broadcastLoungeMessages(Player player, ArenaTeam arenaTeam) {
-        if (this.arena.isFreeForAll()) {
-            this.arena.msg(player,
-                    Language.parse(this.arena, CFG.MSG_YOUJOINED,
-                            Integer.toString(arenaTeam.getTeamMembers().size()),
-                            Integer.toString(this.arena.getConfig().getInt(CFG.READY_MAXPLAYERS))
-                    ));
-            this.arena.broadcastExcept(
-                    player,
-                    Language.parse(this.arena, CFG.MSG_PLAYERJOINED,
-                            player.getName(),
-                            Integer.toString(arenaTeam.getTeamMembers().size()),
-                            Integer.toString(this.arena.getConfig().getInt(CFG.READY_MAXPLAYERS))
-                    ));
-        } else {
-
-            this.arena.msg(player,
-                    Language.parse(this.arena, CFG.MSG_YOUJOINEDTEAM,
-                            arenaTeam.getColoredName() + ChatColor.COLOR_CHAR + 'r',
-                            Integer.toString(arenaTeam.getTeamMembers().size()),
-                            Integer.toString(this.arena.getConfig().getInt(CFG.READY_MAXPLAYERS))
-                    ));
-
-            this.arena.broadcastExcept(
-                    player,
-                    Language.parse(this.arena, CFG.MSG_PLAYERJOINEDTEAM,
-                            player.getName(),
-                            arenaTeam.getColoredName() + ChatColor.COLOR_CHAR + 'r',
-                            Integer.toString(arenaTeam.getTeamMembers().size()),
-                            Integer.toString(this.arena.getConfig().getInt(CFG.READY_MAXPLAYERS))
-                    ));
-        }
     }
 
     @Override

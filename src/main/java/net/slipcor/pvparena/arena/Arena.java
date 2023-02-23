@@ -1174,6 +1174,7 @@ public class Arena {
     public void addPlayerDuringMatch(ArenaPlayer arenaPlayer) {
         arenaPlayer.setStatus(PlayerStatus.FIGHT);
         this.getGoal().initiate(arenaPlayer);
+        this.getScoreboard().setupPlayer(arenaPlayer);
         SpawnManager.distributePlayer(this, arenaPlayer);
         this.msg(arenaPlayer.getPlayer(), MSG.FIGHT_BEGINS);
     }
