@@ -24,8 +24,20 @@ import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static java.util.stream.Collectors.toList;
 import static net.slipcor.pvparena.config.Debugger.debug;
 import static net.slipcor.pvparena.core.ItemStackUtils.getItemStacksFromConfig;
 
@@ -59,7 +71,7 @@ public final class ConfigurationManager {
         }
         final YamlConfiguration config = cfg.getYamlConfiguration();
 
-        final String goalConfig = cfg.getString(CFG.GENERAL_GOAL);
+        final String goalName = cfg.getString(CFG.GENERAL_GOAL);
         final List<String> modules = cfg.getStringList("mods", new ArrayList<>());
 
         ArenaGoalManager goalManager = PVPArena.getInstance().getAgm();
@@ -72,34 +84,12 @@ public final class ConfigurationManager {
             createNewConfig(arena, cfg);
         } else {
             // opening existing arena
-
-            values:
-            for (CFG c : CFG.getValues()) {
-                if (c.hasModule()) {
-                    if (goalConfig.equals(c.getGoalOrModule())) {
-                        if (cfg.getUnsafe(c.getNode()) == null) {
-                            cfg.createDefaults(goalConfig, modules);
-                            break values;
-                        }
-                    }
-
-                    for (String mod : modules) {
-                        if (mod.equals(c.getGoalOrModule())) {
-                            if (cfg.getUnsafe(c.getNode()) == null) {
-                                cfg.createDefaults(goalConfig, modules);
-                                break values;
-                            }
-                        }
-                    }
-                    continue; // node unused, don't check for existence!
-                }
-                if (cfg.getUnsafe(c.getNode()) == null) {
-                    cfg.createDefaults(goalConfig, modules);
-                    break;
-                }
+            if(isOutdatedConfigVersion(cfg.getString(CFG.VERSION, ""))) {
+                throw new UnsupportedClassVersionError();
             }
 
-            String goalName = cfg.getString(CFG.GENERAL_GOAL);
+            cfg.createDefaults(goalName, modules);
+
             if (goalManager.hasLoadable(goalName)) {
                 ArenaGoal goal = goalManager.getNewInstance(goalName);
                 arena.setGoal(goal, false);
@@ -236,6 +226,34 @@ public final class ConfigurationManager {
         return true;
     }
 
+    private static boolean isOutdatedConfigVersion(String versionString) {
+        if(versionString.contains(".")) {
+            String firstDigit = versionString.split("\\.")[0];
+            try {
+                return Integer.parseInt(firstDigit) < 2;
+            } catch (NumberFormatException e) {
+                return true;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Move configuration from previous PA version to a dedicated folder
+     * @param cfgFile the config file
+     */
+    public static void moveOldConfig(File cfgFile) {
+        PVPArena pluginInstance = PVPArena.getInstance();
+        try {
+            File oldArenasDir = new File(String.format("%s/arenas_old", pluginInstance.getDataFolder().getPath()));
+            pluginInstance.getLogger().warning(String.format("Config file %s is outdated! It has been skipped and moved to %s", cfgFile.getName(), oldArenasDir.getPath()));
+            oldArenasDir.mkdirs();
+            Files.move(cfgFile.toPath(), oldArenasDir.toPath().resolve(cfgFile.getName()), REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Setup new Arena config
      *
@@ -244,9 +262,14 @@ public final class ConfigurationManager {
      */
     private static void createNewConfig(Arena arena, Config cfg) {
         cfg.set(Config.CFG.GENERAL_PREFIX, arena.getName());
+        List<String> modules = arena.getMods().stream()
+                .map(ArenaModule::getName)
+                .collect(toList());
         debug(arena, "set config goal {}", arena.getGoal().getName());
+        debug(arena, "set config default modules {}", arena.getGoal().getName());
         cfg.set(CFG.GENERAL_GOAL, arena.getGoal().getName());
-        cfg.createDefaults(arena.getGoal().getName(), new ArrayList<>());
+        cfg.set(CFG.LISTS_MODS, modules);
+        cfg.createDefaults(arena.getGoal().getName(), modules);
     }
 
     /**

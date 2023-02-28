@@ -326,23 +326,29 @@ public final class ArenaManager {
             PVPArena.getInstance().getLogger().severe(String.format("Can't load arena %s: file %s not found.", arena.getName(), file.getName()));
             return false;
         }
-        final Config cfg = new Config(file);
-        arena.setConfig(cfg);
-        arena.setValid(ConfigurationManager.configParse(arena, cfg));
-        debug(arena, "valid: {}", arena.isValid());
-        if (arena.isValid()) {
-            SpawnManager.loadSpawns(arena, cfg);
-            SpawnManager.loadBlocks(arena, cfg);
-        } else {
-            // not valid arena config file
-            Arena.pmsg(Bukkit.getConsoleSender(), MSG.ERROR_ARENACONFIG, arena.getName());
-            // force enabled to false to prevent players using it
-            arena.getConfig().set(CFG.GENERAL_ENABLED, false);
-            arena.getConfig().save();
-            arena.setLocked(true);
+        try {
+            final Config cfg = new Config(file);
+            arena.setConfig(cfg);
+            arena.setValid(ConfigurationManager.configParse(arena, cfg));
+            debug(arena, "valid: {}", arena.isValid());
+            if (arena.isValid()) {
+                SpawnManager.loadSpawns(arena, cfg);
+                SpawnManager.loadBlocks(arena, cfg);
+            } else {
+                // not valid arena config file
+                Arena.pmsg(Bukkit.getConsoleSender(), MSG.ERROR_ARENACONFIG, arena.getName());
+                // force enabled to false to prevent players using it
+                arena.getConfig().set(CFG.GENERAL_ENABLED, false);
+                arena.getConfig().save();
+                arena.setLocked(true);
+            }
+
+            ARENAS.put(arena.getName().toLowerCase(), arena);
+        } catch (UnsupportedClassVersionError e) {
+            arena.setValid(false);
+            ConfigurationManager.moveOldConfig(file);
         }
 
-        ARENAS.put(arena.getName().toLowerCase(), arena);
         return arena.isValid();
     }
 

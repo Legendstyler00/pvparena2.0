@@ -349,6 +349,8 @@ public class PVPArena extends JavaPlugin {
         }
 
         this.saveDefaultConfig();
+        this.loadConfigValues();
+
         if (!this.getConfig().contains("shortcuts")) {
             final List<String> ffa = new ArrayList<>();
             final List<String> teams = new ArrayList<>();
@@ -404,7 +406,6 @@ public class PVPArena extends JavaPlugin {
         ArenaClass.loadGlobalClasses();
         ArenaManager.loadAllArenas();
 
-        this.loadConfigValues();
         this.loadDatabase();
 
         this.updateChecker = new UpdateChecker(this.getFile());
@@ -419,6 +420,14 @@ public class PVPArena extends JavaPlugin {
     }
 
     private void loadConfigValues() {
+        if (this.getConfig().getInt("ver", 0) < 2) {
+            this.getLogger().warning("Plugin config file is outdated. Generating a new one.");
+            File configFile = new File(this.getDataFolder(), "config.yml");
+            configFile.delete();
+            this.saveDefaultConfig();
+            super.reloadConfig();
+        }
+
         try {
             String wandStr = this.getConfig().getString("wandItem");
             this.wandItem = Material.valueOf(wandStr);
@@ -428,12 +437,6 @@ public class PVPArena extends JavaPlugin {
         }
 
         this.spawnOffset = new SpawnOffset(this.getConfig().getConfigurationSection("spawnOffset"));
-
-        if (this.getConfig().getInt("ver", 0) < 1) {
-            this.getConfig().options().copyDefaults(true);
-            this.getConfig().set("ver", 1);
-            this.saveConfig();
-        }
 
         if (this.getConfig().getBoolean("use_shortcuts") || this.getConfig().getBoolean("only_shortcuts")) {
             ArenaManager.readShortcuts(this.getConfig().getConfigurationSection("shortcuts"));

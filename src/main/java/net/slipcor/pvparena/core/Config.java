@@ -74,7 +74,7 @@ public class Config {
         CMDS_DEFAULTJOIN("cmds.defaultjoin", true, null),
 
         DAMAGE_ARMOR("damage.armor", true, null),
-        DAMAGE_BLOODPARTICLES("damage.bloodParticles", true, null),
+        DAMAGE_BLOODPARTICLES("damage.bloodParticles", false, null),
         DAMAGE_FROMOUTSIDERS("damage.fromOutsiders", false, null),
         DAMAGE_SPAWNCAMP("damage.spawncamp", 1, null),
         DAMAGE_WEAPONS("damage.weapons", true, null),
@@ -183,7 +183,6 @@ public class Config {
 
         USES_CLASSSIGNSDISPLAY("uses.classSignsDisplay", false, null),
         USES_DEATHMESSAGES("uses.deathMessages", true, null),
-        USES_DEATHMESSAGESCUSTOM("uses.deathMessagesCustom", true, null),
         USES_EVENTEAMS("uses.evenTeams", false, null),
         USES_INGAMECLASSSWITCH("uses.ingameClassSwitch", false, null),
         USES_INVISIBILITYFIX("uses.invisibilityfix", false, null),
@@ -198,7 +197,6 @@ public class Config {
         USES_WOOLHEAD("uses.woolHead", false, null),
 
         // ----------
-        GOAL_BLOCKDESTROY_BLOCKTYPE("goal.blockdestroy.blocktype", Material.IRON_BLOCK, "BlockDestroy"),
         GOAL_BLOCKDESTROY_AUTOCOLOR("goal.blockdestroy.autocolor", true, "BlockDestroy"),
         GOAL_BLOCKDESTROY_LIVES("goal.blockdestroy.bdlives", 1, "BlockDestroy"),
 
@@ -248,20 +246,6 @@ public class Config {
         GOAL_TDM_LIVES("goal.teamdm.tdlives", 10, "TeamDeathMatch"),
         GOAL_TDM_SUICIDESCORE("goal.teamdm.suicideScore", false, "TeamDeathMatch"),
         GOAL_TLIVES_LIVES("goal.teamlives.tlives", 10, "TeamLives"),
-
-        GOAL_PILLARS_ANNOUNCETICK("goal.pillars.announcetick", true, "Pillars"),
-        GOAL_PILLARS_LIVES("goal.pillars.pillives", 10, "Pillars"),
-        GOAL_PILLARS_ONLYFREE("goal.pillars.onlyfree", true, "Pillars"),
-        GOAL_PILLARS_BREAKABLE("goal.pillars.breakable", true, "Pillars"),
-        GOAL_PILLARS_TICKPOINTS("goal.pillars.tickpoints", 1, "Pillars"),
-        GOAL_PILLARS_INTERVAL("goal.pillars.tickinterval", 20, "Pillars"),
-
-        GOAL_PILLARS_ANNOUNCEOFFSET("goal.pillars.announceoffset", 3, "Pillars"),
-        GOAL_PILLARS_MAXCLICKS("goal.pillars.maxclicks", 10, "Pillars"),
-        GOAL_PILLARS_MAXHEIGHT("goal.pillars.maxheight", 5, "Pillars"),
-        GOAL_PILLARS_EMPTYHEIGHT("goal.pillars.emptyheight", 1, "Pillars"),
-        GOAL_PILLARS_TEAMHEIGHT("goal.pillars.teamheight", 2, "Pillars"),
-        GOAL_PILLARS_CLAIMALL("goal.pillars.claimall", false, "Pillars"),
 
         GOAL_PLAYERKILLREWARD_GRADUALLYDOWN("goal.playerkillreward.graduallyDown", false, "PlayerKillReward"),
         GOAL_PLAYERKILLREWARD_ONLYGIVE("goal.playerkillreward.onlyGive", false, "PlayerKillReward"),
