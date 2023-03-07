@@ -519,17 +519,17 @@ public class Arena {
         ArenaModuleManager.giveRewards(this, player);
         ItemStack[] items = this.config.getItems(CFG.ITEMS_REWARDS);
 
-        final boolean isRandom = this.config.getBoolean(CFG.ITEMS_RANDOM);
+        final boolean isRandom = this.config.getBoolean(CFG.ITEMS_RANDOMREWARD);
         final Random rRandom = new Random();
 
         final PAWinEvent dEvent = new PAWinEvent(this, player, items);
         Bukkit.getPluginManager().callEvent(dEvent);
         items = dEvent.getItems();
 
-        debug(this, player, "start " + this.startCount + " - minplayers: " + this.config.getInt(CFG.ITEMS_MINPLAYERS));
+        debug(this, player, "start " + this.startCount + " - minplayers: " + this.config.getInt(CFG.ITEMS_MINPLAYERSFORREWARD));
 
         if (items == null || items.length < 1
-                || this.config.getInt(CFG.ITEMS_MINPLAYERS) > this.startCount) {
+                || this.config.getInt(CFG.ITEMS_MINPLAYERSFORREWARD) > this.startCount) {
             return;
         }
 

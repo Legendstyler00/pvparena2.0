@@ -107,9 +107,9 @@ public class PAI_Info extends AbstractArenaCommand {
 
         if (displayMode == null || "item".equals(displayMode)) {
             arena.msg(sender, MSG.INFO_SECTION, "item");
-            arena.msg(sender, "minplayers: " + cfg.getInt(CFG.ITEMS_MINPLAYERS) + " | " +
+            arena.msg(sender, "minPlayersForReward: " + cfg.getInt(CFG.ITEMS_MINPLAYERSFORREWARD) + " | " +
                     "rewards: " + StringParser.getItems(cfg.getItems(CFG.ITEMS_REWARDS)) + " | " +
-                    StringParser.colorVar("random", cfg.getBoolean(CFG.ITEMS_RANDOM)));
+                    StringParser.colorVar("randomReward", cfg.getBoolean(CFG.ITEMS_RANDOMREWARD)));
 
         }
 
