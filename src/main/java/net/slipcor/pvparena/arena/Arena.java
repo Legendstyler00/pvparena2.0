@@ -1024,7 +1024,6 @@ public class Arena {
         });
 
         ArenaModuleManager.reset(this, force);
-        ArenaManager.advance(Arena.this);
         this.clearRegions();
         ofNullable(this.goal).ifPresent(arenaGoal -> arenaGoal.reset(force));
 

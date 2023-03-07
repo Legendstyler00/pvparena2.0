@@ -12,9 +12,6 @@ import net.slipcor.pvparena.core.Help;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.core.StringParser;
-import net.slipcor.pvparena.statistics.connector.DatabaseConnector;
-import net.slipcor.pvparena.statistics.connector.MySqlConnector;
-import net.slipcor.pvparena.statistics.connector.SQLiteConnector;
 import net.slipcor.pvparena.listeners.BlockListener;
 import net.slipcor.pvparena.listeners.EntityListener;
 import net.slipcor.pvparena.listeners.InventoryListener;
@@ -26,6 +23,9 @@ import net.slipcor.pvparena.loadables.ArenaRegionShapeManager;
 import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.TabManager;
 import net.slipcor.pvparena.managers.WorkflowManager;
+import net.slipcor.pvparena.statistics.connector.DatabaseConnector;
+import net.slipcor.pvparena.statistics.connector.MySqlConnector;
+import net.slipcor.pvparena.statistics.connector.SQLiteConnector;
 import net.slipcor.pvparena.updater.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,7 +41,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Optional.ofNullable;
@@ -240,13 +239,9 @@ public class PVPArena extends JavaPlugin {
             return true;
         }
 
-        Arena tempArena = "l".equalsIgnoreCase(args[0]) ? playerArena : ArenaManager.getIndirectArenaByName(sender, args[0]);
+        Arena tempArena = "l".equalsIgnoreCase(args[0]) ? playerArena : ArenaManager.getArenaByName(args[0]);
 
         final String name = args[0];
-
-        if (tempArena == null && Arrays.asList(args).contains("vote")) {
-            tempArena = ArenaManager.getArenaByName(args[0]); // arenavote shortcut hack
-        }
 
         String[] newArgs = args;
 
@@ -351,23 +346,6 @@ public class PVPArena extends JavaPlugin {
         this.saveDefaultConfig();
         this.loadConfigValues();
 
-        if (!this.getConfig().contains("shortcuts")) {
-            final List<String> ffa = new ArrayList<>();
-            final List<String> teams = new ArrayList<>();
-
-            ffa.add("arena1");
-            ffa.add("arena2");
-
-            teams.add("teamarena1");
-            teams.add("teamarena2");
-
-            this.getConfig().options().copyDefaults(true);
-            this.getConfig().addDefault("shortcuts.freeforall", ffa);
-            this.getConfig().addDefault("shortcuts.teams", teams);
-
-            this.saveConfig();
-        }
-
         this.getDataFolder().mkdir();
         new File(this.getDataFolder().getPath() + "/arenas").mkdir();
         new File(this.getDataFolder().getPath() + "/goals").mkdir();
@@ -437,10 +415,6 @@ public class PVPArena extends JavaPlugin {
         }
 
         this.spawnOffset = new SpawnOffset(this.getConfig().getConfigurationSection("spawnOffset"));
-
-        if (this.getConfig().getBoolean("use_shortcuts") || this.getConfig().getBoolean("only_shortcuts")) {
-            ArenaManager.readShortcuts(this.getConfig().getConfigurationSection("shortcuts"));
-        }
     }
 
     private void loadDatabase() {

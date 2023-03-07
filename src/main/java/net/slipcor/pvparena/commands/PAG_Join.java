@@ -6,7 +6,6 @@ import net.slipcor.pvparena.core.CollectionUtils;
 import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Help.HELP;
 import net.slipcor.pvparena.core.Language.MSG;
-import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.ConfigurationManager;
 import net.slipcor.pvparena.managers.PermissionManager;
 import net.slipcor.pvparena.managers.WorkflowManager;
@@ -81,14 +80,14 @@ public class PAG_Join extends AbstractArenaCommand {
             if (!arena.getGoal().allowsJoinInBattle() &&
                     !arena.getConfig().getBoolean(CFG.JOIN_ALLOW_REJOIN) && arena.hasAlreadyPlayed(aPlayer.getName())) {
                 debug(arena, aPlayer.getPlayer(), "Join_2");
-                arena.msg(aPlayer.getPlayer(), MSG.ERROR_ARENA_ALREADY_PART_OF, ArenaManager.getIndirectArenaName(arena));
+                arena.msg(aPlayer.getPlayer(), MSG.ERROR_ARENA_ALREADY_PART_OF, arena.getName());
             } else {
                 WorkflowManager.handleJoin(arena, aPlayer.getPlayer(), args);
             }
         } else {
             final Arena pArena = aPlayer.getArena();
             debug(arena, sender, "Join_1");
-            pArena.msg(sender, MSG.ERROR_ARENA_ALREADY_PART_OF, ArenaManager.getIndirectArenaName(pArena));
+            pArena.msg(sender, MSG.ERROR_ARENA_ALREADY_PART_OF, pArena.getName());
         }
 
     }

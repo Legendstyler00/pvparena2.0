@@ -3,9 +3,7 @@ package net.slipcor.pvparena.commands;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Help.HELP;
-import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
-import net.slipcor.pvparena.managers.ArenaManager;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -43,13 +41,6 @@ public class PAA_Disable extends AbstractArenaCommand {
         arena.getConfig().set(CFG.GENERAL_ENABLED, false);
         arena.getConfig().save();
         arena.setLocked(true);
-
-        for (String key : ArenaManager.getShortcutValues().keySet()) {
-            if (arena.equals(ArenaManager.getShortcutValues().get(key))) {
-                ArenaManager.advance(key);
-                break;
-            }
-        }
 
         arena.msg(sender, MSG.ARENA_DISABLE_DONE);
     }

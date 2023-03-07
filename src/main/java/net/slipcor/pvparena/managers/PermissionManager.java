@@ -5,7 +5,6 @@ import net.slipcor.pvparena.arena.ArenaClass;
 import net.slipcor.pvparena.core.Config;
 import net.slipcor.pvparena.core.Language;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import static net.slipcor.pvparena.config.Debugger.debug;
 
@@ -95,15 +94,6 @@ public class PermissionManager {
         }
 
         // explicit permissions not enabled
-        return true;
-    }
-
-    public static boolean hasOverridePerm(final CommandSender sender) {
-        if (sender instanceof Player) {
-            return sender.hasPermission("pvparena.override");
-        }
-
-        // Console or command block
         return true;
     }
 }

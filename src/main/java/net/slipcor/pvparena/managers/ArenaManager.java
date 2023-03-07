@@ -4,8 +4,6 @@ import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.classes.PABlockLocation;
 import net.slipcor.pvparena.commands.AbstractArenaCommand;
-import net.slipcor.pvparena.commands.PAA_Edit;
-import net.slipcor.pvparena.commands.PAA_Setup;
 import net.slipcor.pvparena.commands.PAG_Join;
 import net.slipcor.pvparena.core.CollectionUtils;
 import net.slipcor.pvparena.core.Config;
@@ -20,14 +18,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static net.slipcor.pvparena.config.Debugger.debug;
 
@@ -44,10 +44,6 @@ import static net.slipcor.pvparena.config.Debugger.debug;
 
 public final class ArenaManager {
     private static final Map<String, Arena> ARENAS = new HashMap<>();
-    private static final Map<String, Arena> DEF_VALUES = new HashMap<>();
-    private static final Map<String, List<String>> DEF_LISTS = new HashMap<>();
-
-    private static boolean usingShortcuts;
 
     private ArenaManager() {
     }
@@ -66,29 +62,6 @@ public final class ArenaManager {
         }
 
         return WorkflowManager.handleEnd(arena, force);
-    }
-
-    /**
-     * try loading an arena
-     *
-     * @param name the arena name to load
-     * @return the loaded module name if is missing, null otherwise
-     */
-    private static String checkIfMissingGoals(final String name) {
-        debug("check for missing goals: {}", name);
-        final File file = new File(String.format("%s/arenas/%s.yml", PVPArena.getInstance().getDataFolder(), name));
-        if (!file.exists()) {
-            return String.format("%s (file does not exist)", name);
-        }
-        final Config cfg = new Config(file);
-
-        cfg.load();
-        String goalName = cfg.getString(CFG.GENERAL_GOAL);
-        if (!PVPArena.getInstance().getAgm().hasLoadable(goalName)) {
-            return goalName;
-        }
-
-        return null;
     }
 
     /**
@@ -223,22 +196,6 @@ public final class ArenaManager {
         return null;
     }
 
-    public static Set<Arena> getArenasByRegionLocation(
-            final PABlockLocation location) {
-        final Set<Arena> result = new HashSet<>();
-        for (Arena arena : ARENAS.values()) {
-            if (arena.isLocked()) {
-                continue;
-            }
-            for (ArenaRegion region : arena.getRegions()) {
-                if (region.getShape().contains(location)) {
-                    result.add(arena);
-                }
-            }
-        }
-        return result;
-    }
-
     /**
      * return the arenas
      *
@@ -267,14 +224,6 @@ public final class ArenaManager {
      */
     public static String getNames() {
         return StringParser.joinSet(ARENAS.keySet(), ", ");
-    }
-
-    public static Map<String, List<String>> getShortcutDefinitions() {
-        return DEF_LISTS;
-    }
-
-    public static Map<String, Arena> getShortcutValues() {
-        return DEF_VALUES;
     }
 
     /**
@@ -422,289 +371,5 @@ public final class ArenaManager {
             }
         }
         return null;
-    }
-
-    public static void readShortcuts(final ConfigurationSection cs) {
-        debug("reading shortcuts!");
-        usingShortcuts = false;
-        DEF_VALUES.clear();
-        DEF_LISTS.clear();
-        if (cs == null) {
-            PVPArena.getInstance().getLogger().warning("'shortcuts' node is null!!");
-            debug("'shortcuts' node is null!!");
-            return;
-        }
-
-        for (String key : cs.getKeys(false)) {
-            debug("key: {}", key);
-            final List<String> strings = cs.getStringList(key);
-
-            if (strings == null) {
-                PVPArena.getInstance().getLogger().warning("'shortcuts=>" + key + "' node is null!!");
-                debug("'shortcuts=>\" + key + \"' node is null!!");
-                continue;
-            }
-            if (PVPArena.getInstance().getConfig().getBoolean("shortcut_shuffle")) {
-                debug("shuffling shortcuts!");
-                Collections.shuffle(strings);
-            }
-
-            boolean error = false;
-            for (String arena : strings) {
-                if (!ARENAS.containsKey(arena.toLowerCase())) {
-                    PVPArena.getInstance().getLogger().warning("Arena not found: " + arena);
-                    debug("Arena not found: {}", arena);
-                    error = true;
-                } else {
-                    debug("added {} > {}", key, arena);
-                }
-            }
-            if (error || strings.size() < 1) {
-                PVPArena.getInstance().getLogger().warning("shortcut '" + key + "' will be skipped!!");
-                debug("shortcut '{}' will be skipped!!", key);
-                continue;
-            }
-            usingShortcuts = true;
-            DEF_LISTS.put(key, strings);
-            advance(key);
-        }
-    }
-
-    public static boolean isUsingShortcuts() {
-        return usingShortcuts;
-    }
-
-    public static List<String> getColoredShortcuts() {
-        final Set<String> sorted = new TreeSet<>(DEF_LISTS.keySet());
-
-
-        if (PVPArena.getInstance().getConfig().getBoolean("allow_ungrouped")) {
-            nextArena:
-            for (Arena a : ArenaManager.getArenas()) {
-                if (!DEF_VALUES.containsKey(a.getName())) {
-                    for (List<String> list : DEF_LISTS.values()) {
-                        if (list.contains(a.getName())) {
-                            continue nextArena;
-                        }
-                    }
-                    sorted.add(a.getName());
-                }
-            }
-        }
-
-        final List<String> result = new ArrayList<>();
-
-        for (String definition : sorted) {
-            if (DEF_VALUES.containsKey(definition)) {
-                final Arena a = DEF_VALUES.get(definition);
-                result.add((a.isLocked() ? "&c" : PAA_Edit.activeEdits.containsValue(a) || PAA_Setup.activeSetups.containsValue(a) ? "&e" : a.isFightInProgress() ? "&a" : "&f") + definition + "&r");
-            } else {
-                try {
-                    final Arena a = ArenaManager.getArenaByName(definition);
-                    result.add((a.isLocked() ? "&c" : PAA_Edit.activeEdits.containsValue(a) || PAA_Setup.activeSetups.containsValue(a) ? "&e" : a.isFightInProgress() ? "&a" : "&f") + definition + "&r");
-                } catch (Exception e) {
-                    result.add("&f" + definition + "&r");
-                }
-            }
-        }
-
-        return result;
-    }
-
-    public static String getIndirectArenaName(final Arena arena) {
-        if (usingShortcuts && PVPArena.getInstance().getConfig().getBoolean("only_shortcuts")) {
-            for (Map.Entry<String, Arena> stringArenaEntry : DEF_VALUES.entrySet()) {
-                if (stringArenaEntry.getValue().equals(arena)) {
-                    return stringArenaEntry.getKey();
-                }
-            }
-        }
-        return arena.getName();
-    }
-
-    public static Arena getIndirectArenaByName(final CommandSender sender, String string) {
-        debug("getIndirect({}): {}", sender.getName(), string);
-        if (!usingShortcuts || PermissionManager.hasOverridePerm(sender)) {
-            debug("out1");
-            return getArenaByName(string);
-        }
-
-        // 1) exact match - case sensitive
-
-        if (!DEF_LISTS.containsKey(string) && !PVPArena.getInstance().getConfig().getBoolean("only_shortcuts")) {
-            // if we have not found an EXACT match for a shortcut, and we allow shortcuts -> find an exact arena in a shortcut
-            for (String temp : DEF_LISTS.keySet()) {
-                if (temp.contains(string)) {
-                    Arena a = ArenaManager.getArenaByName(temp);
-                    if (a.isLocked()) {
-                        continue;
-                    }
-                    debug("found exact CS {}", temp);
-                    string = temp;
-                    break;
-                }
-            }
-        }
-        debug("temporary #1 {}", string);
-
-        boolean isUngrouped = true;
-        String preciseArenaName = null;
-
-        deflists:
-        for (List<String> values : DEF_LISTS.values()) {
-            for (String item : values) {
-                if (item.equals(string)) {
-                    if (!PVPArena.getInstance().getConfig().getBoolean("only_shortcuts")) {
-                        preciseArenaName = item;
-                    }
-                    isUngrouped = false;
-                    break deflists; // exact case match, out!
-                }
-                if (item.equalsIgnoreCase(string)) {
-                    if (!PVPArena.getInstance().getConfig().getBoolean("only_shortcuts")) {
-                        preciseArenaName = item;
-                    }
-                    isUngrouped = false; // case insensitive match, continue to eventually find a better match
-                }
-                if (item.toLowerCase().startsWith(string.toLowerCase())) {
-                    if (!PVPArena.getInstance().getConfig().getBoolean("only_shortcuts")) {
-                        preciseArenaName = item;
-                    }
-                    isUngrouped = false; // partial match, continue to eventually find a better match
-                }
-                if (item.toLowerCase().endsWith(string.toLowerCase())) {
-                    if (!PVPArena.getInstance().getConfig().getBoolean("only_shortcuts")) {
-                        preciseArenaName = item;
-                    }
-                    isUngrouped = false; // partial match, continue to eventually find a better match
-                }
-            }
-        } // if ungrouped = false -> we have found the arena in a shortcut definition (CI)
-        debug("temporary #2 {}", string);
-
-        boolean foundExactCI = false;
-
-        for (String key : DEF_LISTS.keySet()) {
-            if (key.equals(string)) {
-                foundExactCI = true;
-                string = key;
-                break;
-            }
-            if (key.equalsIgnoreCase(string)) {
-                foundExactCI = true;
-                string = key; // case insensitive match, continue to eventually find a better match
-            }
-            if (key.toLowerCase().startsWith(string.toLowerCase())) {
-                foundExactCI = true;
-                string = key; // partial match, continue to eventually find a better match
-            }
-            if (key.toLowerCase().endsWith(string.toLowerCase())) {
-                foundExactCI = true;
-                string = key; // partial match, continue to eventually find a better match
-            }
-        }
-        debug("temporary #3 {}", string);
-
-        if (!foundExactCI) {
-            // not found via exact check, ignoring case
-            if (preciseArenaName == null && PVPArena.getInstance().getConfig().getBoolean("only_shortcuts") &&
-                    !(isUngrouped && PVPArena.getInstance().getConfig().getBoolean("allow_ungrouped"))) {
-                // 1) only allowing shortcuts
-                // 2) it's either grouped and we thus don't show it, or it is ungrouped and we don't allow ungrouped
-                debug("not a shortcut or allowed ungrouped");
-
-                return null;
-            } else {
-                // A: allowing more then shortcuts
-                // OR
-                // B: ungrouped and allowing ungrouped
-                if (preciseArenaName != null) {
-                    debug("priorizing actual arena name {} over {}", preciseArenaName, string);
-                    string = preciseArenaName;
-                }
-                debug("out getArenaByName: {}", string);
-                return getArenaByName(string);
-            }
-        }
-
-/*
-        DEBUG.i("advance " + string);
-        advance(string);
-*/
-        if (DEF_VALUES.get(string) == null) {
-            debug("out null -.-");
-        } else {
-            debug("out : {}", DEF_VALUES.get(string).getName());
-        }
-
-        return DEF_VALUES.get(string);
-    }
-
-    public static void advance(final Arena arena) {
-        if (usingShortcuts) {
-            for (Map.Entry<String, Arena> stringArenaEntry : DEF_VALUES.entrySet()) {
-                if (stringArenaEntry.getValue().equals(arena)) {
-                    advance(stringArenaEntry.getKey());
-                    return;
-                }
-            }
-        }
-    }
-
-    public static void advance(final String string) {
-        if (!usingShortcuts) {
-            return;
-        }
-        final List<String> defs = DEF_LISTS.get(string);
-
-        if (DEF_VALUES.containsKey(string)) {
-            final Arena arena = DEF_VALUES.get(string);
-            boolean found = false;
-            for (String arenaName : defs) {
-                if (found) {
-                    // we just found it, this is the one!
-                    final Arena nextArena = ARENAS.get(arenaName.toLowerCase());
-
-                    if (nextArena.isLocked()) {
-                        continue;
-                    }
-
-                    DEF_VALUES.put(string, nextArena);
-                    return;
-                } else {
-                    if (arenaName.equalsIgnoreCase(arena.getName())) {
-                        found = true;
-                    }
-                }
-            }
-        }
-        // get the first available!
-        for (String arenaName : defs) {
-            final Arena arena = ARENAS.get(arenaName.toLowerCase());
-            if (arena.isFightInProgress() || arena.isLocked()) {
-                continue;
-            }
-
-            DEF_VALUES.put(string, arena);
-            return;
-        }
-        if (!DEF_VALUES.containsKey(string)) {
-            DEF_VALUES.put(string, ArenaManager.getArenaByName(defs.get(0)));
-        }
-    }
-
-    public static List<Arena> getArenasSorted() {
-        debug("Sorting!");
-        for (String s : ARENAS.keySet()) {
-            debug(s);
-        }
-        final Map<String, Arena> sorted = new TreeMap<>(ARENAS);
-        final List<Arena> result = new ArrayList<>();
-        debug("Sorted!");
-        for (Map.Entry<String, Arena> stringArenaEntry : sorted.entrySet()) {
-            result.add(stringArenaEntry.getValue());
-            debug(stringArenaEntry.getKey());
-        }
-        return result;
     }
 }

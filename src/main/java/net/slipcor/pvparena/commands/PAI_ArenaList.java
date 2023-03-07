@@ -3,14 +3,14 @@ package net.slipcor.pvparena.commands;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.Help.HELP;
 import net.slipcor.pvparena.core.Language.MSG;
-import net.slipcor.pvparena.core.StringParser;
 import net.slipcor.pvparena.managers.ArenaManager;
-import net.slipcor.pvparena.managers.PermissionManager;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <pre>PVP Arena ARENALIST Command class</pre>
@@ -36,18 +36,22 @@ public class PAI_ArenaList extends AbstractGlobalCommand {
         if (!argCountValid(sender, args, new Integer[]{0})) {
             return;
         }
-        final List<String> names;
+        String arenaListStr = ArenaManager.getArenas().stream()
+                .sorted(Comparator.comparing(Arena::getName))
+                .map(a -> {
+                    ChatColor colorPrefix = ChatColor.WHITE;
+                    if(a.isLocked()) {
+                        colorPrefix = ChatColor.RED;
+                    } else if (PAA_Edit.activeEdits.containsValue(a) || PAA_Setup.activeSetups.containsValue(a)) {
+                        colorPrefix = ChatColor.YELLOW;
+                    } else if (a.isFightInProgress()) {
+                        colorPrefix = ChatColor.GREEN;
+                    }
+                    return colorPrefix + a.getName() + ChatColor.RESET;
+                })
+                .collect(Collectors.joining(", "));
 
-        if (!PermissionManager.hasOverridePerm(sender) && ArenaManager.isUsingShortcuts()) {
-            names = ArenaManager.getColoredShortcuts();
-        } else {
-            names = new ArrayList<>();
-            for (Arena a : ArenaManager.getArenasSorted()) {
-                names.add((a.isLocked() ? "&c" : PAA_Edit.activeEdits.containsValue(a) || PAA_Setup.activeSetups.containsValue(a) ? "&e" : a.isFightInProgress() ? "&a" : "&f") + a.getName() + "&r");
-            }
-        }
-
-        Arena.pmsg(sender, MSG.ARENA_LIST, StringParser.joinList(names, ", "));
+        Arena.pmsg(sender, MSG.ARENA_LIST, arenaListStr);
     }
 
     @Override

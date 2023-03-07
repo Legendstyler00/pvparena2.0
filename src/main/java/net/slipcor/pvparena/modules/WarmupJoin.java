@@ -10,7 +10,6 @@ import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.exceptions.GameplayException;
 import net.slipcor.pvparena.loadables.ArenaModule;
 import net.slipcor.pvparena.loadables.ModuleType;
-import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.PermissionManager;
 import net.slipcor.pvparena.runnables.ArenaWarmupRunnable;
 import org.bukkit.command.CommandSender;
@@ -79,8 +78,7 @@ public class WarmupJoin extends ArenaModule {
 
         if (aPlayer.getArena() != null) {
             debug(aPlayer.getArena(), player, this.getName());
-            throw new GameplayException(Language.parse(
-                    MSG.ERROR_ARENA_ALREADY_PART_OF, ArenaManager.getIndirectArenaName(aPlayer.getArena())));
+            throw new GameplayException(Language.parse(MSG.ERROR_ARENA_ALREADY_PART_OF, aPlayer.getArena().getName()));
         }
         this.getPlayerSet().add(aPlayer);
 

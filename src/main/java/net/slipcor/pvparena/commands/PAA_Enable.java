@@ -3,10 +3,8 @@ package net.slipcor.pvparena.commands;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Help.HELP;
-import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.managers.ArenaManager;
-import net.slipcor.pvparena.managers.RegionManager;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -46,14 +44,6 @@ public class PAA_Enable extends AbstractArenaCommand {
         arena.getConfig().set(CFG.GENERAL_ENABLED, true);
         arena.getConfig().save();
         arena.setLocked(false);
-
-        for (String key : ArenaManager.getShortcutDefinitions().keySet()) {
-            if (ArenaManager.getShortcutDefinitions().get(key).contains(arena.getName()) &&
-                            (!ArenaManager.getShortcutValues().containsKey(arena.getName()) ||
-                                    ArenaManager.getShortcutValues().get(key).isLocked())) {
-                ArenaManager.getShortcutValues().put(key, arena);
-            }
-        }
 
         arena.msg(sender, MSG.ARENA_ENABLE_DONE);
     }
