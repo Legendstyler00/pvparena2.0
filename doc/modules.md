@@ -19,7 +19,6 @@ Hook into many different aspects of the game!
 | [Announcements](mods/announcements.md)             | announce events happening                                                                               |          | ⚠      |
 | [ArenaMaps](mods/arenamaps.md)                     | never lose yourself ever again!                                                                         |          | ⚠      |
 | [AutoSneak](mods/autosneak.md)                     | automatically hide player nametags by forcing sneak mode                                                |          | ⚠      |
-| [AutoVote](mods/autovote.md)                       | automatism                                                                                              |          | ⚠      |
 | [BanKick](mods/bankick.md)                         | secure your arenas!                                                                                     |          | ⚠      |
 | [BattlefieldGuard](mods/battlefieldguard.md)       | secure your battlefield                                                                                 |          | ✔      |
 | [BattlefieldJoin](mods/battlefieldjoin.md)         | join directly your battlefield without using the lounge                                                 | JOIN     | ✔      |
