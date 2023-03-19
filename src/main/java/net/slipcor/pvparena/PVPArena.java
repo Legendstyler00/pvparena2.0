@@ -27,6 +27,7 @@ import net.slipcor.pvparena.statistics.connector.DatabaseConnector;
 import net.slipcor.pvparena.statistics.connector.MySqlConnector;
 import net.slipcor.pvparena.statistics.connector.SQLiteConnector;
 import net.slipcor.pvparena.updater.UpdateChecker;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -336,8 +337,7 @@ public class PVPArena extends JavaPlugin {
         this.shuttingDown = false;
         instance = this;
 
-        // TODO: Enable bStats
-        // Metrics metrics = new Metrics(this, BSTATS_PLUGIN_ID);
+        Metrics metrics = new Metrics(this, BSTATS_PLUGIN_ID);
 
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
             new PVPArenaPlaceholderExpansion().register();
