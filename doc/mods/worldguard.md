@@ -1,29 +1,15 @@
-# Squads
+# Worldguard
 
 ## Description
 
-This mod adds squads to the game, basically only showing players belonging together apart from teams and classes.
-
-## Installation
-
-Installation of this module can be done in a normal way. You'll find installation process in [modules page](../modules.md#installing-modules) of the doc.
-
-## Setup
-
-\-
-
-## Config settings ( config.yml !!! NOT per arena! )
-
-- modules.squads.ingameSquadSwitch \- allow switching squads ingame
+This mod adds creates or updates an arena region based on the coordinates of a worldguard region.
 
 ## Commands
 
-- `/pa wgload [regionname] [wgregionname]` \- load WorldGuard region wgregionname to PVP Arena region regionname
+- `/pa wgload [regionname] [wgregionname]` \- load coordinates of WorldGuard region *wgregionname* to PVP Arena region *regionname*.
 
-## Warnings
-
-\-
+If *wgregionname* coordinates have been changed, you can type this command again to update *regionname* coordinates.
 
 ## Dependencies
 
-- WorldGuard 5.9.1
+- WorldGuard 7.0+
