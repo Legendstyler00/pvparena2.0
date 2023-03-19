@@ -42,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.util.Optional.ofNullable;
 import static net.slipcor.pvparena.config.Debugger.debug;
@@ -404,6 +405,14 @@ public class PVPArena extends JavaPlugin {
             configFile.delete();
             this.saveDefaultConfig();
             super.reloadConfig();
+            File filesDir = new File(PVPArena.getInstance().getDataFolder(), "/files/");
+            File modsDir = new File(PVPArena.getInstance().getDataFolder(), "/mods/");
+            if(filesDir.exists() && filesDir.canWrite()) {
+                Stream.of(filesDir.listFiles()).forEach(File::delete);
+            }
+            if(modsDir.exists() && modsDir.canWrite()) {
+                Stream.of(modsDir.listFiles()).forEach(File::delete);
+            }
         }
 
         try {
