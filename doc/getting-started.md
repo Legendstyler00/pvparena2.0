@@ -49,19 +49,19 @@ You will find more information about this command [on this link](commands/goal.m
 Now you have to create game spawn points by using this command:  
 `/pa [arenaName] spawn set [spawnType] (teamName)`
 
-Spawn types are: `spawn`, `lounge`, `spectator`, `exit`
+Spawn types are: `fight`, `lounge`, `spectator`, `exit`
 Number of spawns you have to create depends of the gamemode of your goal (free or teams).
 
 ##### Team arenas
-For team arenas, you need: 2 spawns (red & blue) / 2 lounges (red & blue) / 1 spectator zone / 1 exit.
+For team arenas, you need: 2 fight spawns (red & blue) / 2 lounges (red & blue) / 1 spectator zone / 1 exit.
 
 ##### Free arenas
-For free (FFA) arenas, you need: 4 spawns (spawn1, spawn2, spawn3, spawn4) / 1 lounge / 1 spectator zone / 1 exit.
+For free (FFA) arenas, you need: at least 2 fight spawns (fight1, fight2) / 1 lounge / 1 spectator zone / 1 exit.
 
 <br>
 
 > **🚩 Tips:**
->- In free arenas, you can create as many spawn points as you want.
+>- You can create as many spawn points as you want (in FFA or teams arenas), just increase number after spawn name.
 >- You can use `/pa spawn set` command again to move a spawn point
 
 <br>
