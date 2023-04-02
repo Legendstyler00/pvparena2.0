@@ -696,6 +696,20 @@ public class Config {
     }
 
     /**
+     * Get configuration Section or create it if not exist
+     *
+     * @param name section name
+     * @return configuration section
+     */
+    public ConfigurationSection getOrCreateConfigurationSection(String name) {
+        ConfigurationSection cs = this.cfg.getConfigurationSection(name);
+        if(cs == null) {
+            return this.cfg.createSection(name);
+        }
+        return cs;
+    }
+
+    /**
      * Retrieve a value from the YamlConfiguration.
      *
      * @param string the path of the value

@@ -22,6 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
@@ -391,8 +392,9 @@ public class ArenaRegion {
     }
 
     public void saveToConfig() {
-        this.arena.getConfig().getConfigurationSection("arenaregion")
-                .createSection(this.name, Config.parseToConfigMap(this, this.flags, this.protections));
+        String arenaregionPath = "arenaregion";
+        ConfigurationSection arSection = this.arena.getConfig().getOrCreateConfigurationSection(arenaregionPath);
+        arSection.createSection(this.name, Config.parseToConfigMap(this, this.flags, this.protections));
         this.arena.getConfig().save();
     }
 
