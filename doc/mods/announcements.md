@@ -1,7 +1,7 @@
 # Announcements
 ## Description
 
-Teach your arena how to talk! Every event can possibly trigger a global message to attract people!
+Broadcast global messages to talk about your game to all connected players (except the ones in the arena).
 ## Installation
 
 Installation of this module can be done in a normal way. You'll find installation process in [modules page](../modules.md#installing-modules) of the doc.
@@ -26,12 +26,4 @@ Valid Announcement types:
 
 ## Commands
 
-- `/pa !aa [type]` \- toggle the announcing of types, listed above 
-
-## Warnings
-
-\-
-
-## Dependencies
-
-\-
+- `/pa !aa [type]` \- toggle the announcing of types, listed above

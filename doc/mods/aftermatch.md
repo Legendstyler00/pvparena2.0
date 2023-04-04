@@ -15,11 +15,4 @@ Set the aftermatch config to a valid setting, and set the after spawn, `/pa [are
 ## Commands
 
 - `/pa [arena] !am time X` \- set the aftermatch countdown to X seconds
-- `/pa [arena] !am death X` \- activate the aftermatch after X deaths 
-
-## Warnings
-
-\-
-## Dependencies
-
-\-
+- `/pa [arena] !am death X` \- activate the aftermatch when the number of X remaining alive players is reached
