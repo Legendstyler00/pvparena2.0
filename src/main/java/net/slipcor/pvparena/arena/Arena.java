@@ -1052,7 +1052,7 @@ public class Arena {
         } catch (Exception ignored) {
         }
 
-        ofNullable(aPlayer.getState()).ifPresent(playerState -> playerState.unload(soft));
+        ofNullable(aPlayer.getState()).ifPresent(playerState -> playerState.unload(aPlayer, soft));
 
         this.getScoreboard().reset(player, force, soft);
 

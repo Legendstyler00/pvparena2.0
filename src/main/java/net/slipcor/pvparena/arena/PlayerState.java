@@ -157,11 +157,10 @@ public final class PlayerState {
         player.setFlySpeed(0.2F);
     }
 
-    public void unload(final boolean soft) {
+    public void unload(final ArenaPlayer aPlayer, final boolean soft) {
         final Player player = Bukkit.getPlayerExact(this.name);
 
         if (player == null) {
-            final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(this.name);
             aPlayer.getArena().getGoal().disconnect(aPlayer);
             return;
         }
@@ -170,7 +169,6 @@ public final class PlayerState {
         player.setFireTicks(this.fireticks);
         player.setFoodLevel(this.foodlevel);
 
-        final ArenaPlayer aPlayer = ArenaPlayer.fromPlayer(player);
         player.setFoodLevel(this.foodlevel);
         if (aPlayer.getArena().getConfig().getGameMode(CFG.GENERAL_GAMEMODE) != null) {
             player.setGameMode(this.gamemode);
