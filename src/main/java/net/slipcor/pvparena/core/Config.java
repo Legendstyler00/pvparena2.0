@@ -68,7 +68,7 @@ public class Config {
         CHAT_COLORNICK("chat.colorNick", true, null),
         CHAT_DEFAULTTEAM("chat.defaultTeam", false, null),
         CHAT_ENABLED("chat.enabled", true, null),
-        CHAT_ONLYPRIVATE("chat.onlyPrivate", false, null),
+        CHAT_ONLYPRIVATE("chat.onlyPrivate", true, null),
         CHAT_TOGLOBAL("chat.toGlobal", "none", null),
 
         CMDS_DEFAULTJOIN("cmds.defaultjoin", true, null),

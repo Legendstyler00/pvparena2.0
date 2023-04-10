@@ -85,10 +85,10 @@ msg:
   youjoinedteam: You have joined team %1%!
 chat:
   colorNick: true #Use team color in chat
-  defaultTeam: false #If true, chat is limited to team members by default. Players can talk in general chat using '/pa chat' command
+  defaultTeam: false #If true, chat is limited to team members by default. By using '/pa chat' command, players can talk in general chat or arena chat (depending of "onlyPrivate" value).
   enabled: true #Allow chat usage, if false all arena players are muted
-  onlyPrivate: false #Limit chat to the arena
-  toGlobal: none #Begin word to talk to all the arena of onlyPrivate is active. E.g. @all
+  onlyPrivate: true #Limit chat to the arena (i.e. other players on the server can't read arena chat)
+  toGlobal: none #Begin word to talk global server chat if onlyPrivate is active. E.g. @all
 player:
   autoIgniteTNT: false #Ignite TNT automatically on place
   clearInventory: NONE #Clear player inventory on join. Set a specific game mode or ALL for any kind.

@@ -11,6 +11,7 @@ import net.slipcor.pvparena.commands.PAG_Arenaclass;
 import net.slipcor.pvparena.core.Config.CFG;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
+import net.slipcor.pvparena.core.StringUtils;
 import net.slipcor.pvparena.events.goal.PAGoalEvent;
 import net.slipcor.pvparena.exceptions.GameplayException;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
@@ -181,27 +182,27 @@ public class PlayerListener implements Listener {
 
         debug(arena, player, "fighting player chatting!");
 
-        if (arena.getConfig().getBoolean(CFG.CHAT_ENABLED) && !aPlayer.isPublicChatting()) {
-
-            if (!arena.getConfig().getBoolean(CFG.CHAT_ONLYPRIVATE)) {
+        if (arena.getConfig().getBoolean(CFG.CHAT_ENABLED)) {
+            if(aPlayer.isPublicChatting()) {
+                if(arena.getConfig().getBoolean(CFG.CHAT_ONLYPRIVATE)) {
+                    arena.broadcastColored(message, team.getColor(), event.getPlayer());
+                    event.setCancelled(true);
+                }
+                // else regular chatting => just let push message to chat
+            } else {
+                team.sendMessage(aPlayer, message);
+                event.setCancelled(true);
 
                 String toGlobal = arena.getConfig().getString(CFG.CHAT_TOGLOBAL);
 
-                if (!toGlobal.equalsIgnoreCase("none")) {
-                    if (message.toLowerCase().startsWith(toGlobal.toLowerCase())) {
-                        event.setMessage(message.substring(toGlobal.length()));
-                        return;
-                    }
+                if (!toGlobal.equalsIgnoreCase("none") && StringUtils.startsWithIgnoreCase(message, toGlobal)) {
+                    event.setMessage(message.substring(toGlobal.length()));
+                    // global chatting => just let push message to chat
                 }
             }
-
-            team.sendMessage(aPlayer, message);
+        } else {
             event.setCancelled(true);
-            return;
         }
-
-        arena.broadcastColored(message, team.getColor(), event.getPlayer());
-        event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
