@@ -265,10 +265,11 @@ public class Config {
         MODULES_ANNOUNCEMENTS_CUSTOM("modules.announcements.custom", false, "Announcements"),
         MODULES_ANNOUNCEMENTS_ADVERT("modules.announcements.advert", false, "Announcements"),
 
-        MODULES_ARENAMAPS_ALIGNTOPLAYER("modules.arenamaps.aligntoplayer", false, "ArenaMaps"),
-        MODULES_ARENAMAPS_SHOWSPAWNS("modules.arenamaps.showspawns", true, "ArenaMaps"),
-        MODULES_ARENAMAPS_SHOWPLAYERS("modules.arenamaps.showplayers", true, "ArenaMaps"),
-        MODULES_ARENAMAPS_SHOWLIVES("modules.arenamaps.showlives", true, "ArenaMaps"),
+        MODULES_ARENAMAPS_ALIGNTOPLAYER("modules.arenamaps.alignToPlayer", false, "ArenaMaps"),
+        MODULES_ARENAMAPS_SHOWSPAWNS("modules.arenamaps.showSpawns", true, "ArenaMaps"),
+        MODULES_ARENAMAPS_SHOWBLOCKS("modules.arenamaps.showBlocks", true, "ArenaMaps"),
+        MODULES_ARENAMAPS_SHOWPLAYERS("modules.arenamaps.showPlayers", true, "ArenaMaps"),
+        MODULES_ARENAMAPS_SHOWSCORE("modules.arenamaps.showScore", true, "ArenaMaps"),
 
         MODULES_ARENAVOTE_EVERYONE("modules.arenavote.everyone", true, "AutoVote"),
         MODULES_ARENAVOTE_AUTOSTART("modules.arenavote.autostart", false, "AutoVote"),

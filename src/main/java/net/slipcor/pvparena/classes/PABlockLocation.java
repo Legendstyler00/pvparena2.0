@@ -1,9 +1,12 @@
 package net.slipcor.pvparena.classes;
 
+import net.slipcor.pvparena.core.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.Vector;
+
+import java.util.Collection;
 
 /**
  * <pre>
@@ -145,6 +148,25 @@ public class PABlockLocation {
     public PABlockLocation getMidpoint(final PABlockLocation location) {
         return new PABlockLocation(this.world, (this.x + location.x) / 2, (this.y + location.y) / 2,
                 (this.z + location.z) / 2);
+    }
+
+    public static PABlockLocation getMidpoint(Collection<PABlockLocation> locations) {
+        int size = locations.size();
+        String world = null;
+        int x = 0;
+        int y = 0;
+        int z = 0;
+        for (PABlockLocation loc : locations) {
+            if (world == null) {
+                world = loc.getWorldName();
+            } else if(!StringUtils.equalsIgnoreCase(world, loc.getWorldName())) {
+                throw new RuntimeException("Error: trying to find MidPoint of locations in different worlds");
+            }
+            x += loc.getX();
+            y += loc.getY();
+            z += loc.getZ();
+        }
+        return new PABlockLocation(world, x / size, y / size, z / size);
     }
 
     public String getWorldName() {
