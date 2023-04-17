@@ -129,7 +129,7 @@ public final class Language {
         ERROR_CLASS_NOT_FOUND("nulang.error.class.notfound", "Class not found: &a%1%&r"),
         ERROR_CLASS_NOT_GIVEN("nulang.error.class.notgiven", "No class was given!"),
         ERROR_REQ_NEEDS_AUTOCLASS("nulang.error.class.needsautoclass", "%1% module requires autoclass setting to be defined"),
-        ERROR_REQ_NEEDS_JOINDURINGMATCHGOAL("nulang.error.class.needsjoinduringmatchgoal", "%1% module requires a goal that allows join during match"),
+        ERROR_REQ_NEEDS_JOINDURINGMATCHGOAL("nulang.error.class.needsjoinduringmatchgoal", "%1% module requires enabling join.allowDuringMatch and a goal that allows join during match"),
         ERROR_REQ_INCOMPATIBLESETTING("nulang.error.class.incompatiblesetting", "%1% module is not compatible with %2% setting"),
         ERROR_COMMAND_BLOCKED("nulang.error.cmdblocked", "&cCommand blocked: %1%"),
         ERROR_COMMAND_INVALID("nulang.error.invalidcmd", "Invalid command: %1%"),
