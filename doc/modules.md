@@ -17,8 +17,7 @@ Hook into many different aspects of the game!
 |----------------------------------------------------|---------------------------------------------------------------------------------------------------------|----------|--------|
 | [AfterMatch](mods/aftermatch.md)                   | could also be called "Sudden Death"                                                                     |          | ✔      |
 | [Announcements](mods/announcements.md)             | announce events happening                                                                               |          | ✔      |
-| [ArenaMaps](mods/arenamaps.md)                     | never lose yourself ever again!                                                                         |          | ⚠      |
-| [AutoSneak](mods/autosneak.md)                     | automatically hide player nametags by forcing sneak mode                                                |          | ⚠      |
+| [ArenaMaps](mods/arenamaps.md)                     | never lose yourself ever again!                                                                         |          | ✔      |
 | [BanKick](mods/bankick.md)                         | secure your arenas!                                                                                     |          | ⚠      |
 | [BattlefieldGuard](mods/battlefieldguard.md)       | secure your battlefield                                                                                 |          | ☑      |
 | [BattlefieldJoin](mods/battlefieldjoin.md)         | join directly your battlefield without using the lounge                                                 | JOIN     | ✔      |
@@ -75,6 +74,10 @@ version will be to make a great check-up of all of them and fix all eventual iss
 
 Anyway, don't hesitate to test legacy modules by yourself, a big part of them work normally or have trivial issues. Obviously
 if you encounter one, you can [report it](https://github.com/Eredrim/pvparena/issues) 😉
+
+### What happened to ArenaBoards, AutoSneak and AutoVote?
+These modules either used discontinued features (like arena rounds) or their features have been integrated in core of
+PVPArena plugin.
 
 ## Installing modules
 

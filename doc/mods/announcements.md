@@ -22,7 +22,10 @@ Valid Announcement types:
 
 - all of the above \- is this announcement active?
 - radius \- the radius where the announcements are heard. 0 for infinite
-- color \- the color to format the announcements (default: AQUA) 
+- color \- the color to format the announcements (default: AQUA).
+
+Available colors are: AQUA, BLACK, BLUE, DARK_AQUA, DARK_BLUE, DARK_GRAY, DARK_GREEN, DARK_PURPLE, DARK_RED, GOLD, GRAY,
+GREEN, LIGHT_PURPLE, RED, WHITE and YELLOW.
 
 ## Commands
 
