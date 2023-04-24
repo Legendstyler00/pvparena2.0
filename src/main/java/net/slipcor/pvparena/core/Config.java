@@ -266,9 +266,9 @@ public class Config {
         MODULES_ANNOUNCEMENTS_ADVERT("modules.announcements.advert", false, "Announcements"),
 
         MODULES_ARENAMAPS_ALIGNTOPLAYER("modules.arenamaps.alignToPlayer", false, "ArenaMaps"),
-        MODULES_ARENAMAPS_SHOWSPAWNS("modules.arenamaps.showSpawns", true, "ArenaMaps"),
-        MODULES_ARENAMAPS_SHOWBLOCKS("modules.arenamaps.showBlocks", true, "ArenaMaps"),
-        MODULES_ARENAMAPS_SHOWPLAYERS("modules.arenamaps.showPlayers", true, "ArenaMaps"),
+        MODULES_ARENAMAPS_SHOWSPAWNS("modules.arenamaps.showSpawns", "ALL", "ArenaMaps"),
+        MODULES_ARENAMAPS_SHOWBLOCKS("modules.arenamaps.showBlocks", "ALL", "ArenaMaps"),
+        MODULES_ARENAMAPS_SHOWPLAYERS("modules.arenamaps.showPlayers", "TEAM", "ArenaMaps"),
         MODULES_ARENAMAPS_SHOWSCORE("modules.arenamaps.showScore", true, "ArenaMaps"),
 
         MODULES_ARENAVOTE_EVERYONE("modules.arenavote.everyone", true, "AutoVote"),
