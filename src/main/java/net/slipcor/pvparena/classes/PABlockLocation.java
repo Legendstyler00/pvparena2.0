@@ -207,6 +207,10 @@ public class PABlockLocation {
                 + goal.getBlockY(), this.z + goal.getBlockZ());
     }
 
+    public boolean isUpperThan(final PABlockLocation other) {
+        return this.y > other.y;
+    }
+
     public void setX(final int value) {
         this.x = value;
     }

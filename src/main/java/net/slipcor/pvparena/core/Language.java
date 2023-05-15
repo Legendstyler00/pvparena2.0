@@ -359,6 +359,7 @@ public final class Language {
         NOTICE_WELCOME_SPECTATOR2("nulang.notice.welcomespec2", "/pa bet [name] [amount] to bet on team or player."),
         NOTICE_YOU_DEATH("nulang.notice.youdeath", "You entered a DEATH region. Goodbye!"),
         NOTICE_YOU_ESCAPED("nulang.notice.youescaped", "You escaped the battlefield. Goodbye!"),
+        NOTICE_ARENA_BOUNDS("nulang.notice.arenabounds", "You reached bounds of the arena."),
         NOTICE_YOU_LEFT("nulang.notice.youleft", "You left the arena!"),
         NOTICE_YOU_NOCAMP("nulang.notice.younocamp", "You are in a NOCAMP region. Move!"),
 

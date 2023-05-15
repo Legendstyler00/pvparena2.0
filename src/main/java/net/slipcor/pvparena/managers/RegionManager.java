@@ -6,10 +6,15 @@ import net.slipcor.pvparena.classes.PABlockLocation;
 import net.slipcor.pvparena.commands.PAG_Join;
 import net.slipcor.pvparena.core.Config;
 import net.slipcor.pvparena.core.Language;
+import net.slipcor.pvparena.core.Utils;
 import net.slipcor.pvparena.regions.ArenaRegion;
 import net.slipcor.pvparena.regions.RegionType;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.util.Vector;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,12 +51,12 @@ public final class RegionManager {
                 .collect(Collectors.toSet());
     }
 
-    public void checkPlayerLocation(Player player, PABlockLocation pLoc) {
+    public void checkPlayerLocation(Player player, PABlockLocation locTo, PlayerMoveEvent event) {
         ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
 
         if(arenaPlayer.getArena() == null) {
             this.joinRegionsCache.stream()
-                    .filter(rg -> rg.getShape().contains(pLoc))
+                    .filter(rg -> rg.getShape().contains(locTo))
                     .findFirst()
                     .filter(rg -> !rg.getArena().isLocked() && rg.getArena().getConfig().getBoolean(Config.CFG.JOIN_FORCE))
                     .filter(rg -> !rg.getArena().isFightInProgress() || (rg.getArena().isFightInProgress() && rg.getArena().getGoal().allowsJoinInBattle()))
@@ -63,27 +68,41 @@ public final class RegionManager {
         } else if(!arenaPlayer.isTeleporting()) {
 
             if (arenaPlayer.getStatus() == FIGHT) {
-                this.handleFightingPlayerMove(arenaPlayer, pLoc);
+                this.handleFightingPlayerMove(arenaPlayer, locTo, event);
 
             } else if (arenaPlayer.getStatus() == READY || arenaPlayer.getStatus() == LOUNGE) {
-                this.handleEscapeLoungeRegions(arenaPlayer, pLoc);
+                this.handleEscapeLoungeRegions(arenaPlayer, locTo);
 
             } else if (arenaPlayer.isSpectating()) {
-                this.handleEscapeWatchRegions(arenaPlayer, pLoc);
+                this.handleEscapeWatchRegions(arenaPlayer, locTo);
             }
         }
     }
 
-    public void handleFightingPlayerMove(ArenaPlayer arenaPlayer, PABlockLocation pLoc) {
+    public void handleFightingPlayerMove(ArenaPlayer arenaPlayer, PABlockLocation locTo, PlayerMoveEvent event) {
         Arena arena = arenaPlayer.getArena();
 
         if (arena.isFightInProgress()) {
-            boolean escaping = this.isEscapingBattleRegions(arenaPlayer, pLoc);
+            boolean escaping = this.isEscapingBattleRegions(arenaPlayer, locTo);
 
-            if (!escaping) {
+            if (escaping) {
+                Player player = arenaPlayer.getPlayer();
+                debug(player, "escaping BATTLE, loc : {}", locTo);
+
+                boolean hasBeenRollback = this.tryRollbackPosition(event);
+                if(!hasBeenRollback) {
+                    Arena.pmsg(player, Language.MSG.NOTICE_YOU_ESCAPED);
+                    if (arena.getConfig().getBoolean(Config.CFG.GENERAL_LEAVEDEATH)) {
+                        player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.CUSTOM, 1004.0));
+                        player.damage(1000);
+                    } else {
+                        arena.playerLeave(player, Config.CFG.TP_EXIT, false, false, false);
+                    }
+                }
+            } else {
                 arena.getRegions().stream()
                         .filter(rg -> rg.getType() == RegionType.BATTLE || rg.getType() == RegionType.CUSTOM)
-                        .forEach(rg -> rg.handleRegionFlags(arenaPlayer, pLoc));
+                        .forEach(rg -> rg.handleRegionFlags(arenaPlayer, locTo));
             }
         }
     }
@@ -114,26 +133,34 @@ public final class RegionManager {
         }
     }
 
-    private boolean isEscapingBattleRegions(ArenaPlayer arenaPlayer, PABlockLocation pLoc) {
+    private boolean isEscapingBattleRegions(ArenaPlayer arenaPlayer, PABlockLocation locTo) {
         Arena arena = arenaPlayer.getArena();
         Set<ArenaRegion> regions = arena.getRegionsByType(RegionType.BATTLE);
-        boolean isInRegion = regions.isEmpty() || regions.stream().anyMatch(rg -> rg.getShape().contains(pLoc));
+        return !regions.isEmpty() && regions.stream().noneMatch(rg -> rg.getShape().contains(locTo));
+    }
 
-        if (!isInRegion) {
-
-            Player player = arenaPlayer.getPlayer();
-            debug(player, "escaping BATTLE, loc : {}", pLoc);
-            Arena.pmsg(player, Language.MSG.NOTICE_YOU_ESCAPED);
-
-            if (arena.getConfig().getBoolean(Config.CFG.GENERAL_LEAVEDEATH)) {
-                player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.CUSTOM, 1004.0));
-                player.damage(1000);
-            } else {
-                arena.playerLeave(player, Config.CFG.TP_EXIT, false, false, false);
-            }
-
+    private boolean tryRollbackPosition(final PlayerMoveEvent event) {
+        if(event instanceof PlayerTeleportEvent || event.getFrom().getBlock().isLiquid()) {
+            trace(event.getPlayer(), "escaping - cancel movement");
+            event.setCancelled(true);
             return true;
         }
+
+        // Checking if player can be rollback on the floor (solid block under previous position)
+        final Location locFrom = event.getFrom();
+        for(int i = 1; i <= 10; i++) {
+            Location maybeFloor = locFrom.clone().subtract(new Vector(0, i, 0));
+            if(maybeFloor.getBlock().getType().isSolid()) {
+                Location rollbackLoc = Utils.getCenteredLocation(locFrom);
+                rollbackLoc.setPitch(locFrom.getPitch());
+                rollbackLoc.setYaw(locFrom.getYaw());
+                event.getPlayer().teleport(rollbackLoc);
+                trace(event.getPlayer(), "escaping - rollback to location : {}", rollbackLoc);
+                Arena.pmsg(event.getPlayer(), Language.MSG.NOTICE_ARENA_BOUNDS);
+                return true;
+            }
+        }
+
         return false;
     }
 }

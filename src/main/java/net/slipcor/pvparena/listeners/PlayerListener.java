@@ -756,7 +756,7 @@ public class PlayerListener implements Listener {
         Location from = event.getFrom();
         if (to != null && (from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() || from.getBlockZ() != to.getBlockZ())) {
             PABlockLocation locTo = new PABlockLocation(to);
-            RegionManager.getInstance().checkPlayerLocation(event.getPlayer(), locTo);
+            RegionManager.getInstance().checkPlayerLocation(event.getPlayer(), locTo, event);
         }
     }
 
@@ -819,10 +819,11 @@ public class PlayerListener implements Listener {
         }
 
         PABlockLocation toLoc = new PABlockLocation(event.getTo());
+        PABlockLocation fromLoc = new PABlockLocation(event.getFrom());
 
         if (!arenaPlayer.isTelePass() && !player.hasPermission("pvparena.telepass")) {
             for (ArenaRegion r : regions) {
-                if (r.getShape().contains(toLoc) || r.getShape().contains(new PABlockLocation(event.getFrom()))) {
+                if (r.getShape().contains(toLoc) || r.getShape().contains(fromLoc)) {
                     // teleport inside the arena, allow, unless:
                     if (r.getProtections().contains(RegionProtection.TELEPORT)) {
                         debug(arena, player, "onPlayerTeleport: protected region, cancelling!");
@@ -837,7 +838,7 @@ public class PlayerListener implements Listener {
         }
 
         if (arena.isFightInProgress() && !arenaPlayer.isTeleporting() && arenaPlayer.getStatus() == FIGHT) {
-            RegionManager.getInstance().handleFightingPlayerMove(arenaPlayer, toLoc);
+            RegionManager.getInstance().handleFightingPlayerMove(arenaPlayer, toLoc, event);
         }
 
         this.maybeFixInvisibility(arena, player);
