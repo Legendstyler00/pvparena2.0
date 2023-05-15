@@ -606,7 +606,6 @@ public final class Language {
 
         MODULE_BANVOTE_BANNED("nulang.banvote.lang.playerbanned", "Player banned: %1%"),
         MODULE_BANVOTE_KICKED("nulang.banvote.lang.playerkicked", "Player kicked: %1%"),
-        MODULE_BANVOTE_NOTKICKED("nulang.banvote.lang.playernotkicked", "Player not kicked: %1%"),
         MODULE_BANVOTE_NOTONLINE("nulang.banvote.lang.playernotonline", "Player is not online: %1%"),
         MODULE_BANVOTE_UNBANNED("nulang.banvote.lang.playerunbanned", "Player unbanned: %1%"),
         MODULE_BANVOTE_YOUBANNED("nulang.banvote.lang.youwerebanned", "You are banned from arena %1%!"),
