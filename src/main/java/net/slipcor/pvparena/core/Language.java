@@ -360,6 +360,7 @@ public final class Language {
         NOTICE_YOU_DEATH("nulang.notice.youdeath", "You entered a DEATH region. Goodbye!"),
         NOTICE_YOU_ESCAPED("nulang.notice.youescaped", "You escaped the battlefield. Goodbye!"),
         NOTICE_ARENA_BOUNDS("nulang.notice.arenabounds", "You reached bounds of the arena."),
+        NOTICE_ARENA_INTRUSION("nulang.notice.arenaintrusion", "This is an area closed to visitors. If you want to play this arena, type &e/pa %1%&r. If you want to spectate, type &e/pa %1% spectate&r."),
         NOTICE_YOU_LEFT("nulang.notice.youleft", "You left the arena!"),
         NOTICE_YOU_NOCAMP("nulang.notice.younocamp", "You are in a NOCAMP region. Move!"),
 

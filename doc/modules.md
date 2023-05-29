@@ -19,7 +19,6 @@ Hook into many different aspects of the game!
 | [Announcements](mods/announcements.md)             | announce events happening                                                                               |          | ✔      |
 | [ArenaMaps](mods/arenamaps.md)                     | never lose yourself ever again!                                                                         |          | ✔      |
 | [BanKick](mods/bankick.md)                         | secure your arenas!                                                                                     |          | ⚠      |
-| [BattlefieldGuard](mods/battlefieldguard.md)       | secure your battlefield                                                                                 |          | ☑      |
 | [BattlefieldJoin](mods/battlefieldjoin.md)         | join directly your battlefield without using the lounge                                                 | JOIN     | ✔      |
 | [BattlefieldManager](mods/battlefieldmanager.md)   | manage your battlefield                                                                                 |          | ⚠      |
 | [BetterClasses](mods/betterclasses.md)             | add potion effects and more to specific classes                                                         |          | ☑      |
@@ -75,7 +74,7 @@ version will be to make a great check-up of all of them and fix all eventual iss
 Anyway, don't hesitate to test legacy modules by yourself, a big part of them work normally or have trivial issues. Obviously
 if you encounter one, you can [report it](https://github.com/Eredrim/pvparena/issues) 😉
 
-### What happened to ArenaBoards, AutoSneak and AutoVote?
+### What happened to ArenaBoards, AutoSneak, AutoVote or BattlefieldGuard?
 These modules either used discontinued features (like arena rounds) or their features have been integrated in core of
 PVPArena plugin.
 

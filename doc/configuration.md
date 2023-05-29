@@ -153,6 +153,7 @@ protection:
   enabled: true #Enable protections on regions. See "regions" part of documentation for more informations
   punish: false #Damage players who don't respect protections
   spawn: 0 #Radius around spawns where player fight is disallowed. Makes possible to prevent spawn kills
+  preventIntrusion: false #If true, prevent players entering in all regions of the arena. Ensure placing exit spawnpoint outside of any region.
 block:
   blacklist: [] #Blacklist of blocks with players can't interact
   whitelist: [] #Whitelist of blocks with players can interact

@@ -158,6 +158,8 @@ public class Config {
         PROTECT_PUNISH("protection.punish", false, null),
         PROTECT_SPAWN("protection.spawn", 0, null),
 
+        PROTECT_PREVENT_INTRUSION("protection.preventIntrusion", false, null),
+
         READY_AUTOCLASS("ready.autoClass", "none", null),
         READY_BLOCK("ready.block", Material.IRON_BLOCK, null),
         READY_CHECKEACHPLAYER("ready.checkEachPlayer", false, null),
