@@ -56,13 +56,14 @@ Number of spawns you have to create depends of the gamemode of your goal (free o
 For team arenas, you need: 2 fight spawns (red & blue) / 2 lounges (red & blue) / 1 spectator zone / 1 exit.
 
 ##### Free arenas
-For free (FFA) arenas, you need: at least 2 fight spawns (fight1, fight2) / 1 lounge / 1 spectator zone / 1 exit.
+For free (FFA) arenas, you need: at least 2 fight spawns (fight1, fight2) / 1 lounge / 1 spectator zone / 1 exit.   
+Just put a spawn number after spawn type to create multiple spawns. E.g. `/pa spawn set fight3`.
 
 <br>
 
 > **🚩 Tips:**
->- You can create as many spawn points as you want (in FFA or teams arenas), just increase number after spawn name.
->- You can use `/pa spawn set` command again to move a spawn point
+>- You can create as many spawn points as you want (in FFA or teams arenas), just increase the spawn number.
+>- To move a spawn point, just type again `/pa spawn set` with the the right spawn information (type and team)
 
 <br>
 

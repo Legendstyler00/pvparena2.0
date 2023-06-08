@@ -18,7 +18,7 @@ Hook into many different aspects of the game!
 | [AfterMatch](mods/aftermatch.md)                   | could also be called "Sudden Death"                                                                     |          | ✔      |
 | [Announcements](mods/announcements.md)             | announce events happening                                                                               |          | ✔      |
 | [ArenaMaps](mods/arenamaps.md)                     | never lose yourself ever again!                                                                         |          | ✔      |
-| [BanKick](mods/bankick.md)                         | secure your arenas!                                                                                     |          | ⚠      |
+| [BanKick](mods/bankick.md)                         | secure your arenas!                                                                                     |          | ✔      |
 | [BattlefieldJoin](mods/battlefieldjoin.md)         | join directly your battlefield without using the lounge                                                 | JOIN     | ✔      |
 | [BattlefieldManager](mods/battlefieldmanager.md)   | manage your battlefield                                                                                 |          | ⚠      |
 | [BetterClasses](mods/betterclasses.md)             | add potion effects and more to specific classes                                                         |          | ☑      |
@@ -43,7 +43,7 @@ Hook into many different aspects of the game!
 | [QuickLounge](mods/quicklounge.md)                 | join a lounge which starts the game automatically                                                       | JOIN     | ✔      |
 | [RealSpectate](mods/realspectate.md)               | spectate the game, CounterStrike style!                                                                 |          | ✔      |
 | [RedstoneTriggers](mods/redstonetriggers.md)       | add win/lose triggered by redstone                                                                      | SPECTATE | ⚠      |
-| [RespawnRelay](mods/respawnrelay.md)               | add a relay for respawning players                                                                      |          | ⚠      |
+| [RespawnRelay](mods/respawnrelay.md)               | add a relay for respawning players                                                                      |          | ✔      |
 | [SinglePlayerSupport](mods/singleplayersupport.md) | Allow players to use an arena on their own!                                                             |          | ⚠      |
 | [Skins](mods/skins.md)                             | add custom skins to teams/classes                                                                       |          | ❌      |
 | [SpecialJoin](mods/specialjoin.md)                 | join via buttons, levers, etc                                                                           |          | ⚠      |

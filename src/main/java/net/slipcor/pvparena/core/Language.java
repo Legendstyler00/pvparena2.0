@@ -669,6 +669,8 @@ public final class Language {
         MODULE_POWERUPS_SERVER("nulang.mod.powerups.puserver", "PowerUp deployed!"),
 
         MODULE_RESPAWNRELAY_RESPAWNING("nulang.mod.respawnrelay.respawning", "Respawning in %1%!"),
+        MODULE_RESPAWNRELAY_CHOICE("nulang.mod.respawnrelay.choice", "If you want to respawn to a particular spawn point, just type the spawn number in your chat. Available spawns: %1%"),
+        MODULE_RESPAWNRELAY_CHOSEN("nulang.mod.respawnrelay.chosen", "Your next spawn point choice has been registered."),
 
         MODULE_SKINS_DISGUISECRAFT("nulang.mod.skins.dc", "Hooking into DisguiseCraft!"),
         MODULE_SKINS_LIBSDISGUISE("nulang.mod.skins.ld", "Hooking into LibsDisguises!"),

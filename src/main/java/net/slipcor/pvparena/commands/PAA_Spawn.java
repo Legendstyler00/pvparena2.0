@@ -136,7 +136,7 @@ public class PAA_Spawn extends AbstractArenaCommand {
         String coloredTeam = ofNullable(spawn.getTeamName())
                 .map(teamName -> arena.getTeam(teamName).getColoredName())
                 .orElse("");
-        return String.join(" ", coloredTeam, spawn.getName(), ofNullable(spawn.getClassName()).orElse(""));
+        return String.join(" ", coloredTeam, spawn.getName(), ofNullable(spawn.getClassName()).orElse("")).trim();
     }
 
     @Override

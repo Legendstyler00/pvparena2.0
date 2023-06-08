@@ -10,21 +10,16 @@ Installation of this module can be done in a normal way. You'll find installatio
 
 ## Setup
 
-You need to set a spawn called "relay" -> `/pa [arena] spawn relay`
+You need to set a spawn called "relay" -> `/pa [arena] spawn set relay`
 
 ## Config settings
 
 - respawnseconds \- The respawn time in seconds (default: 10)
-- choosespawn \- Should players be able to choose a spawn when dead, by saying it in chat? (default: false) 
+- choosespawn \- Should players be able to choose the next spawn during relay time, by saying it in chat? (default: false)
 
-## Commands
+> ℹ Limitations  
+> `choosespawn`setting is only available in free goals (not team ones)
 
-\-
+## Compatibility
 
-## Warnings
-
-\-
-
-## Dependencies
-
-\-
+This module is not compatible with [AfterMatch](aftermatch.md) module.
