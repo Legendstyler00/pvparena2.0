@@ -682,6 +682,13 @@ public final class Language {
         MODULE_SPECIALJOIN_START("nulang.mod.specialjoin.start", "Setting join block!"),
         MODULE_SPECIALJOIN_STOP("nulang.mod.specialjoin.stop", "Aborted join block selection!"),
 
+        MODULE_SPAWNCOLLECTIONS_SAVED("nulang.mod.spawncollections.saved", "The spawn collection \"%1%\" has been saved"),
+        MODULE_SPAWNCOLLECTIONS_USE("nulang.mod.spawncollections.use", "As of now, arena uses spawns of \"%1%\" spawn collection"),
+        MODULE_SPAWNCOLLECTIONS_NOTEXIST("nulang.mod.spawncollections.notexist", "Spawn collection \"%1%\" doesn't exist"),
+        MODULE_SPAWNCOLLECTIONS_REMOVED("nulang.mod.spawncollections.removed", "Spawn collection \"%1%\" has been removed"),
+        MODULE_SPAWNCOLLECTIONS_LIST("nulang.mod.spawncollections.list", "Saved spawn collections for arena: %1%"),
+        MODULE_SPAWNCOLLECTIONS_EMPTY("nulang.mod.spawncollections.empty", "There's no saved spawn collection"),
+
         MODULE_SQUADS_NOSQUAD("nulang.mod.squads.nosquad", "No squads loaded! Add some: /pa [arena] !sq add [name]"),
         MODULE_SQUADS_LISTHEAD("nulang.mod.squads.listhead", "Squads for arena &b%1%"),
         MODULE_SQUADS_LISTITEM("nulang.mod.squads.listitem", "Squad %1% (max: %2%) %3%"),

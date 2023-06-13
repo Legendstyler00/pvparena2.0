@@ -20,7 +20,6 @@ Hook into many different aspects of the game!
 | [ArenaMaps](mods/arenamaps.md)                     | never lose yourself ever again!                                                                         |          | ✔      |
 | [BanKick](mods/bankick.md)                         | secure your arenas!                                                                                     |          | ✔      |
 | [BattlefieldJoin](mods/battlefieldjoin.md)         | join directly your battlefield without using the lounge                                                 | JOIN     | ✔      |
-| [BattlefieldManager](mods/battlefieldmanager.md)   | manage your battlefield                                                                                 |          | ⚠      |
 | [BetterClasses](mods/betterclasses.md)             | add potion effects and more to specific classes                                                         |          | ☑      |
 | [BetterGears](mods/bettergears.md)                 | give team colored leather                                                                               |          | ☑      |
 | [BetterFight](mods/betterfight.md)                 | kill streaks and one-hit-kill items!                                                                    |          | ⚠      |
@@ -46,6 +45,7 @@ Hook into many different aspects of the game!
 | [RespawnRelay](mods/respawnrelay.md)               | add a relay for respawning players                                                                      |          | ✔      |
 | [SinglePlayerSupport](mods/singleplayersupport.md) | Allow players to use an arena on their own!                                                             |          | ⚠      |
 | [Skins](mods/skins.md)                             | add custom skins to teams/classes                                                                       |          | ❌      |
+| [SpawnCollections](mods/battlefieldmanager.md)     | save different spawn configurations of the battlefield and switch between them                          |          | ✔      |
 | [SpecialJoin](mods/specialjoin.md)                 | join via buttons, levers, etc                                                                           |          | ⚠      |
 | [Spectate](mods/spectate.md)                       | use the new 1.8 SPECTATOR mode to allow flying and POV spectating                                       | SPECTATE | ✔      |
 | StandardLounge                                     | Default lounge module                                                                                   | JOIN     | ✔      |
@@ -77,6 +77,9 @@ if you encounter one, you can [report it](https://github.com/Eredrim/pvparena/is
 ### What happened to ArenaBoards, AutoSneak, AutoVote or BattlefieldGuard?
 These modules either used discontinued features (like arena rounds) or their features have been integrated in core of
 PVPArena plugin.
+
+### What happened to BattlefieldManager?
+The module has been renamed to SpawnCollections.
 
 ## Installing modules
 

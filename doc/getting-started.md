@@ -62,7 +62,8 @@ Just put a spawn number after spawn type to create multiple spawns. E.g. `/pa sp
 <br>
 
 > **🚩 Tips:**
->- You can create as many spawn points as you want (in FFA or teams arenas), just increase the spawn number.
+>- You can create as many spawn points as you want (in FFA or teams arenas), simply add/increase a spawn number at the 
+> end of the spawn type. E.g. `/pa spawn set fight2 blue`
 >- To move a spawn point, just type again `/pa spawn set` with the the right spawn information (type and team)
 
 <br>
