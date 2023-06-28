@@ -16,7 +16,3 @@ Set the aftermatch config to a valid setting, and set the after spawn, `/pa [are
 
 - `/pa [arena] !am time X` \- set the aftermatch countdown to X seconds
 - `/pa [arena] !am death X` \- activate the aftermatch when the number of X remaining alive players is reached
-
-## Compatibility
-
-This module is not compatible with [RespawnRelay](respawnrelay.md) module.

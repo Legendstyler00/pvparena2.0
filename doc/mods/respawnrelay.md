@@ -15,11 +15,7 @@ You need to set a spawn called "relay" -> `/pa [arena] spawn set relay`
 ## Config settings
 
 - respawnseconds \- The respawn time in seconds (default: 10)
-- choosespawn \- Should players be able to choose the next spawn during relay time, by saying it in chat? (default: false)
+- choosespawn \- Should players be able to choose the next spawn during relay time, by writing it in chat? (default: false)
 
 > ℹ Limitations  
 > `choosespawn`setting is only available in free goals (not team ones)
-
-## Compatibility
-
-This module is not compatible with [AfterMatch](aftermatch.md) module.

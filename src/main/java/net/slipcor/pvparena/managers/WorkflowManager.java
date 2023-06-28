@@ -210,6 +210,8 @@ public class WorkflowManager {
         boolean goalHandlesDeath = (shouldGoalRespawnPlayer != null);
         boolean doesRespawn = goalHandlesDeath && shouldGoalRespawnPlayer;
 
+        arenaPlayer.setStatus(PlayerStatus.DEAD);
+
         StatisticsManager.kill(arena, killer, player, doesRespawn);
 
         // Calculating dropped exp. Source: https://minecraft.fandom.com/wiki/Experience
