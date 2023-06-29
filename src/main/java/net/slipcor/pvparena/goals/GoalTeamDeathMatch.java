@@ -14,6 +14,8 @@ import net.slipcor.pvparena.managers.WorkflowManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import static java.util.Optional.ofNullable;
+
 /**
  * <pre>
  * Arena Goal class "TeamDeathMatch"
@@ -58,7 +60,7 @@ public class GoalTeamDeathMatch extends AbstractTeamKillGoal {
     @Override
     public void commitPlayerDeath(final ArenaPlayer respawnPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
 
-        ArenaPlayer killer = ArenaPlayer.fromPlayer(deathInfo.getKiller());
+        ArenaPlayer killer = ofNullable(deathInfo.getKiller()).map(ArenaPlayer::fromPlayer).orElse(null);
         if (killer == null || respawnPlayer.equals(killer)) {
             if (!this.arena.getConfig().getBoolean(CFG.GOAL_TDM_SUICIDESCORE)) {
                 this.broadcastSimpleDeathMessage(respawnPlayer, deathInfo);

@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.Optional.ofNullable;
 import static net.slipcor.pvparena.config.Debugger.debug;
 
 /**
@@ -112,7 +113,7 @@ public class GoalPlayerDeathMatch extends ArenaGoal {
     @Override
     public void commitPlayerDeath(final ArenaPlayer arenaPlayer, final boolean doesRespawn, PADeathInfo deathInfo) {
 
-        ArenaPlayer killer = ArenaPlayer.fromPlayer(deathInfo.getKiller());
+        ArenaPlayer killer = ofNullable(deathInfo.getKiller()).map(ArenaPlayer::fromPlayer).orElse(null);
 
         if (killer == null || !this.getPlayerLifeMap().containsKey(killer) || arenaPlayer.equals(killer)) {
             final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, null, false);

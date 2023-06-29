@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.Optional.ofNullable;
 import static net.slipcor.pvparena.config.Debugger.debug;
 import static net.slipcor.pvparena.core.ItemStackUtils.getItemStacksFromConfig;
 import static net.slipcor.pvparena.core.Utils.getSerializableItemStacks;
@@ -230,7 +231,7 @@ public class GoalPlayerKillReward extends ArenaGoal {
 
         }
         Bukkit.getScheduler().runTaskLater(PVPArena.getInstance(), new ResetRunnable(arenaPlayer), 4L);
-        final ArenaPlayer killer = ArenaPlayer.fromPlayer(deathInfo.getKiller());
+        final ArenaPlayer killer = ofNullable(deathInfo.getKiller()).map(ArenaPlayer::fromPlayer).orElse(null);
 
         if (killer == null) {
             return;

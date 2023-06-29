@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 public class PADeathInfo {
     private final EntityDamageEvent.DamageCause cause;
     private Entity damager;
+    @Nullable
     private Player killer;
 
     public PADeathInfo(EntityDamageEvent deathEvent) {
