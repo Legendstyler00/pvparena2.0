@@ -275,23 +275,7 @@ public final class PlayerState {
     }
 
     public static void removeEffects(final Player player) {
-        class RunLater implements Runnable {
-            @Override
-            public void run() {
-                for(final PotionEffect pe :player.getActivePotionEffects())
-                {
-                    player.removePotionEffect(pe.getType());
-                }
-            }
-        }
-        try {
-            Bukkit.getScheduler().runTaskLater(PVPArena.getInstance(), new RunLater(), 5L);
-        } catch (Exception e) {
-            for(final PotionEffect pe :player.getActivePotionEffects())
-            {
-                player.removePotionEffect(pe.getType());
-            }
-        }
+        player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
     }
 
     public static PlayerState undump(final YamlConfiguration cfg, final String pName) {

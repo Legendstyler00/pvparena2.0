@@ -20,7 +20,7 @@ Hook into many different aspects of the game!
 | [ArenaMaps](mods/arenamaps.md)                     | never lose yourself ever again!                                                                         |          | ✔      |
 | [BanKick](mods/bankick.md)                         | secure your arenas!                                                                                     |          | ✔      |
 | [BattlefieldJoin](mods/battlefieldjoin.md)         | join directly your battlefield without using the lounge                                                 | JOIN     | ✔      |
-| [BetterClasses](mods/betterclasses.md)             | add potion effects and more to specific classes                                                         |          | ☑      |
+| [BetterClasses](mods/betterclasses.md)             | add potion effects and more to specific classes                                                         |          | ✔      |
 | [BetterGears](mods/bettergears.md)                 | give team colored leather                                                                               |          | ☑      |
 | [BetterFight](mods/betterfight.md)                 | kill streaks and one-hit-kill items!                                                                    |          | ⚠      |
 | [BetterKillstreaks](mods/betterkillstreaks.md)     | even more detailed kill streaks!                                                                        |          | ⚠      |

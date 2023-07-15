@@ -691,11 +691,11 @@ public class Config {
     /**
      * Get configuration Section
      *
-     * @param name section name
+     * @param path section path
      * @return configuration section
      */
-    public ConfigurationSection getConfigurationSection(String name) {
-        return this.cfg.getConfigurationSection(name);
+    public ConfigurationSection getConfigurationSection(String path) {
+        return this.cfg.getConfigurationSection(path);
     }
 
     /**
