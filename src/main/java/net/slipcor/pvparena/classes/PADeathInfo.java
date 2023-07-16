@@ -43,4 +43,11 @@ public class PADeathInfo {
     public Player getKiller() {
         return this.killer;
     }
+
+    /**
+     * Method used to remove killer information in a goal if this information must not be used
+     */
+    public void clearKiller() {
+        this.killer = null;
+    }
 }

@@ -116,7 +116,8 @@ public class GoalPlayerDeathMatch extends ArenaGoal {
         ArenaPlayer killer = ofNullable(deathInfo.getKiller()).map(ArenaPlayer::fromPlayer).orElse(null);
 
         if (killer == null || !this.getPlayerLifeMap().containsKey(killer) || arenaPlayer.equals(killer)) {
-            final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, null, false);
+            deathInfo.clearKiller();
+            final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, false);
             Bukkit.getPluginManager().callEvent(gEvent);
 
             if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
