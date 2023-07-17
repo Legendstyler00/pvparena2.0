@@ -115,7 +115,7 @@ public class GoalPlayerDeathMatch extends ArenaGoal {
 
         ArenaPlayer killer = ofNullable(deathInfo.getKiller()).map(ArenaPlayer::fromPlayer).orElse(null);
 
-        if (killer == null || !this.getPlayerLifeMap().containsKey(killer) || arenaPlayer.equals(killer)) {
+        if (killer == null || !this.getPlayerLifeMap().containsKey(killer) || arenaPlayer.equals(killer)) { // suicide
             deathInfo.clearKiller();
             final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, false);
             Bukkit.getPluginManager().callEvent(gEvent);
@@ -139,27 +139,26 @@ public class GoalPlayerDeathMatch extends ArenaGoal {
                 }
             }
 
-            return;
-        }
+        } else {
+            int iLives = this.getPlayerLifeMap().get(killer);
+            final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, false);
+            Bukkit.getPluginManager().callEvent(gEvent);
 
-        int iLives = this.getPlayerLifeMap().get(killer);
-        final PAGoalPlayerDeathEvent gEvent = new PAGoalPlayerDeathEvent(this.arena, this, arenaPlayer, deathInfo, false);
-        Bukkit.getPluginManager().callEvent(gEvent);
-
-        if (this.increaseScore(killer, arenaPlayer, deathInfo)) {
-            return;
-        }
-
-        if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
-            if (this.arena.getConfig().getBoolean(CFG.GENERAL_SHOWREMAININGLIVES)) {
-                this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING_FRAGS, arenaPlayer, deathInfo, iLives - 1);
-            } else {
-                this.broadcastSimpleDeathMessage(arenaPlayer, deathInfo);
+            if (this.increaseScore(killer, arenaPlayer, deathInfo)) {
+                return;
             }
-        }
 
-        arenaPlayer.setMayDropInventory(true);
-        arenaPlayer.setMayRespawn(true);
+            if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
+                if (this.arena.getConfig().getBoolean(CFG.GENERAL_SHOWREMAININGLIVES)) {
+                    this.broadcastDeathMessage(MSG.FIGHT_KILLED_BY_REMAINING_FRAGS, arenaPlayer, deathInfo, iLives - 1);
+                } else {
+                    this.broadcastSimpleDeathMessage(arenaPlayer, deathInfo);
+                }
+            }
+
+            arenaPlayer.setMayDropInventory(true);
+            arenaPlayer.setMayRespawn(true);
+        }
     }
 
     private boolean increaseScore(ArenaPlayer killer, ArenaPlayer killedPlayer, PADeathInfo deathInfo) {

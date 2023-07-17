@@ -107,7 +107,7 @@ player:
   refillCustomInventory: true #Refill inventory of players using "custom" class (i.e. their own inventory) after death
   refillInventory: true #Reset class inventory of players after death
   refillforkill: false #Reset class inventory of a player after a kill
-  removearrows: false #Remove arrows on body after death
+  removearrows: false #Remove arrows on body after death (works only for Spigot 1.16.2+)
   saturation: 20 #Set hunger saturation level
   quickloot: false #If true, makes possible to get whole chest content just clicking on it
   dayTime: -1 #Time of the day seen by players (world time is not changed). Set to -1 to use world time or set a number of ticks. This value is fixed, day/night cycle will not progress.
