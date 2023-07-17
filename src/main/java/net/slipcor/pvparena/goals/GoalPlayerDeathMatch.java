@@ -69,7 +69,7 @@ public class GoalPlayerDeathMatch extends ArenaGoal {
 
     @Override
     public Set<PASpawn> checkForMissingSpawns(Set<PASpawn> spawns) {
-        return SpawnManager.getMissingTeamSpawn(this.arena, spawns);
+        return SpawnManager.getMissingFFASpawn(this.arena, spawns);
     }
 
     @Override
