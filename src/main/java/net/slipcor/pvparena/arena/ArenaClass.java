@@ -24,7 +24,6 @@ import java.util.Map;
 import static java.util.Arrays.asList;
 import static net.slipcor.pvparena.config.Debugger.debug;
 import static net.slipcor.pvparena.core.ItemStackUtils.getItemStacksFromConfig;
-import static net.slipcor.pvparena.managers.ConfigurationManager.generateDefaultClasses;
 
 /**
  * <pre>Arena Class class</pre>
@@ -53,7 +52,7 @@ public final class ArenaClass {
         final YamlConfiguration cfg = YamlConfiguration.loadConfiguration(classFile);
 
         if(cfg.get("classes") == null) {
-            cfg.addDefault("classes", generateDefaultClasses());
+            cfg.addDefault("classes", new HashMap<>());
             cfg.options().copyDefaults(true);
 
             try {
