@@ -213,6 +213,7 @@ public class Arena {
 
     public void addModule(ArenaModule module, boolean updateConfig) {
         module.setArena(this);
+        module.initConfig();
         this.mods.add(module);
 
         if (updateConfig) {

@@ -250,6 +250,13 @@ public abstract class ArenaModule implements IArenaCommandHandler {
     }
 
     /**
+     * Hook into arena module enabling to create config
+     */
+    public void initConfig() {
+
+    }
+
+    /**
      * hook into the arena config parsing
      *
      * @param config the arena config
