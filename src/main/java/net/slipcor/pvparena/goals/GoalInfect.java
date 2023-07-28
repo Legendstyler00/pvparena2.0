@@ -23,6 +23,7 @@ import net.slipcor.pvparena.managers.SpawnManager;
 import net.slipcor.pvparena.runnables.EndRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -483,7 +484,8 @@ public class GoalInfect extends ArenaGoal {
             return;
         }
         // create the team infected
-        this.infectedTeam = new ArenaTeam(INFECTED, "PINK");
+        this.infectedTeam = new ArenaTeam(INFECTED, DyeColor.PINK.name());
+        this.arena.getTeams().add(this.infectedTeam);
 
         // select starting infected players
         ArenaPlayer infected = null;
@@ -529,7 +531,6 @@ public class GoalInfect extends ArenaGoal {
         final Set<PASpawn> spawns = new HashSet<>(SpawnManager.getPASpawnsStartingWith(this.arena, INFECTED));
 
         TeleportManager.teleportPlayerToRandomSpawn(this.arena, infected, spawns);
-        this.arena.getTeams().add(this.infectedTeam);
     }
 
     @Override

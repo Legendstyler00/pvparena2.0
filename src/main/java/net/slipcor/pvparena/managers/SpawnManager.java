@@ -339,7 +339,8 @@ public final class SpawnManager {
             if (FREE.equals(team.getName())) {
                 spawns.addAll(SpawnManager.getPASpawnsStartingWith(arena, spawnName));
             } else {
-                spawns.addAll(SpawnManager.getPASpawnsStartingWith(arena, spawnName, team.getName()));
+                // Special spawns for fake team goals (like infect or tank)
+                spawns.addAll(SpawnManager.getPASpawnsStartingWith(arena, team.getName()));
             }
         } else {
             spawns.addAll(SpawnManager.getPASpawnsStartingWith(arena, spawnName, team.getName()));
