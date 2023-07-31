@@ -5,8 +5,9 @@
 ## Description
 
 Players are hungry! The first team gathering enough **cooked** food items (of their type) wins the game.
+Teams have to cook in specific furnaces and bring the cooked food in their own chest(s).
 
-The following food types exist:
+Each team will get a random food type among the following ones:
 - Beef
 - Chicken
 - Cod
@@ -20,13 +21,18 @@ The following food types exist:
 
 ## Setup
 
-You have to prepare chests. To define those, use `/pa [arenaname] foodchest add [teamname]` \- this enables setting. 
+You have to prepare chests.
+Those chests will be checked for incoming and outgoing food items (of the team type).
 
-Finish the setting by clicking the chest that should be the team's chest. 
+To register them, use `/pa [arenaname] foodchest add [teamname]`, this enables 
+a selection mode. Click on the chests that should be the team's chests. Then, type the command again to
+close selection mode.  
+Repeat the operation for all teams.
 
-This chest will be checked for incoming and outgoing food items (of the team type). You can optionally prepare furnaces so that a team can ONLY use this furnace. 
+ You can optionally prepare furnaces so that a team can ONLY use this furnace. 
 
-Set this by `/pa [arenaname] foodfurnace add [teamname]` and hit the furnace. 
+Set this by `/pa [arenaname] foodfurnace add [teamname]` and hit the furnace. The selection mode works exactly like
+the one for food chests.
 
 > 🚩 **Notes:**  
 > - Teams not having a corresponding furnace will be able to access all of them.
@@ -36,6 +42,6 @@ Set this by `/pa [arenaname] foodfurnace add [teamname]` and hit the furnace.
 
 ## Config settings
 
-- `fmaxitems` \- the item count that triggers win (default: 50)
+- `fmaxitems` \- the cooked item count that triggers win (default: 50)
 - `fplayeritems` \- the item count players receive on start and respawn \- (default: 50)
 - `fteamitems` \- the item count the team receives on start, divided by team members \- (default: 100) 

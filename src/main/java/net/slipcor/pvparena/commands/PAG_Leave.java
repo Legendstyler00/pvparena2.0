@@ -52,7 +52,10 @@ public class PAG_Leave extends AbstractArenaCommand {
         }
 
         if (!arena.hasPlayer(aPlayer.getPlayer())) {
-            if(PAA_Edit.activeEdits.containsKey(sender.getName())) {
+            if (PAA_Region.activeSelections.containsKey(sender.getName())) {
+                PAA_Region.activeSelections.remove(sender.getName());
+                arena.msg(sender, MSG.GOAL_CLOSED_SELECTION);
+            } else if(PAA_Edit.activeEdits.containsKey(sender.getName())) {
                 new PAA_Edit().commit(arena, sender, args);
             } else {
                 arena.msg(sender, MSG.ERROR_NOT_IN_ARENA);

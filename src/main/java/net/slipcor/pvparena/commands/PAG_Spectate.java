@@ -52,6 +52,11 @@ public class PAG_Spectate extends AbstractArenaCommand {
             }
         }
 
+        if (PAA_Region.activeSelections.containsKey(sender.getName())) {
+            PAA_Region.activeSelections.remove(sender.getName());
+            arena.msg(sender, MSG.GOAL_CLOSED_SELECTION);
+        }
+
         WorkflowManager.handleSpectate(arena, (Player) sender);
     }
 

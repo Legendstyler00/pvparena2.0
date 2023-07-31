@@ -508,7 +508,7 @@ public final class Language {
         GOAL_DOMINATION_CONTESTING("nulang.goal.dom.contesting", "&eA flag claimed by team %1% is being contested!"),
         GOAL_DOMINATION_UNCLAIMING("nulang.goal.dom.unclaiming", "&eA flag claimed by team %1% is being unclaimed!"),
         GOAL_DOMINATION_UNCLAIMINGBY("nulang.goal.dom.unclaimingby", "&eA flag claimed by team %1% is being unclaimed by team %2%!"),
-        GOAL_DOMINATION_SET_FLAG("nulang.goal.dom.setflag", "&eClick on a flag to register it, it needs to be a colorable block."),
+        GOAL_DOMINATION_SET_FLAG("nulang.goal.dom.setflag", "&eClick on flags to register them, they need to be colorable blocks. Type this command again to close selection mode."),
         GOAL_DOMINATION_EXISTING_FLAG("nulang.goal.dom.existingflag", "&eThis flag was already set"),
 
         GOAL_FLAGS_BROUGHTHOME("lang.goal.flag.flaghomeleft", "%1% brought home the flag of team %2%! Captures remaining: %3%"),
@@ -524,7 +524,7 @@ public final class Language {
         GOAL_FLAGS_REMOVED("lang.goal.flag.removed", "Flag &e%1%&r has been removed"),
 
         GOAL_FOOD_NOTYOURFOOD("lang.goal.food.notyourfood", "This is not your furnace!"),
-        GOAL_FOOD_TOSET("lang.goal.food.tosetfood", "&eClick on a %1% to register it. Type this command again to close selection mode"),
+        GOAL_FOOD_TOSET("lang.goal.food.tosetfood", "&eClick on each &f%1%&e to register it. Then, type this command again to close selection mode"),
         GOAL_FOOD_NOTFOUND("lang.goal.food.notfound", "Block not found: %1% %2% #%3%"),
         GOAL_FOOD_REMOVED("lang.goal.food.removed", "%1% %2% #%3% has been removed"),
         GOAL_FOOD_EXISTING_BLOCK("lang.goal.food.existingblock", "This block has already been set for team %1%"),

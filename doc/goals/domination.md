@@ -19,9 +19,9 @@ points wins.
 
 ## Setup
 
-Flags have to be added.In order to do that, use `/pa [arenaname] add flag [teamName]`. This toggles edit mode. 
-Don't forget to type command again in order to exit edit mode after setting the flags. 
-Set them by clicking the flag type (WOOL by default).
+Flags have to be added. In order to do that, use `/pa [arenaname] add flag`. This toggles edit mode. 
+In toggle mode you can register as many flags as you want by clicking on them.  
+Don't forget to type command again in order to exit edit mode after setting the flags.
 
 Given that flag must be able to change color, you can use the following blocks as flag blocks:                                                                                  
 * BANNERS

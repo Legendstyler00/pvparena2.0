@@ -563,7 +563,6 @@ public class GoalDomination extends ArenaGoal {
             SpawnManager.setBlock(this.arena, new PABlockLocation(block.getLocation()), flagName, null);
 
             this.arena.msg(player, MSG.GOAL_FLAGS_SET, flagName);
-            PAA_Region.activeSelections.remove(player.getName());
             return true;
         }
         return false;

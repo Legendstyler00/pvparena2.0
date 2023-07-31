@@ -329,10 +329,6 @@ public class GoalFood extends ArenaGoal {
             this.arena.msg(player, MSG.GOAL_FOOD_CHEST_SET, String.valueOf(newIndex), this.blockTeamName);
         }
 
-        PAA_Region.activeSelections.remove(player.getName());
-        this.blockTypeName = null;
-        this.blockTeamName = null;
-
         return true;
     }
 

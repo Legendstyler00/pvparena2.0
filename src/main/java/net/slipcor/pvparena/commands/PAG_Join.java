@@ -69,6 +69,11 @@ public class PAG_Join extends AbstractArenaCommand {
             }
         }
 
+        if (PAA_Region.activeSelections.containsKey(sender.getName())) {
+            PAA_Region.activeSelections.remove(sender.getName());
+            arena.msg(sender, MSG.GOAL_CLOSED_SELECTION);
+        }
+
         if (ArenaRegion.tooFarAway(arena, (Player) sender)) {
             arena.msg(sender, MSG.ERROR_JOIN_RANGE);
             return;
