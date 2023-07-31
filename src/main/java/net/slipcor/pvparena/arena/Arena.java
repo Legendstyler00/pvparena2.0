@@ -458,7 +458,7 @@ public class Arena {
             if (aPlayer.getArenaClass() != null) {
                 if ("custom".equalsIgnoreCase(className)) {
                     // if custom, give stuff back
-                    aPlayer.reloadInventory(false);
+                    aPlayer.reloadInventory(true);
                 } else {
                     InventoryManager.clearInventory(player);
                     aPlayer.equipPlayerFightItems();
