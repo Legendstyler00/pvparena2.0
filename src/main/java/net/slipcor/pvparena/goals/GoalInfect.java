@@ -37,6 +37,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 import java.util.*;
 
+import static java.util.Arrays.asList;
 import static net.slipcor.pvparena.config.Debugger.debug;
 
 /**
@@ -81,21 +82,14 @@ public class GoalInfect extends ArenaGoal {
     }
 
     private boolean anyTeamEmpty() {
-        for (ArenaTeam team : this.arena.getTeams()) {
-            boolean bbreak = false;
-            for (ArenaPlayer player : team.getTeamMembers()) {
-                if (player.getStatus() == PlayerStatus.FIGHT) {
-                    bbreak = true;
-                    break;
-                }
-            }
-            if (bbreak) {
-                continue;
-            }
-            debug(this.arena, "team empty: " + team.getName());
-            return true;
-        }
-        return false;
+        return this.arena.getTeams().stream()
+                .filter(team -> team.getTeamMembers()
+                        .stream()
+                        .noneMatch(player -> asList(PlayerStatus.FIGHT, PlayerStatus.DEAD).contains(player.getStatus()))
+                )
+                .peek(team -> debug(this.arena, "team empty: {}", team.getName()))
+                .findAny()
+                .isPresent();
     }
 
     @Override
@@ -451,7 +445,7 @@ public class GoalInfect extends ArenaGoal {
 
     @Override
     public List<String> getGoalCommands() {
-        return Arrays.asList(GETPROTECT, SETPROTECT);
+        return asList(GETPROTECT, SETPROTECT);
     }
 
     @Override

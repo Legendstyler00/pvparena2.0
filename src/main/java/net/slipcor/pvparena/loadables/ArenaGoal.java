@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.Arrays.asList;
 import static net.slipcor.pvparena.classes.PASpawn.FIGHT;
 import static net.slipcor.pvparena.config.Debugger.trace;
 
@@ -360,7 +361,7 @@ public class ArenaGoal implements IArenaCommandHandler {
     @NotNull
     public Map<ArenaPlayer, Integer> getActivePlayerLifeMap() {
         return this.playerLifeMap.entrySet().stream()
-                .filter(entry -> entry.getKey().getStatus() == PlayerStatus.FIGHT)
+                .filter(entry -> asList(PlayerStatus.FIGHT, PlayerStatus.DEAD).contains(entry.getKey().getStatus()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
