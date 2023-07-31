@@ -481,7 +481,7 @@ public class GoalFood extends ArenaGoal {
 
             this.teamFoodMap.put(team, teamMaterial);
 
-            int teamPartAmount = tAmount / team.getTeamMembers().size();
+            int teamPartAmount = tAmount / Math.max(team.getTeamMembers().size(), 1);
             int totalAmount = Math.max(pAmount + teamPartAmount, 1);
             
             for (ArenaPlayer teamPlayer : team.getTeamMembers()) {
