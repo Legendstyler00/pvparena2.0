@@ -2,34 +2,27 @@
 
 ## Description
 
-This mod adds colored armor to keep track of teams more easily. The class armor value is reflected by a head gear enchantment.
+This mod colorize armors to keep track of teams more easily.  
+By default, module tries to intelligently guess team colors. If the result doesn't convince you and change them as you 
+like.
 
 ## Installation
 
 Installation of this module can be done in a normal way. You'll find installation process in [modules page](../modules.md#installing-modules) of the doc.
 
-## Setup
-
-The plugin tries to intelligently guess team colors. Might be that the results are odd, so go ahead and change them as you like.
-
 ## Config settings
 
-- head \- alter the head slot
-- chest \- alter the chest slot
-- leg \- alter the leg slot
-- foot \- alter the foot slot
-- onlyifleather \- only alter leather inventory contents 
+- **head** \- apply colored armor on the head slot (default: true)
+- **chest** \- apply colored armor on the chest slot (default: true)
+- **leg** \- apply colored armor on the leg slot (default: true)
+- **foot** \- apply colored armor on the foot slot (default: true)
+- **onlyifleather** \- apply colored armor only if slots already contain a leather armor (default: true)
+
+> 🚩 **Tip:**  
+> The *onlyifleather* setting makes possible to create different classes with as many leather elements as you want 
+> (including zero).
 
 ## Commands
 
 - `/pa !bg [name]` \- show class / team
 - `/pa !bg [name] color R G B` \- set a team's color values
-- `/pa !bg [name] level [number]` \- set the protection enchantment level 
-
-## Warnings
-
-\-
-
-## Dependencies
-
-CraftBukkit 1.4.5-R1.0 and above

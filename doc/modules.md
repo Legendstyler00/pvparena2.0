@@ -21,7 +21,7 @@ Hook into many different aspects of the game!
 | [BanKick](mods/bankick.md)                         | secure your arenas!                                                                                     |          | ✔      |
 | [BattlefieldJoin](mods/battlefieldjoin.md)         | join directly your battlefield without using the lounge                                                 | JOIN     | ✔      |
 | [BetterClasses](mods/betterclasses.md)             | add potion effects and more to specific classes                                                         |          | ✔      |
-| [BetterGears](mods/bettergears.md)                 | give team colored leather                                                                               |          | ☑      |
+| [BetterGears](mods/bettergears.md)                 | automatically colorize classes armors to suit team color                                                |          | ✔      |
 | [BetterFight](mods/betterfight.md)                 | kill streaks and one-hit-kill items!                                                                    |          | ⚠      |
 | [BetterKillstreaks](mods/betterkillstreaks.md)     | even more detailed kill streaks!                                                                        |          | ⚠      |
 | [BlockDissolve](mods/blockdissolve.md)             | dissolve blocks under fighting players                                                                  |          | ☑      |

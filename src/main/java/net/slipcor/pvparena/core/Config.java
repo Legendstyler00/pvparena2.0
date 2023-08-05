@@ -294,7 +294,7 @@ public class Config {
         MODULES_BETTERGEARS_CHEST("modules.bettergears.chest", true, "BetterGears"),
         MODULES_BETTERGEARS_LEG("modules.bettergears.leg", true, "BetterGears"),
         MODULES_BETTERGEARS_FOOT("modules.bettergears.foot", true, "BetterGears"),
-        MODULES_BETTERGEARS_ONLYIFLEATHER("modules.bettergears.onlyifleather", false, "BetterGears"),
+        MODULES_BETTERGEARS_ONLYIFLEATHER("modules.bettergears.onlyifleather", true, "BetterGears"),
 
         MODULES_BLOCKRESTORE_HARD("modules.blockrestore.hard", false, "BlockRestore"),
         MODULES_BLOCKRESTORE_OFFSET("modules.blockrestore.offset", 1, "BlockRestore"),
