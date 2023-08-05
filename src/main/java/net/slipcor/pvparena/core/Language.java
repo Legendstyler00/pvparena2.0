@@ -63,7 +63,7 @@ public final class Language {
         CHECK_DONE("nulang.check.done", "Check done! No errors!"),
 
         CLASS_LIST("nulang.class.list", "Available classes: %1%"),
-        CLASS_PREVIEW("nulang.class.preview", "You are now previewing the class: %1%"),
+        CLASS_PREVIEW("nulang.class.preview", "You are now previewing the class: %1%. Run &e/pa leave&r to quit preview mode."),
         CLASS_REMOVED("nulang.class.removed", "Class removed: %1%"),
         CLASS_SAVED("nulang.class.saved", "Class saved: %1%"),
         CLASS_SELECTED("nulang.class.selected", "You have switched to the &e%1%&r class."),

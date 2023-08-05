@@ -72,7 +72,7 @@ public class PAA_Class extends AbstractArenaCommand {
             } else {
                 InventoryManager.clearInventory(player);
             }
-            arena.selectClass(aPlayer, classname);
+            arena.selectClass(aPlayer, classname, false);
         } else if ("save".equalsIgnoreCase(args[0])) {
             ItemStack[] storage = player.getInventory().getStorageContents();
             ItemStack offhand = player.getInventory().getItemInOffHand();

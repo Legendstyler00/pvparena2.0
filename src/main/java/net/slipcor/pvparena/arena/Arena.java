@@ -804,7 +804,7 @@ public class Arena {
                         autoClass = p.getName();
                     }
                     if (autoClass != null && this.getArenaClass(autoClass) != null) {
-                        this.selectClass(p, autoClass);
+                        this.selectClass(p, autoClass, true);
                     } else {
                         // player no class!
                         PVPArena.getInstance().getLogger().warning("Player no class: " + p.getPlayer());
@@ -1070,8 +1070,8 @@ public class Arena {
         TeleportManager.teleportPlayerAfterReset(this, destination, soft, force, aPlayer);
     }
 
-    public void selectClass(final ArenaPlayer aPlayer, final String cName) {
-        if (ArenaModuleManager.cannotSelectClass(this, aPlayer.getPlayer(), cName)) {
+    public void selectClass(final ArenaPlayer aPlayer, final String cName, boolean checkModules) {
+        if (checkModules && ArenaModuleManager.cannotSelectClass(this, aPlayer.getPlayer(), cName)) {
             return;
         }
         for (ArenaClass c : this.classes) {
