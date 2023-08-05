@@ -22,7 +22,7 @@ public class ItemStackUtils  {
      * List of "meta-type" config keys which can be drop
      */
     private enum HandledMetaType {
-        POTION, ENCHANTED, BOOK_SIGNED, BOOK, BANNER, MAP, FIREWORK, LEATHER_ARMOR, UNSPECIFIC
+        POTION, ENCHANTED, BOOK_SIGNED, BOOK, BANNER, MAP, FIREWORK, LEATHER_ARMOR, COLORABLE_ARMOR, ARMOR, UNSPECIFIC
     }
 
     private static boolean isAnHandledMetaType(String metaTypeString) {
@@ -61,7 +61,12 @@ public class ItemStackUtils  {
         if(keySet.contains("firework-effects")) {
             return HandledMetaType.FIREWORK;
         }
-        if(keySet.contains("color")) {
+        if(keySet.contains("trim")) {
+            if(keySet.contains("color")) {
+                return HandledMetaType.COLORABLE_ARMOR;
+            }
+            return HandledMetaType.ARMOR;
+        } else if(keySet.contains("color")) {
             return HandledMetaType.LEATHER_ARMOR;
         }
         return HandledMetaType.UNSPECIFIC;
@@ -137,7 +142,7 @@ public class ItemStackUtils  {
                 if(!metaMap.containsKey("meta-type")) {
                     metaMap.put("meta-type", getRightMetaType(metaMap.keySet()).name());
 
-                    //Simplify Leather armor colors
+                    // Simplify Leather armor colors
                     if(metaMap.containsKey("color")) {
                         Color color = Color.deserialize((Map<String, Object>) metaMap.get("color"));
                         metaMap.put("color", color);
