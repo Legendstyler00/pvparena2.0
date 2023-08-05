@@ -246,8 +246,8 @@ public class ArenaRegion {
     public void applyProtections(List<String> protections) {
         protections.forEach(protection -> {
             try {
-                RegionFlag rp = RegionFlag.valueOf(protection);
-                this.flags.add(rp);
+                RegionProtection rp = RegionProtection.valueOf(protection);
+                this.protections.add(rp);
             } catch (IllegalArgumentException ignored) {}
         });
     }
