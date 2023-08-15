@@ -132,17 +132,16 @@ public final class RegionManager {
                 debug(player, "escaping BATTLE, loc : {}", locTo);
 
                 try {
-                    this.tryRollbackPosition(event, null);
-                } catch (GameplayRuntimeException e) {
-                    Arena.pmsg(player, Language.MSG.NOTICE_YOU_ESCAPED);
+                    arena.msg(player, Language.MSG.NOTICE_ARENA_BOUNDS);
                     if (arena.getConfig().getBoolean(Config.CFG.GENERAL_LEAVEDEATH)) {
                         player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.CUSTOM, 1004.0));
                         player.damage(1000);
                     } else {
-                        arena.playerLeave(player, Config.CFG.TP_EXIT, false, false, false);
+                        this.tryRollbackPosition(event, null);
                     }
-                } finally {
-                    arena.msg(player, Language.MSG.NOTICE_ARENA_BOUNDS);
+                } catch (GameplayRuntimeException e) {
+                    Arena.pmsg(player, Language.MSG.NOTICE_YOU_ESCAPED);
+                    arena.playerLeave(player, Config.CFG.TP_EXIT, false, false, false);
                 }
             } else {
                 arena.getRegions().stream()
