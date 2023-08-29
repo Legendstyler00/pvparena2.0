@@ -4,19 +4,19 @@ import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.events.PADeathEvent;
 import net.slipcor.pvparena.events.PAKillEvent;
-import net.slipcor.pvparena.statistics.model.PlayerArenaStats;
-import net.slipcor.pvparena.statistics.model.StatEntry;
 import net.slipcor.pvparena.statistics.dao.PlayerArenaStatsDao;
 import net.slipcor.pvparena.statistics.dao.PlayerArenaStatsDaoImpl;
+import net.slipcor.pvparena.statistics.model.PlayerArenaStats;
+import net.slipcor.pvparena.statistics.model.StatEntry;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.io.File;
+import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toMap;
 import static net.slipcor.pvparena.config.Debugger.debug;
 
 /**
@@ -29,8 +29,6 @@ import static net.slipcor.pvparena.config.Debugger.debug;
  */
 
 public final class StatisticsManager {
-    private static File playersFile;
-    private static YamlConfiguration config;
 
     private StatisticsManager() {}
 
@@ -79,13 +77,17 @@ public final class StatisticsManager {
         debug("getting stats: {} sorted by {}", (arena == null ? "global" : arena.getName()), statType);
         PlayerArenaStatsDao statsDao = PlayerArenaStatsDaoImpl.getInstance();
 
+        List<PlayerArenaStats> statsResult;
         if (arena == null) {
-            return statsDao.findBestStat(statType, limit).stream()
-                    .collect(toMap(PlayerArenaStats::getPlayerName, stat -> stat.getValueByStatType(statType)));
+            statsResult = statsDao.findBestStat(statType, limit);
+        } else {
+            statsResult = statsDao.findBestStatByArena(statType, arena, limit);
         }
 
-        return statsDao.findBestStatByArena(statType, arena, limit).stream()
-                .collect(toMap(PlayerArenaStats::getPlayerName, stat -> stat.getValueByStatType(statType)));
+        return statsResult.stream()
+                .map(stat -> new AbstractMap.SimpleEntry<>(stat.getPlayerName(), stat.getValueByStatType(statType)))
+                .filter(entry -> entry.getKey() != null)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     /**

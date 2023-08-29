@@ -59,8 +59,10 @@ public class PlaceholderMultilineCache {
                     List<String> scoreListCache = new ArrayList<>();
                     List<String> playerListCache = new ArrayList<>();
                     statsList.forEach(st -> {
-                        scoreListCache.add(st.getValueByStatType(statEntry).toString());
-                        playerListCache.add(st.getPlayerName());
+                        ofNullable(st.getPlayerName()).ifPresent(playerName -> {
+                            scoreListCache.add(st.getValueByStatType(statEntry).toString());
+                            playerListCache.add(playerName);
+                        });
                     });
                     this.cacheMap.put(scoreKey, scoreListCache);
                     this.cacheMap.put(playerKey, playerListCache);
