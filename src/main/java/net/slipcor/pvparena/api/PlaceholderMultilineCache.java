@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
@@ -24,17 +26,17 @@ import static net.slipcor.pvparena.arena.PlayerStatus.*;
  * cache values. In consequences, cache will be stored for a duration of only two ticks.
  */
 public class PlaceholderMultilineCache {
-    private final Map<String, List<String>> cacheMap;
+    private final ConcurrentMap<String, List<String>> cacheMap;
     private final List<String> purgeableKeys;
 
     public PlaceholderMultilineCache() {
-        this.cacheMap = new HashMap<>();
+        this.cacheMap = new ConcurrentHashMap<>();
         this.purgeableKeys = new ArrayList<>();
 
         Bukkit.getScheduler().runTaskTimer(PVPArena.getInstance(), () -> {
-            purgeableKeys.forEach(cacheMap::remove);
-            purgeableKeys.clear();
-            purgeableKeys.addAll(cacheMap.keySet());
+                purgeableKeys.forEach(cacheMap::remove);
+                purgeableKeys.clear();
+                purgeableKeys.addAll(cacheMap.keySet());
         }, 1, 0);
     }
 
