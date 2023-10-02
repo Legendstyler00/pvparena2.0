@@ -18,12 +18,12 @@ Hook into many different aspects of the game!
 | [AfterMatch](mods/aftermatch.md)                   | could also be called "Sudden Death"                                                                     |          | ✔      |
 | [Announcements](mods/announcements.md)             | announce events happening                                                                               |          | ✔      |
 | [ArenaMaps](mods/arenamaps.md)                     | never lose yourself ever again!                                                                         |          | ✔      |
-| [BanKick](mods/bankick.md)                         | secure your arenas!                                                                                     |          | ✔      |
+| [BanKick](mods/bankick.md)                         | ban or kick a player of an arena                                                                        |          | ✔      |
 | [BattlefieldJoin](mods/battlefieldjoin.md)         | join directly your battlefield without using the lounge                                                 | JOIN     | ✔      |
 | [BetterClasses](mods/betterclasses.md)             | add potion effects and more to specific classes                                                         |          | ✔      |
 | [BetterGears](mods/bettergears.md)                 | automatically colorize classes armors to suit team color                                                |          | ✔      |
-| [BetterFight](mods/betterfight.md)                 | kill streaks and one-hit-kill items!                                                                    |          | ⚠      |
-| [BetterKillstreaks](mods/betterkillstreaks.md)     | even more detailed kill streaks!                                                                        |          | ⚠      |
+| [BetterFight](mods/betterfight.md)                 | pack of fun features : one-shot items, kill sounds and explosions on death                              |          | ✔      |
+| [BetterKillstreaks](mods/betterkillstreaks.md)     | reward kill streaks with items or potion effects                                                        |          | ✔      |
 | [BlockDissolve](mods/blockdissolve.md)             | dissolve blocks under fighting players                                                                  |          | ☑      |
 | [BlockRestore](mods/blockrestore.md)               | restore the battlefield                                                                                 |          | ✔      |
 | [ChestFiller](mods/chestfiller.md)                 | fill battlefield chests with customizable content!                                                      |          | ☑      |

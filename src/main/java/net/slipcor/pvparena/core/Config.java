@@ -284,12 +284,9 @@ public class Config {
 
         MODULES_BATTLEFIELDGUARD_ENTERDEATH("modules.battlefieldguard.enterdeath", false, "BattleFieldGuard"),
 
-        MODULES_BETTERFIGHT_MESSAGES("modules.betterfight.usemessages", false, "BetterFight"),
-        MODULES_BETTERFIGHT_ONEHITITEMS("modules.betterfight.onehititems", "none", "BetterFight"),
-        MODULES_BETTERFIGHT_RESETKILLSTREAKONDEATH("modules.betterfight.resetkillstreakondeath", true, "BetterFight"),
-        MODULES_BETTERFIGHT_EXPLODEONDEATH("modules.betterfight.explodeondeath", true, "BetterFight"),
-        MODULES_BETTERFIGHT_EXPLODEONDEATHONLYONONEHIT("modules.betterfight.explodeondeathonlyononehit", false, "BetterFight"),
-
+        MODULES_BETTERFIGHT_ONESHOTITEMS("modules.betterfight.oneShotItems", new ArrayList<>(), "BetterFight"),
+        MODULES_BETTERFIGHT_EXPLODEONDEATH("modules.betterfight.explodeOnDeath", true, "BetterFight"),
+        MODULES_BETTERFIGHT_EXPLODEONLYWITHONESHOTITEM("modules.betterfight.explodeOnlyWithOneShotItem", false, "BetterFight"),
         MODULES_BETTERGEARS_HEAD("modules.bettergears.head", true, "BetterGears"),
         MODULES_BETTERGEARS_CHEST("modules.bettergears.chest", true, "BetterGears"),
         MODULES_BETTERGEARS_LEG("modules.bettergears.leg", true, "BetterGears"),
@@ -648,7 +645,7 @@ public class Config {
         outputConfig.options().indent(2);
 
         Map<String, Object> configMap = new TreeMap<>(new ConfigComparator());
-        configMap.putAll(this.cfg.getValues(false));
+        configMap.putAll(this.cfg.getValues(true));
         configMap.entrySet().spliterator().forEachRemaining(entry ->
             outputConfig.set(entry.getKey(), entry.getValue())
         );

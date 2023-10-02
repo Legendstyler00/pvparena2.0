@@ -144,6 +144,8 @@ public final class Language {
         ERROR_INVALID_ARGUMENT_COUNT("nulang.error.invalid_argument_count", "&cInvalid number of arguments&r (%1% instead of %2%)!"),
         ERROR_INVALID_STATTYPE("nulang.error.invalidstattype", "Invalid statistics type: %1%"),
         ERROR_INVALID_VALUE("nulang.error.valuenotfound", "Invalid value: &a%1%&r!"),
+        ERROR_EXISTING_VALUE("nulang.error.existingvalue", "&a%1%&r value already exist in &e%2%&r!"),
+        ERROR_NON_EXISTING_VALUE("nulang.error.nonexistingvalue", "&a%1%&r value doesn't exist in &e%2%&r!"),
         ERROR_INVENTORY_FULL("nulang.error.invfull", "Your inventory was full. You did not receive all rewards!"),
         ERROR_JOIN_ARENA_FULL("nulang.error.arenafull", "Arena is full!"),
         ERROR_JOIN_RANGE("nulang.error.joinrange", "You are too far away to join this arena!"),
@@ -421,6 +423,8 @@ public final class Language {
         ROUNDS_DISPLAYSEPARATOR("nulang.round.roundsdisplayseparator", "-----------"),
 
         SET_DONE("nulang.set.done", "&a%1%&r set to &e%2%&r!"),
+        ADD_DONE("nulang.add.done", "&e%2%&r added to &a%1%&r!"),
+        REMOVE_DONE("nulang.remove.done", "&e%2%&r removed from &a%1%&r!"),
         SET_HELP("nulang.set.help", "Use /pa {arenaname} set [page] to get a node list."),
         SET_UNKNOWN("nulang.set.unknown", "Unknown node: &e%1%&r!"),
         SET_ITEMS_NOT("nulang.set.items_not", "Please use either hand or inventory to set an item node!"),
