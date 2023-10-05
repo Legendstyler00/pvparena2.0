@@ -40,12 +40,12 @@ Hook into many different aspects of the game!
 | [PowerUps](mods/powerups.md)                       | spawn items giving special powers                                                                       |          | ☑      |
 | [Projectiles](mods/projectiles.md)                 | add knockback to throwable items (snowballs, eggs, etc)                                                 |          | ☑      |
 | [QuickLounge](mods/quicklounge.md)                 | join a lounge which starts the game automatically                                                       | JOIN     | ✔      |
-| [RealSpectate](mods/realspectate.md)               | spectate the game, CounterStrike style!                                                                 |          | ✔      |
-| [RedstoneTriggers](mods/redstonetriggers.md)       | add win/lose triggered by redstone                                                                      | SPECTATE | ⚠      |
+| [RealSpectate](mods/realspectate.md)               | spectate the game, CounterStrike style!                                                                 | SPECTATE | ✔      |
+| [RedstoneTriggers](mods/redstonetriggers.md)       | add win/lose triggered by redstone                                                                      |          | ⚠      |
 | [RespawnRelay](mods/respawnrelay.md)               | add a relay for respawning players                                                                      |          | ✔      |
 | [SinglePlayerSupport](mods/singleplayersupport.md) | Allow players to use an arena on their own!                                                             |          | ⚠      |
 | [Skins](mods/skins.md)                             | add custom skins to teams/classes                                                                       |          | ❌      |
-| [SpawnCollections](mods/battlefieldmanager.md)     | save different spawn configurations of the battlefield and switch between them                          |          | ✔      |
+| [SpawnCollections](mods/spawncollections.md)       | save different spawn configurations of the battlefield and switch between them                          |          | ✔      |
 | [SpecialJoin](mods/specialjoin.md)                 | join via buttons, levers, etc                                                                           |          | ⚠      |
 | [Spectate](mods/spectate.md)                       | use the new 1.8 SPECTATOR mode to allow flying and POV spectating                                       | SPECTATE | ✔      |
 | StandardLounge                                     | Default lounge module                                                                                   | JOIN     | ✔      |
