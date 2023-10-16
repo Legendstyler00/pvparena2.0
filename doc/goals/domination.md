@@ -7,10 +7,10 @@
 The game is simple :
 
 There are one or several flags that can be claimed by players.
-When players are in the range of a flag, a load bar appears and they will claim the flag after few seconds.
+When players are in the range of a flag, a load bar appears, and they will claim the flag after few seconds.
 Obviously, if a player on another team come also within the flag range, loading stops.
 
-When a flag is claimed, it take team color. Player of other team can get it back by the same process.
+When a flag is claimed, it takes team color. Player of other team can get it back by the same process.
 In this case, flag will be released in a first time (it takes white color) and only then it will take color of
 second team.
 
@@ -19,7 +19,7 @@ points wins.
 
 ## Setup
 
-Flags have to be added. In order to do that, use `/pa [arenaname] add flag`. This toggles edit mode. 
+Flags have to be added. In order to do that, use `/pa [arenaname] flag add`. This toggles edit mode. 
 In toggle mode you can register as many flags as you want by clicking on them.  
 Don't forget to type command again in order to exit edit mode after setting the flags.
 
