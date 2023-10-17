@@ -332,7 +332,7 @@ public final class ArenaManager {
             if (block.getState() instanceof Sign) {
                 String[] lines = ((Sign) block.getState()).getLines();
                 List<String> signHeaders = PVPArena.getInstance().getConfig().getStringList("signHeaders");
-                if (CollectionUtils.containsIgnoreCase(signHeaders, lines[0])) {
+                if (CollectionUtils.containsIgnoreCase(signHeaders, ChatColor.stripColor(lines[0]))) {
                     final String sName = ChatColor.stripColor(lines[1]).toLowerCase();
                     String[] newArgs = new String[0];
                     final Arena arena = ARENAS.get(sName);
