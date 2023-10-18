@@ -54,8 +54,12 @@ teamName
 
 ```
 
-You can keep the third line empty to join a random team.
+The first line is one of the sign headers configurable in your global 
+[config.yml](./configuration.md#global-config-file) file, by default: `[PVP Arena]` and `[arena]`.  
+You can keep the third line empty to join a random team.  
 The fourth line can still be empty or filled with a custom message.
+
+> 🚩 **Tip:** Color codes are automatically handled, so feel free to color your signs!
 
 <br>
 

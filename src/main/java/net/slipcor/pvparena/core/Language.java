@@ -561,7 +561,7 @@ public final class Language {
         GOAL_SABOTAGE_SETTNT("nulang.goal.sabotage.set", "%1% TNT has been set"),
         GOAL_SABOTAGE_TOSET("nulang.goal.sabotage.toset", "Click on the TNT of the %1% team to register it"),
         GOAL_SABOTAGE_NOSELFDESTROY("nulang.goal.sabotage.noselfdestroy", "You can not ignite your own TNT!"),
-        GOAL_SABOTAGE_NOTGOODITEM("nulang.goal.sabotage.notgooditem", "You need sabotage tool to ignite the TNT."),
+        GOAL_SABOTAGE_NOTGOODITEM("nulang.goal.sabotage.notgooditem", "You need a flint and steel to ignite the TNT."),
         GOAL_SABOTAGE_YOUTNT("nulang.goal.sabotage.youtnt", "You now carry the sabotage tool."),
         GOAL_SABOTAGE_TNT_NOTFOUND("nulang.goal.sabotage.tntnotfound", "%1% tnt doesn't exist"),
         GOAL_SABOTAGE_TNT_REMOVED("nulang.goal.sabotage.tntremoved", "%1% tnt has been removed"),

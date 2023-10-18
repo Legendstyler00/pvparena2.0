@@ -139,7 +139,7 @@ public class GoalSabotage extends ArenaGoal implements Listener {
             debug(this.arena, player, "block, but not TNT");
             return false;
         }
-        debug(this.arena, player, "flag click!");
+        debug(this.arena, player, "tnt click!");
 
         if (player.getEquipment() == null || player.getEquipment().getItemInMainHand().getType() != Material.FLINT_AND_STEEL) {
             debug(this.arena, player, "block, but no sabotage items");
