@@ -671,6 +671,7 @@ public final class Language {
         MODULE_POWERUPS_INVALIDPUEFF("nulang.mod.powerups.invalidpowerupeffect", "Invalid PowerupEffect: %1%"),
         MODULE_POWERUPS_PLAYER("nulang.mod.powerups.puplayer", "%1% has collected PowerUp: %2%"),
         MODULE_POWERUPS_SERVER("nulang.mod.powerups.puserver", "PowerUp deployed!"),
+        MODULE_REALSPECTATE_INFO("nulang.mod.realspectate.info", "You're spectating in immersive view! Sneak to switch to next fighter and press \"throw item\" key to switch back to previous one."),
 
         MODULE_RESPAWNRELAY_RESPAWNING("nulang.mod.respawnrelay.respawning", "Respawning in %1%!"),
         MODULE_RESPAWNRELAY_CHOICE("nulang.mod.respawnrelay.choice", "If you want to respawn to a particular spawn point, just type the spawn number in your chat. Available spawns: %1%"),
