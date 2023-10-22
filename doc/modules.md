@@ -24,7 +24,7 @@ Hook into many different aspects of the game!
 | [BetterGears](mods/bettergears.md)                 | automatically colorize classes armors to suit team color                                                |          | ✔      |
 | [BetterFight](mods/betterfight.md)                 | pack of fun features : one-shot items, kill sounds and explosions on death                              |          | ✔      |
 | [BetterKillstreaks](mods/betterkillstreaks.md)     | reward kill streaks with items or potion effects                                                        |          | ✔      |
-| [BlockDissolve](mods/blockdissolve.md)             | dissolve blocks under fighting players                                                                  |          | ☑      |
+| [BlockDissolve](mods/blockdissolve.md)             | dissolve blocks under fighting players                                                                  |          | ✔      |
 | [BlockRestore](mods/blockrestore.md)               | restore the battlefield                                                                                 |          | ✔      |
 | [ChestFiller](mods/chestfiller.md)                 | fill battlefield chests with customizable content!                                                      |          | ☑      |
 | [Duel](mods/duel.md)                               | duel someone!                                                                                           |          | ⚠      |
