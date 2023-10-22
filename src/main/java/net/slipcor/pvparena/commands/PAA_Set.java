@@ -2,12 +2,14 @@ package net.slipcor.pvparena.commands;
 
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.Config.CFG;
+import net.slipcor.pvparena.core.ConfigNodeType;
 import net.slipcor.pvparena.core.Help.HELP;
 import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,6 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static net.slipcor.pvparena.core.Utils.getSerializableItemStacks;
 
@@ -50,7 +53,7 @@ public class PAA_Set extends AbstractArenaCommand {
             try {
                 int page = Integer.parseInt(args[0]);
 
-                page = page < 1 ? 1 : page;
+                page = Math.max(page, 1);
 
                 final Map<String, String> keys = new HashMap<>();
 
@@ -69,11 +72,8 @@ public class PAA_Set extends AbstractArenaCommand {
                         break;
                     }
                 }
-                arena.msg(sender, ChatColor.COLOR_CHAR + "6------ config list [" + page + "] ------");
-                for (Map.Entry<String, String> stringStringEntry : keys.entrySet()) {
-                    arena.msg(sender,
-                            stringStringEntry.getValue() + " => " + CFG.getByNode(stringStringEntry.getKey()).getType());
-                }
+                arena.msg(sender, String.format("%s------ config list [%d] ------", ChatColor.GOLD, page));
+                keys.forEach((key, value) -> arena.msg(sender, String.format("%s => %s", value, CFG.getByNode(key).getType())));
 
             } catch (final Exception e) {
                 arena.msg(sender, MSG.ERROR_NOT_NUMERIC, args[0]);
@@ -86,43 +86,38 @@ public class PAA_Set extends AbstractArenaCommand {
         this.set(sender, arena, args[0], args[1]);
     }
 
-    private void set(final CommandSender player, final Arena arena, final String node, final String value) {
+    private Optional<String> findNodeWithEndMatchingWith(YamlConfiguration cfg, String endOfNode) {
+        return cfg.getKeys(true).stream()
+                .filter(key -> key.toLowerCase().endsWith('.' + endOfNode.toLowerCase()))
+                .findFirst();
+    }
 
-        for (String s : arena.getConfig().getYamlConfiguration().getKeys(true)) {
-            if (s.toLowerCase().endsWith('.' + node.toLowerCase())) {
-                this.set(player, arena, s, value);
-                return;
-            }
+    private void set(final CommandSender player, final Arena arena, final String nodeToCheck, final String value) {
+
+        YamlConfiguration configFile = arena.getConfig().getYamlConfiguration();
+        String node = nodeToCheck;
+        if(!configFile.contains(nodeToCheck, false)) {
+            node = this.findNodeWithEndMatchingWith(configFile, nodeToCheck).orElse(null);
         }
 
-        final String type = CFG.getByNode(node) == null ? "" : CFG.getByNode(node).getType();
+        ConfigNodeType type = (node == null || CFG.getByNode(node) == null) ? null : CFG.getByNode(node).getType();
 
 
-        if ("boolean".equals(type)) {
+        if (type == ConfigNodeType.BOOLEAN) {
             if ("true".equalsIgnoreCase(value)) {
                 arena.getConfig().setManually(node, Boolean.TRUE);
-                arena.msg(
-                        player,
-                        Language.parse(MSG.SET_DONE, node,
-                                String.valueOf("true".equalsIgnoreCase(value))));
+                arena.msg(player, Language.parse(MSG.SET_DONE, node, true));
             } else if ("false".equalsIgnoreCase(value)) {
                 arena.getConfig().setManually(node, Boolean.FALSE);
-                arena.msg(
-                        player,
-                        Language.parse(MSG.SET_DONE, node,
-                                String.valueOf("true".equalsIgnoreCase(value))));
+                arena.msg(player, Language.parse(MSG.SET_DONE, node, false));
             } else {
-                arena.msg(player, Language.parse(MSG.ERROR_ARGUMENT_TYPE, value,
-                        "boolean (true|false)"));
+                arena.msg(player, Language.parse(MSG.ERROR_ARGUMENT_TYPE, value, "boolean (true|false)"));
                 return;
             }
-        } else if ("string".equals(type)) {
+        } else if (type == ConfigNodeType.STRING) {
             arena.getConfig().setManually(node, String.valueOf(value));
-            arena.msg(
-                    player,
-                    Language.parse(MSG.SET_DONE, node,
-                            String.valueOf(value)));
-        } else if ("int".equals(type)) {
+            arena.msg(player, Language.parse(MSG.SET_DONE, node, value));
+        } else if (type == ConfigNodeType.INT) {
             final int iValue;
 
             try {
@@ -132,98 +127,69 @@ public class PAA_Set extends AbstractArenaCommand {
                 return;
             }
             arena.getConfig().setManually(node, iValue);
-            arena.msg(
-                    player,
-                    Language.parse(MSG.SET_DONE, node,
-                            String.valueOf(iValue)));
-        } else if ("double".equals(type)) {
+            arena.msg(player, Language.parse(MSG.SET_DONE, node, iValue));
+        } else if (type == ConfigNodeType.DOUBLE) {
             final double dValue;
 
             try {
                 dValue = Double.parseDouble(value);
             } catch (final Exception e) {
-                arena.msg(player, Language.parse(MSG.ERROR_ARGUMENT_TYPE, value,
-                        "double (e.g. 12.00)"));
+                arena.msg(player, Language.parse(MSG.ERROR_ARGUMENT_TYPE, value, "double (e.g. 12.00)"));
                 return;
             }
             arena.getConfig().setManually(node, dValue);
-            arena.msg(
-                    player,
-                    Language.parse(MSG.SET_DONE, node,
-                            String.valueOf(dValue)));
-        } else if ("tp".equals(type)) {
-            if (!"exit".equals(value) && !"old".equals(value) && !"spectator".equals(value)) {
-                arena.msg(player, Language.parse(MSG.ERROR_ARGUMENT_TYPE, value,
-                        "tp (exit|old|spectator|...)"));
-                return;
-            }
-            arena.getConfig().setManually(node, value);
-            arena.msg(player, MSG.SET_DONE, node, value);
-        } else if ("material".equals(type)) {
-            if ("hand".equals(value)) {
+            arena.msg(player, Language.parse(MSG.SET_DONE, node, dValue));
+        } else if (type == ConfigNodeType.MATERIAL) {
+            if ("hand".equalsIgnoreCase(value)) {
                 if (player instanceof Player) {
 
                     String itemDefinition = ((Player) player).getEquipment().getItemInMainHand().getType().name();
                     arena.getConfig().setManually(node, itemDefinition);
-                    arena.msg(
-                            player,
-                            Language.parse(MSG.SET_DONE, node,
-                                    itemDefinition));
+                    arena.msg(player, Language.parse(MSG.SET_DONE, node, itemDefinition));
                 } else {
                     arena.msg(player, MSG.ERROR_ONLY_PLAYERS);
+                    return;
                 }
-                return;
-            }
-
-            try {
-                final Material mat = Material.valueOf(value.toUpperCase());
-                if (mat != Material.AIR) {
-                    arena.getConfig().setManually(node, mat.name());
-                    arena.msg(player, MSG.SET_DONE, node, mat.name());
+            } else {
+                try {
+                    final Material mat = Material.valueOf(value.toUpperCase());
+                    if (mat != Material.AIR) {
+                        arena.getConfig().setManually(node, mat.name());
+                        arena.msg(player, MSG.SET_DONE, node, mat.name());
+                    }
+                } catch (final Exception e) {
+                    arena.msg(player, Language.parse(MSG.ERROR_ARGUMENT_TYPE, value, "valid ENUM or item ID"));
+                    return;
                 }
-
-                arena.getConfig().save();
-                return;
-            } catch (final Exception e) {
-                arena.msg(player, Language.parse(MSG.ERROR_ARGUMENT_TYPE, value,
-                        "valid ENUM or item ID"));
             }
-            return;
-        } else if ("items".equals(type)) {
-            if ("hand".equals(value)) {
+        } else if (type == ConfigNodeType.ITEMS) {
+            if ("hand".equalsIgnoreCase(value)) {
                 if (player instanceof Player) {
 
                     ItemStack item = ((Player) player).getInventory().getItemInMainHand();
                     arena.getConfig().setManually(node, getSerializableItemStacks(item));
                     arena.msg(player, MSG.SET_DONE, node, item.getType().name());
-                    arena.getConfig().save();
                 } else {
                     arena.msg(player, MSG.ERROR_ONLY_PLAYERS);
+                    return;
                 }
-                return;
-            }
-            if ("inventory".equals(value)) {
+            } else if ("inventory".equalsIgnoreCase(value)) {
                 if (player instanceof Player) {
 
                     final ItemStack[] items = ((Player) player).getInventory().getContents();
                     arena.getConfig().setManually(node, getSerializableItemStacks(items));
                     arena.msg(player, MSG.SET_DONE, node, "inventory");
-                    arena.getConfig().save();
                 } else {
                     arena.msg(player, MSG.ERROR_ONLY_PLAYERS);
+                    return;
                 }
+            } else {
+                arena.msg(player, MSG.SET_ITEMS_NOT);
                 return;
             }
-            arena.msg(player, MSG.SET_ITEMS_NOT);
         } else {
-            arena.msg(
-                    player,
-                    Language.parse(MSG.SET_UNKNOWN, node,
-                            String.valueOf(value)));
-            arena.msg(
-                    player,
-                    Language.parse(MSG.SET_HELP, node,
-                            String.valueOf(value)));
+            arena.msg(player, Language.parse(MSG.SET_UNKNOWN, node, value));
+            arena.msg(player, Language.parse(MSG.SET_HELP, node, value));
             return;
         }
         arena.getConfig().save();

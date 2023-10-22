@@ -2,8 +2,8 @@ package net.slipcor.pvparena.commands;
 
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.Config.CFG;
+import net.slipcor.pvparena.core.ConfigNodeType;
 import net.slipcor.pvparena.core.Help.HELP;
-import net.slipcor.pvparena.core.Language;
 import net.slipcor.pvparena.core.Language.MSG;
 import org.bukkit.command.CommandSender;
 
@@ -42,16 +42,16 @@ public class PAA_Check extends AbstractArenaCommand {
                 continue;
             }
             try {
-                if ("string".equals(c.getType())) {
+                if (c.getType() == ConfigNodeType.STRING) {
                     final String value = arena.getConfig().getString(c);
                     arena.msg(sender, "correct " + c.getType() + ": " + value);
-                } else if ("boolean".equals(c.getType())) {
+                } else if (c.getType() == ConfigNodeType.BOOLEAN) {
                     final boolean value = arena.getConfig().getBoolean(c);
                     arena.msg(sender, "correct " + c.getType() + ": " + value);
-                } else if ("int".equals(c.getType())) {
+                } else if (c.getType() == ConfigNodeType.INT) {
                     final int value = arena.getConfig().getInt(c);
                     arena.msg(sender, "correct " + c.getType() + ": " + value);
-                } else if ("double".equals(c.getType())) {
+                } else if (c.getType() == ConfigNodeType.DOUBLE) {
                     final double value = arena.getConfig().getDouble(c);
                     arena.msg(sender, "correct " + c.getType() + ": " + value);
                 }

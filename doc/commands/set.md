@@ -10,10 +10,10 @@ So only use this if you know what you're doing.
 
 ## Usage
 
-Command |  Definition
-------------- | -------------
-/pa [arena] set [pageNumber] | show a list of editable config nodes of your arena
-/pa [arena] set [configNode] [value] | edit the value of an arena config node
+| Command                              | Definition                                         |
+|--------------------------------------|----------------------------------------------------|
+| /pa [arena] set [pageNumber]         | show a list of editable config nodes of your arena |
+| /pa [arena] set [configNode] [value] | edit the value of an arena config node             |
 
 Examples :
 - `/pa test set 0` - get the first page of editable nodes of the arena "test" configuration

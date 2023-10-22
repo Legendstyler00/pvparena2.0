@@ -417,7 +417,7 @@ public class Config {
 
         private final String node;
         private final Object value;
-        private final String type;
+        private final ConfigNodeType type;
         private final String goalOrModule;
 
         public static CFG getByNode(final String node) {
@@ -432,56 +432,56 @@ public class Config {
         CFG(final String node, final String value, final String source) {
             this.node = node;
             this.value = value;
-            this.type = "string";
+            this.type = ConfigNodeType.STRING;
             this.goalOrModule = source;
         }
 
         CFG(final String node, final Boolean value, final String source) {
             this.node = node;
             this.value = value;
-            this.type = "boolean";
+            this.type = ConfigNodeType.BOOLEAN;
             this.goalOrModule = source;
         }
 
         CFG(final String node, final Integer value, final String source) {
             this.node = node;
             this.value = value;
-            this.type = "int";
+            this.type = ConfigNodeType.INT;
             this.goalOrModule = source;
         }
 
         CFG(final String node, final Double value, final String source) {
             this.node = node;
             this.value = value;
-            this.type = "double";
+            this.type = ConfigNodeType.DOUBLE;
             this.goalOrModule = source;
         }
 
         CFG(final String node, final ItemStack[] value, final String source) {
             this.node = node;
             this.value = getSerializableItemStacks(value);
-            this.type = "items";
+            this.type = ConfigNodeType.ITEMS;
             this.goalOrModule = source;
         }
 
         CFG(final String node, final Material value, final String source) {
             this.node = node;
             this.value = value.name();
-            this.type = "material";
+            this.type = ConfigNodeType.MATERIAL;
             this.goalOrModule = source;
         }
 
         CFG(final String node, final GameMode value, final String source) {
             this.node = node;
             this.value = value.name();
-            this.type = "gamemode";
+            this.type = ConfigNodeType.GAMEMODE;
             this.goalOrModule = source;
         }
 
         CFG(final String node, final List<String> value, String source) {
             this.node = node;
             this.value = value;
-            this.type = "list";
+            this.type = ConfigNodeType.STR_LIST;
             this.goalOrModule = source;
         }
 
@@ -496,18 +496,18 @@ public class Config {
                 final String[] split = cfg.node.split("\\.");
                 final String ending = split[split.length - 1];
 
-                if ("material".equals(cfg.type)) {
+                if (cfg.type == ConfigNodeType.MATERIAL) {
                     result.define(new String[]{cfg.node, "{Material}"});
                     result.define(new String[]{cfg.node, "hand"});
                     result.define(new String[]{ending, "{Material}"});
                     result.define(new String[]{ending, "hand"});
-                } else if ("items".equals(cfg.type)) {
+                } else if (cfg.type == ConfigNodeType.ITEMS) {
                     result.define(new String[]{cfg.node, "inventory"});
                     result.define(new String[]{ending, "inventory"});
-                } else if ("gamemode".equals(cfg.type)) {
+                } else if (cfg.type == ConfigNodeType.GAMEMODE) {
                     result.define(new String[]{cfg.node, "{GameMode}"});
                     result.define(new String[]{ending, "{GameMode}"});
-                } else if ("boolean".equals(cfg.type)) {
+                } else if (cfg.type == ConfigNodeType.BOOLEAN) {
                     result.define(new String[]{cfg.node, "true"});
                     result.define(new String[]{cfg.node, "false"});
                     result.define(new String[]{ending, "true"});
@@ -533,7 +533,7 @@ public class Config {
             return values();
         }
 
-        public String getType() {
+        public ConfigNodeType getType() {
             return this.type;
         }
 
