@@ -44,25 +44,19 @@ public class PABlockLocation {
     }
 
     public PABlockLocation(final String value) {
-        String[] split = value.split(":");
+        String[] split = value.split(",");
         this.world = split[0];
-
-        String[] ints = split[1].split(",");
-
-        this.x = Integer.parseInt(ints[0]);
-        this.y = Integer.parseInt(ints[1]);
-        this.z = Integer.parseInt(ints[2]);
+        this.x = Integer.parseInt(split[1]);
+        this.y = Integer.parseInt(split[2]);
+        this.z = Integer.parseInt(split[3]);
     }
 
     public PABlockLocation(final String value, final String data) {
-        String[] split = value.split(":");
+        String[] split = value.split(",");
         this.world = split[0];
-
-        String[] ints = split[1].split(",");
-
-        this.x = Integer.parseInt(ints[0]);
-        this.y = Integer.parseInt(ints[1]);
-        this.z = Integer.parseInt(ints[2]);
+        this.x = Integer.parseInt(split[1]);
+        this.y = Integer.parseInt(split[2]);
+        this.z = Integer.parseInt(split[3]);
 
         this.blockData = Bukkit.createBlockData(data);
     }
@@ -229,7 +223,7 @@ public class PABlockLocation {
 
     @Override
     public String toString() {
-        return this.world + ':' + this.x + ',' + this.y + ',' + this.z;
+        return this.world + ',' + this.x + ',' + this.y + ',' + this.z;
     }
 
     public BlockData getBlockData() {

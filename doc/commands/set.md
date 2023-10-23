@@ -34,5 +34,6 @@ holding in your hand.
 inventory to a list of items (metadata will be saved) or use `hand` get only get the item you're holding.
 
 > 🚩 **NB:** 
-> If you want to define items or material nodes directly in your config file, please check 
->[this documentation](../items.md).
+> * If you want to define items or material nodes directly in your config file, please check 
+> [this documentation](../items.md).
+> * To apply modifications made by `/pa set` command, you **[must reload](reload.md)** your arena!

@@ -162,6 +162,7 @@ public final class Language {
         ERROR_NO_ARENAS("nulang.error.noarenas", "No arenas found!"),
         ERROR_NEGATIVES("nulang.error.valueneg", "Negative values: &c%1%&r"),
         ERROR_NO_CHEST("nulang.error.nochest", "You are not looking at a chest!"),
+        ERROR_NO_CONTAINER("nulang.error.nocontainer", "You are not looking at a container!"),
         ERROR_NO_FIGHT("nulang.error.nofight", "There is no fight in progress."),
         ERROR_NO_GOAL("nulang.error.nogoal", "You did not add a goal! &a/pa [arena] goal [goalname]"),
         ERROR_NO_SPAWNS("nulang.error.nospawns", "No spawns set!"),
@@ -634,10 +635,12 @@ public final class Language {
         MODULE_BETTERGEARS_TEAMDONE("nulang.bettergears.teamdone", "Team %1% now has Color %2%."),
 
         MODULE_BLOCKRESTORE_CLEARINVDONE("nulang.blockrestore.clearinvdone", "Inventories cleared! Expect lag on next arena start!"),
+        MODULE_BLOCKRESTORE_ADDEDTOLIST("nulang.blockrestore.addedtolist", "Container (%1%) has been added to inventories to restore!"),
 
-        MODULE_CHESTFILLER_CHEST("nulang.chestfiller.chest", "Successfully set the items to the contents of %1%."),
-        MODULE_CHESTFILLER_CLEAR("nulang.chestfiller.clear", "Inventories cleared!"),
-        MODULE_CHESTFILLER_FILLCHEST("nulang.chestfiller.fillchest", "Added to the list to be filled: %1%."),
+        MODULE_CHESTFILLER_SOURCECHEST("nulang.chestfiller.sourceChest", "The container at \"%1%\" becomes the new source chest of the arena."),
+        MODULE_CHESTFILLER_SOURCECHEST_REMOVED("nulang.chestfiller.removedSource", "The source container of the arena has been removed, now using 'chestfiller.items' config to fill chests."),
+        MODULE_CHESTFILLER_CLEAR("nulang.chestfiller.clear", "List of chests to fill has been cleared!"),
+        MODULE_CHESTFILLER_ADDEDTOLIST("nulang.chestfiller.addedToList", "Successfully added to the list to be filled: %1%"),
 
         MODULE_COLORTEAMS_TAGAPI("log.tagapi", "Hooking into TagAPI!"),
 

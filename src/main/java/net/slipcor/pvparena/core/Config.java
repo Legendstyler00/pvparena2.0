@@ -298,6 +298,7 @@ public class Config {
         MODULES_BLOCKRESTORE_RESTOREBLOCKS("modules.blockrestore.restoreblocks", true, "BlockRestore"),
         MODULES_BLOCKRESTORE_RESTORECONTAINERS("modules.blockrestore.restorecontainers", false, "BlockRestore"),
         MODULES_BLOCKRESTORE_RESTOREINTERACTIONS("modules.blockrestore.restoreinteractions", false, "BlockRestore"),
+        MODULES_BLOCKRESTORE_CONTAINERLIST("modules.blockrestore.containerlist", new ArrayList<>(), "BlockRestore"),
 
         MODULES_BLOCKDISSOLVE_CALCOFFSET("modules.blockdissolve.calcoffset", 0.333, "BlockDissolve"),
         MODULES_BLOCKDISSOLVE_MATERIALS("modules.blockdissolve.materials", new ItemStack[]{
@@ -325,11 +326,12 @@ public class Config {
         MODULES_BLOCKDISSOLVE_STARTSECONDS("modules.blockdissolve.startseconds", 10, "BlockDissolve"),
         MODULES_BLOCKDISSOLVE_TICKS("modules.blockdissolve.ticks", 40, "BlockDissolve"),
 
-        MODULES_CHESTFILLER_CHESTLOCATION("modules.chestfiller.chestlocation", "none", "ChestFiller"),
+        MODULES_CHESTFILLER_SOURCELOCATION("modules.chestfiller.sourceLocation", "none", "ChestFiller"),
         MODULES_CHESTFILLER_CLEAR("modules.chestfiller.clear", false, "ChestFiller"),
-        MODULES_CHESTFILLER_ITEMS("modules.chestfiller.cfitems", new ItemStack[]{new ItemStack(Material.STONE)}, "ChestFiller"),
-        MODULES_CHESTFILLER_MAXITEMS("modules.chestfiller.cfmaxitems", 5, "ChestFiller"),
-        MODULES_CHESTFILLER_MINITEMS("modules.chestfiller.cfminitems", 0, "ChestFiller"),
+        MODULES_CHESTFILLER_ITEMS("modules.chestfiller.items", new ItemStack[]{new ItemStack(Material.STONE)}, "ChestFiller"),
+        MODULES_CHESTFILLER_MAXITEMS("modules.chestfiller.maxItems", 5, "ChestFiller"),
+        MODULES_CHESTFILLER_MINITEMS("modules.chestfiller.minItems", 0, "ChestFiller"),
+        MODULES_CHESTFILLER_CONTAINERLIST("modules.chestfiller.containerList", new ArrayList<>(), "ChestFiller"),
 
         MODULES_DUEL_FORCESTART("modules.duel.forcestart", true, "Duel"),
 

@@ -15,6 +15,7 @@ Installation of this module can be done in a normal way. You'll find installatio
 - restoreblocks \- restore blocks (default: true)
 - restorecontainers \- restore containers (chests, furnaces, brewing stands, etc) content (default: false) 
 - restoreinteractions \- restore player interactions with blocks like opened doors or toggled levers (default: false) 
+- containerlist \- list of coordinates of all registered containers 
 
 ## Commands
 
@@ -22,13 +23,17 @@ Installation of this module can be done in a normal way. You'll find installatio
 - `/pa [arena] !br restoreblocks` \- toggle the restoreblocks setting
 - `/pa [arena] !br restorecontainers` \- toggle the restorecontainers setting
 - `/pa [arena] !br restoreinteractions` \- toggle the restoreinteractions setting
-- `/pa [arena] !br clearinv` \- clear saved chest locations
+- `/pa [arena] !br addinv` \- add a new saved container location (uses the container you're looking)
+- `/pa [arena] !br clearinv` \- clear saved containers locations
 - `/pa [arena] !br offset X` \- set the restore offset in TICKS! 
 
 <br>
 
 > **🚩 Tips:**  
-> - If you add new chests to your map, don't forget to register them with `/pa [arena] !br clearinv`.
+> - There's no need to manually add containers location to config. By default, all containers of your BATTLE region will
+>   be registered on the first startup.
+> - If you physically add new chests to your map, don't forget to register them. Even manually with 
+>   `/pa [arena] !br addinv`, or by forcing a new complete registration with `/pa [arena] !br clearinv`.
 > - BlockRestore is designed for block destruction, chest and block usage only. If you need advanced restoring 
 >   (especially entities), please prefer [WorldEdit](./worldedit.md) mod. 
 
@@ -37,10 +42,10 @@ Installation of this module can be done in a normal way. You'll find installatio
 > ⚙ **Technical precisions:**  
 > - BlockRestore is fully asynchronous and may take some time restore the battlefield (few seconds in most cases). 
     This one is not reachable during the process.
-> - Chest restoring lags badly for the first time, because it searches the BATTLE region(s) for chests and saves location 
->   of each of them.
+> - Chest restoring may lag on the first startup or after a `clearinv`, because it searches the BATTLE region(s) for 
+>   chests and saves location of each of them.
 > - Due to API limitations on servers that are **not based on PaperMC**, destruction of linked blocks (like wall torches
->   when the support block is broken) is limited to doors and non solid blocks on the top of the support block, along 
+>   when the support block is broken) is limited to doors and non-solid blocks on the top of the support block, along 
 >   with directional blocks on the other faces.
 
 
