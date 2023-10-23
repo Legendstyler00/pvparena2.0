@@ -38,6 +38,7 @@ of a game will be set as a container to fill.
 - `/pa [arena] !cf addContainer` \- add the container that you're looking to the list of chests to be filled
 - `/pa [arena] !cf clear` \- clear the list of chests to be filled
 
+<br>
 
 > 🚩 **Tips**:
 > * [BlockRestore](blockrestore.md) is fully compatible with ChestFiller! By enabling `restorecontainers` setting you can:

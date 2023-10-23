@@ -26,7 +26,7 @@ Hook into many different aspects of the game!
 | [BetterKillstreaks](mods/betterkillstreaks.md)     | reward kill streaks with items or potion effects                                                        |          | ✔      |
 | [BlockDissolve](mods/blockdissolve.md)             | dissolve blocks under fighting players                                                                  |          | ✔      |
 | [BlockRestore](mods/blockrestore.md)               | restore the battlefield                                                                                 |          | ✔      |
-| [ChestFiller](mods/chestfiller.md)                 | fill battlefield chests with customizable content!                                                      |          | ☑      |
+| [ChestFiller](mods/chestfiller.md)                 | fill battlefield containers with random and customizable content!                                       |          | ✔      |
 | [Duel](mods/duel.md)                               | duel someone!                                                                                           |          | ⚠      |
 | [EventActions](mods/eventactions.md)               | do stuff when stuff happens                                                                             |          | ⚠      |
 | [Factions](mods/factions.md)                       | fix pvp not working                                                                                     |          | ⚠      |
