@@ -109,19 +109,17 @@ public class BlockListener implements Listener {
             return;
         }
 
-        final Arena arena = ArenaManager
-                .getArenaByRegionLocation(new PABlockLocation(event.getBlock()
-                        .getLocation()));
+        Arena arena = ArenaManager.getArenaByRegionLocation(new PABlockLocation(event.getBlock().getLocation()));
+        try {
+            arena.getGoal().checkBreak(event);
+        } catch (GameplayException e) {
+            debug(event.getPlayer(), "onBlockBreak cancelled by goal: {}", arena.getGoal().getName());
+            return;
+        }
 
-        final List<String> list = arena.getConfig().getStringList(
-                CFG.LISTS_WHITELIST.getNode() + ".break",
-                new ArrayList<String>());
+        List<String> list = arena.getConfig().getStringList(CFG.LISTS_WHITELIST.getNode() + ".break", new ArrayList<>());
 
-        if (!list.isEmpty()
-                && !list.contains(event.getBlock().getType()
-                .name())
-                && !list.contains(event.getBlock().getType()
-                .name())) {
+        if (!list.isEmpty() && !list.contains(event.getBlock().getType().name())) {
             arena.msg(event.getPlayer(), MSG.ERROR_WHITELIST_DISALLOWED, Language.parse(MSG.GENERAL_BREAK));
             // not on whitelist. DENY!
             event.setCancelled(true);
@@ -133,13 +131,11 @@ public class BlockListener implements Listener {
             debug(event.getPlayer(), "isprotected!");
             return;
         }
-        list.clear();
-        list.addAll(arena.getConfig().getStringList(
-                CFG.LISTS_BLACKLIST.getNode() + ".break",
-                new ArrayList<String>()));
 
-        if (list.contains(event.getBlock().getType().name())
-                || list.contains(event.getBlock().getType().name())) {
+        list.clear();
+        list.addAll(arena.getConfig().getStringList(CFG.LISTS_BLACKLIST.getNode() + ".break", new ArrayList<>()));
+
+        if (list.contains(event.getBlock().getType().name())) {
             arena.msg(event.getPlayer(), MSG.ERROR_BLACKLIST_DISALLOWED, Language.parse(MSG.GENERAL_BREAK));
             // on blacklist. DENY!
             event.setCancelled(true);
@@ -147,17 +143,9 @@ public class BlockListener implements Listener {
             return;
         }
 
-        try {
-            arena.getGoal().checkBreak(event);
-        } catch (GameplayException e) {
-            debug(event.getPlayer(), "onBlockBreak cancelled by goal: {}", arena.getGoal().getName());
-            return;
-        }
-
         debug(event.getPlayer(), "onBlockBreak !!!");
 
         ArenaModuleManager.onBlockBreak(arena, event.getBlock());
-
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(PVPArena.getInstance(),
                 new DamageResetRunnable(arena, event.getPlayer(), null), 1L);
@@ -336,8 +324,7 @@ public class BlockListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onExplosionPrime(final ExplosionPrimeEvent event) {
 
-        if (this.willBeSkipped(event, event.getEntity().getLocation(),
-                RegionProtection.TNT)) {
+        if (this.willBeSkipped(event, event.getEntity().getLocation(), RegionProtection.TNT)) {
             return;
         }
         final Arena arena = ArenaManager.getArenaByRegionLocation(
