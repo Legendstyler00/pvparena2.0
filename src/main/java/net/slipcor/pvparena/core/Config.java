@@ -996,8 +996,11 @@ public class Config {
         final Float yaw = parseFloat(parts[4]);
         final Float pitch = parseFloat(parts[5]);
 
-        if (Bukkit.getWorld(parts[0]) == null || x == null || y == null
-                || z == null || yaw == null || pitch == null) {
+        if (Bukkit.getWorld(parts[0]) == null) {
+            throw new IllegalArgumentException(String.format("World %s not recognized. Is it loaded ?", parts[0]));
+        }
+
+        if (x == null || y == null || z == null || yaw == null || pitch == null) {
             throw new IllegalArgumentException(
                     "Some of the parsed values are null: " + coords);
         }
