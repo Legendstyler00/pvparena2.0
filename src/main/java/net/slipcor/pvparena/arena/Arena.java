@@ -1001,8 +1001,10 @@ public class Arena {
      */
     public void reset(boolean force) {
 
-        final PAEndEvent event = new PAEndEvent(this);
-        Bukkit.getPluginManager().callEvent(event);
+        if(!force) {
+            final PAEndEvent event = new PAEndEvent(this);
+            Bukkit.getPluginManager().callEvent(event);
+        }
 
         debug(this, "resetting arena; force: " + force);
         for (PAClassSign as : this.signs) {

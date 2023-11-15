@@ -266,8 +266,6 @@ public class TimedEndRunnable extends ArenaRunnable {
         } else {
             ArenaModuleManager.announce(this.arena, Language.parse(MSG.FIGHT_DRAW), WINNER);
             this.arena.broadcast(Language.parse(MSG.FIGHT_DRAW));
-            this.arena.reset(true);
-            return;
         }
 
         debug(this.arena, "resetting arena!");

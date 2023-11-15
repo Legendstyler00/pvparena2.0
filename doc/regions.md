@@ -33,7 +33,6 @@ The following Region Types exist:
 - WATCH => the place where spectators should be, BattleFieldGuard will kick spectators not being part inside of one WATCH region
 - LOUNGE => the place where fighters select their class. Required to allow players interactions in the lounge.
 - BATTLE => the most important type. It adds battlefield reservation (for overlapping arenas, only caring about that actually battle region), region protection, restoring and check if fighters are in the right place.
-- EXIT => the region where players should be after exiting the arena, no functionality atm
 - JOIN => the region where players should be when joining, see Configuration page, enforcement is disabled by default
 - SPAWN => a spawn region where players are randomly placed in when spawning or respawning 
 - BL_INV => block chest access to any team which name is included in the region name, same for classes

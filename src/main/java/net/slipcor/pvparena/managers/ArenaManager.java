@@ -244,7 +244,7 @@ public final class ArenaManager {
 
         if (CollectionUtils.isNotEmpty(files)) {
             for (File arenaConfigFile : files) {
-                if (!arenaConfigFile.isDirectory() && arenaConfigFile.getName().contains(".yml")) {
+                if (!arenaConfigFile.isDirectory() && arenaConfigFile.getName().endsWith(".yml")) {
                     String sName = arenaConfigFile.getName().replace("config_", "");
                     sName = sName.replace(".yml", "");
 
