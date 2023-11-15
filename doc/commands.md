@@ -40,7 +40,6 @@ All of these commands have to be used prefixing the arena name (e.g. `/pa myAren
 | [/pa enable](commands/enable.md)           | /pa !en   | Enable an arena.                        |
 | [/pa forcewin](commands/forcewin.md)       | /pa !fw   | Force a player/team to win.             |
 | [/pa goal](commands/goal.md)               | /pa !g    | Manage arena goals                      |
-| [/pa playerclass](commands/playerclass.md) | /pa !pcl  | Manage player classes                   |
 | [/pa playerjoin](commands/playerjoin.md)   | /pa !pj   | Make a player join                      |
 | [/pa protection](commands/protection.md)   | /pa !p    | Manage arena protections                |
 | [/pa region](commands/region.md)           | /pa !rg   | Manage arena regions                    |

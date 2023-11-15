@@ -29,12 +29,9 @@ Hook into many different aspects of the game!
 | [ChestFiller](mods/chestfiller.md)                 | fill battlefield containers with random and customizable content!                                       |          | ✔️️    |
 | [Duel](mods/duel.md)                               | duel someone!                                                                                           |          | ⚠️     |
 | [EventActions](mods/eventactions.md)               | do stuff when stuff happens                                                                             |          | ✔️️    |
-| [Factions](mods/factions.md)                       | fix pvp not working                                                                                     |          | ⚠️     |
-| [FixInventoryLoss](mods/fixinventoryloss.md)       | prevent loss by gamemode / inventory check                                                              |          | ⚠️     |
 | [FlySpectate](mods/flyspectate.md)                 | have players spectating a fight in fly mode                                                             | SPECTATE | ✔️️    |
 | [Items](mods/items.md)                             | spawn (random) items                                                                                    |          | ⚠️     |
 | [LateLounge](mods/latelounge.md)                   | keep playing until enough ppl are joining                                                               |          | ☑️     |
-| [MatchResultStats](mods/matchresultstats.md)       | keep stats of player games, who won, who lost?                                                          |          | ⚠️     |
 | [PlayerFinder](mods/playerfinder.md)               | allow players to find others with a compass                                                             |          | ☑️     |
 | [Points](mods/points.md)                           | allow to restrict certain classes to require players to fight for better classes                        |          | ⚠️     |
 | [PowerUps](mods/powerups.md)                       | spawn items giving special powers                                                                       |          | ☑️     |
@@ -74,7 +71,7 @@ version will be to make a great check-up of all of them and fix all eventual iss
 Anyway, don't hesitate to test legacy modules by yourself, a big part of them work normally or have trivial issues. Obviously
 if you encounter one, you can [report it](https://github.com/Eredrim/pvparena/issues) 😉
 
-### What happened to ArenaBoards, AutoSneak, AutoVote or BattlefieldGuard?
+### What happened to ArenaBoards, AutoSneak, AutoVote, BattlefieldGuard, Factions, FixInventoryLoss or MatchResultsStats?
 These modules either used discontinued features (like arena rounds) or their features have been integrated in core of
 PVPArena plugin.
 
