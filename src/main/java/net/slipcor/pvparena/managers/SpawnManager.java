@@ -484,6 +484,13 @@ public final class SpawnManager {
                 .orElse(null);
     }
 
+    public static PASpawn getPASpawnByExactName(Arena arena, String name) {
+        return arena.getSpawns().stream()
+                .filter(spawn -> spawn.getName().equals(name))
+                .findAny()
+                .orElse(null);
+    }
+
     public static PALocation getSpawnByExactName(Arena arena, String name, String teamName, String className) {
         return arena.getSpawns().stream()
                 .filter(spawn -> StringUtils.equalsIgnoreCase(spawn.getName(), name)

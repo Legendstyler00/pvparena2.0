@@ -6,7 +6,7 @@ PvPArena modules are ways to enhance your arenas. They could modify a lot of thi
 or spectating...
 
 To install arena mods, please check [documentation below](#installing-modules). The `/pa modules` command allows for 
-managing your arena mods (download, install, remove, etc), please check [documentation](commands/modules.md) to get 
+managing your arena mods (download, install, remove, etc.), please check [documentation](commands/modules.md) to get 
 more information.
 
 ## List of PVP Arena Mods
@@ -30,7 +30,7 @@ Hook into many different aspects of the game!
 | [Duel](mods/duel.md)                               | duel someone!                                                                                           |          | ⚠️     |
 | [EventActions](mods/eventactions.md)               | do stuff when stuff happens                                                                             |          | ✔️️    |
 | [FlySpectate](mods/flyspectate.md)                 | have players spectating a fight in fly mode                                                             | SPECTATE | ✔️️    |
-| [Items](mods/items.md)                             | spawn (random) items                                                                                    |          | ⚠️     |
+| [ItemSpawners](mods/itemspawners.md)               | spawn (random) items on different points                                                                |          | ✔️     |
 | [LateLounge](mods/latelounge.md)                   | keep playing until enough ppl are joining                                                               |          | ☑️     |
 | [PlayerFinder](mods/playerfinder.md)               | allow players to find others with a compass                                                             |          | ☑️     |
 | [Points](mods/points.md)                           | allow to restrict certain classes to require players to fight for better classes                        |          | ⚠️     |
@@ -75,8 +75,8 @@ if you encounter one, you can [report it](https://github.com/Eredrim/pvparena/is
 These modules either used discontinued features (like arena rounds) or their features have been integrated in core of
 PVPArena plugin.
 
-### What happened to BattlefieldManager?
-The module has been renamed to SpawnCollections.
+### What happened to BattlefieldManager and Items?
+The module have been renamed to SpawnCollections and ItemSpawners respectively.
 
 ## Installing modules
 
@@ -103,5 +103,5 @@ Type [`/pa modules install [moduleName]`](commands/modules.md) to install one of
 
 > ℹ This has to be done for each arena
 
-Last step: your module is installed and you want to use it in some of your arenas. 
+Last step: your module is installed, and you want to use it in some of your arenas. 
 Type [`/pa [arena] !tm [moduleName]`](commands/togglemod.md) to enable it in your arena.

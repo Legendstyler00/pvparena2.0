@@ -338,8 +338,7 @@ public class Config {
         MODULES_FIXINVENTORYLOSS_GAMEMODE("modules.fixinventoryloss.gamemode", false, "FixInventoryLoss"),
         MODULES_FIXINVENTORYLOSS_INVENTORY("modules.fixinventoryloss.inventory", false, "FixInventoryLoss"),
 
-        MODULES_ITEMS_INTERVAL("modules.items.interval", 0, "Items"),
-        MODULES_ITEMS_ITEMS("modules.items.items", new ItemStack[0], "Items"),
+        MODULES_ITEMSPAWNERS_INTERVAL("modules.itemspawners.interval", 30, "ItemSpawners"),
 
         MODULES_RESPAWNRELAY_INTERVAL("modules.respawnrelay.respawnseconds", 10, "RespawnRelay"),
         MODULES_RESPAWNRELAY_CHOOSESPAWN("modules.respawnrelay.choosespawn", false, "RespawnRelay"),
