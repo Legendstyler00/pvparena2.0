@@ -49,8 +49,8 @@ You will find more information about this command [on this link](commands/goal.m
 Now you have to create game spawn points by using this command:  
 `/pa [arenaName] spawn set [spawnType] (teamName)`
 
-Spawn types are: `fight`, `lounge`, `spectator`, `exit`
-Number of spawns you have to create depends of the gamemode of your goal (free or teams).
+Spawn types are: `fight`, `lounge`, `spectator`, `exit`. 
+Number of spawns you have to create depends on the gamemode of your goal (free or teams).
 
 ##### Team arenas
 For team arenas, you need: 2 fight spawns (red & blue) / 2 lounges (red & blue) / 1 spectator zone / 1 exit.
@@ -87,7 +87,7 @@ Finally, specify your region type :
 `/pa [arenaName] regionType [regionName] BATTLE`
 
 > **🚩 Tips:**
-> - By default your region is protected from block destruction and placing
+> - By default, your region is protected from block destruction and placing
 > - Get a look to [the region documentation page](regions.md) to improve your arena regions
 
 <br>
@@ -95,17 +95,17 @@ Finally, specify your region type :
 ## 5. Place required items in the lounge
 
 By default, four classes already exist : Swordsman, Tank, Pyro and Ranger.  
-You can chose to keep these classes or create new ones with the the [class command](commands/class.md).
+You can choose to keep these classes or create new ones with the [class command](commands/class.md).
 
 Then simply place signs near your **lounge** spawn point(s) and write the class names on the first line.
 
-Place the signs in each lobby, and an iron block (configurable). 
+Place the signs in each lobby, and an iron block (block type can be changed [in arena config](configuration.md)). 
 The iron block is the default ready block that players can click on when they are ready. The match begins
 when all players
 are ready.
 
 > **🚩 Tips:**
-> - Players can can choose their class with `/pa arenaclass [className]` command
+> - Players can choose their class with `/pa arenaclass [className]` command
 > - You can set a default class using the config parameter `autoClass`
 > - Players can also be ready typing `/pa ready`, that's why ready block is not mandatory
 
@@ -119,3 +119,12 @@ Your first arena was created! Join the game with:
 
 > **🚩 Tip:**  
 > If you just type `/pa [arenaName]` your team will be randomly selected.
+
+<br>
+
+## Bonus: improve the arena with modules!
+
+PVPArena provides a large set of modules to add new gameplay rules, new features and fun. These modules have to be
+installed then can be individually enabled in each arena. 
+
+The full module list, their description and the installation process are available [on this dedicated page](modules.md).
