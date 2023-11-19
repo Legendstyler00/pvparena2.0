@@ -17,5 +17,10 @@ You need to set a spawn called "relay" -> `/pa [arena] spawn set relay`
 - respawnseconds \- The respawn time in seconds (default: 10)
 - choosespawn \- Should players be able to choose the next spawn during relay time, by writing it in chat? (default: false)
 
-> ℹ Limitations  
+
+> 🚩 **Tip:**  
+> Players can change their class with [`/pa -ac`](../commands/arenaclass.md) command during relay time
+
+
+> ℹ️ **Limitations**:  
 > `choosespawn`setting is only available in free goals (not team ones)

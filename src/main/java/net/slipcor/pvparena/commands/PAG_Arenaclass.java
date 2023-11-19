@@ -24,8 +24,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static java.util.Arrays.asList;
-import static net.slipcor.pvparena.arena.PlayerStatus.FIGHT;
-import static net.slipcor.pvparena.arena.PlayerStatus.LOUNGE;
+import static net.slipcor.pvparena.arena.PlayerStatus.*;
 
 /**
  * <pre>PVP Arena JOIN Command class</pre>
@@ -60,7 +59,7 @@ public class PAG_Arenaclass extends AbstractArenaCommand {
         PlayerStatus pStatus = arenaPlayer.getStatus();
 
         // Player can change arena class only in lounge or in fight with ingameClassSwith parameter set to true
-        if(!arena.equals(arenaPlayer.getArena()) || !asList(LOUNGE, FIGHT).contains(pStatus) ||
+        if(!arena.equals(arenaPlayer.getArena()) || !asList(LOUNGE, READY, FIGHT, DEAD).contains(pStatus) ||
                 (pStatus == FIGHT && !arena.getConfig().getBoolean(CFG.USES_INGAMECLASSSWITCH))) {
             return;
         }
@@ -107,9 +106,7 @@ public class PAG_Arenaclass extends AbstractArenaCommand {
                         error = true;
                     }
                 }
-            } catch (Exception e) {
-
-            }
+            } catch (Exception ignored) {}
         }
 
         if (error) {
@@ -120,16 +117,16 @@ public class PAG_Arenaclass extends AbstractArenaCommand {
             return;
         }
 
-        if (!arena.getConfig().getBoolean(CFG.GENERAL_CLASSSWITCH_AFTER_RESPAWN) || !arena.isFightInProgress()) {
+        if (arena.getConfig().getBoolean(CFG.GENERAL_CLASSSWITCH_AFTER_RESPAWN) || arenaPlayer.getStatus() == DEAD) {
+            arena.msg(sender, MSG.CLASS_SELECTED_RESPAWN, arenaClass.getName());
+            arenaPlayer.setNextArenaClass(arenaClass);
+        } else if (!arena.getConfig().getBoolean(CFG.GENERAL_CLASSSWITCH_AFTER_RESPAWN) || !arena.isFightInProgress()) {
             InventoryManager.clearInventory(arenaPlayer.getPlayer());
             arenaPlayer.setArenaClass(arenaClass);
             if (arenaPlayer.getArenaClass() != null) {
                 arenaPlayer.equipPlayerFightItems();
                 arena.msg(sender, MSG.CLASS_SELECTED, arenaClass.getName());
             }
-        } else if (arenaPlayer.getArenaClass() != null) {
-            arena.msg(sender, MSG.CLASS_SELECTED_RESPAWN, arenaClass.getName());
-            arenaPlayer.setNextArenaClass(arenaClass);
         }
     }
 
