@@ -107,9 +107,13 @@ public class EntityListener implements Listener {
             return;
         }
 
-        if(arena.hasRegionsProtectingLocation(eventLocation, RegionProtection.TNT) ||
-                arena.hasRegionsProtectingLocation(eventLocation, RegionProtection.TNTBREAK)) {
-            debug(arena, "explosion inside an protected arena, TNT should be blocked");
+        if(arena.hasRegionsProtectingLocation(eventLocation, RegionProtection.TNT)) {
+            debug(arena, "explosion inside an TNT protected arena, TNT should be blocked");
+            event.setCancelled(true);
+        } if(arena.hasRegionsProtectingLocation(eventLocation, RegionProtection.TNTBREAK)) {
+            debug(arena, "explosion inside an TNTBREAK protected arena, TNT should be blocked");
+            Location location = event.getLocation();
+            location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
             event.setCancelled(true);
         } else {
             debug(arena, "explosion allowed inside this arena");
