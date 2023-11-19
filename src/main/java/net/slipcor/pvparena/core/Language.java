@@ -659,9 +659,6 @@ public final class Language {
         MODULE_DUEL_STARTING("nulang.mod.duel.starting", "The duel begins!"),
         MODULE_DUEL_NODIRECTJOIN("nulang.mod.duel.nodirectjoin", "You may not join this arena directly! Use: &e/pa %1% duel [playername]"),
 
-        MODULE_FIXINVENTORYLOSS_GAMEMODE("nulang.mod.fixinventorylos.gamemode", "Enter survival gamemode before joining!"),
-        MODULE_FIXINVENTORYLOSS_INVENTORY("nulang.mod.fixinventorylos.invenory", "Empty your inventory before joining!"),
-
         MODULE_LATELOUNGE_ANNOUNCE("nulang.mod.latelounge.llannounce", "Arena %1% is starting! Player %2% wants to start. Join with: /pa %1%"),
         MODULE_LATELOUNGE_POSITION("nulang.mod.latelounge.llposition", "You are in queue. Position: #%1%"),
         MODULE_LATELOUNGE_REJOIN("nulang.mod.latelounge.llrejoin", "Ready check has caught you not being able to join. Rejoin when you can!"),
@@ -685,10 +682,6 @@ public final class Language {
         MODULE_SKINS_NOMOD("nulang.mod.skins.nomod", "No disguise plugin found, Skins module is inactive!"),
         MODULE_SKINS_SHOWCLASS("nulang.mod.skins.showclass", "Class &e%1%&r will be disguised to: &a%2%"),
         MODULE_SKINS_SHOWTEAM("nulang.mod.skins.showteam", "Team %1% will be disguised to: %2%"),
-
-        MODULE_SPECIALJOIN_DONE("nulang.mod.specialjoin.done", "Join block set here - %1%"),
-        MODULE_SPECIALJOIN_START("nulang.mod.specialjoin.start", "Setting join block!"),
-        MODULE_SPECIALJOIN_STOP("nulang.mod.specialjoin.stop", "Aborted join block selection!"),
 
         MODULE_SPAWNCOLLECTIONS_SAVED("nulang.mod.spawncollections.saved", "The spawn collection \"%1%\" has been saved"),
         MODULE_SPAWNCOLLECTIONS_USE("nulang.mod.spawncollections.use", "As of now, arena uses spawns of \"%1%\" spawn collection"),

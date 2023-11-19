@@ -43,7 +43,6 @@ Hook into many different aspects of the game!
 | [SinglePlayerSupport](mods/singleplayersupport.md) | Allow players to use an arena on their own!                                                             |          | ⚠️     |
 | [Skins](mods/skins.md)                             | add custom skins to teams/classes                                                                       |          | ❌      |
 | [SpawnCollections](mods/spawncollections.md)       | save different spawn configurations of the battlefield and switch between them                          |          | ✔️️    |
-| [SpecialJoin](mods/specialjoin.md)                 | join via buttons, levers, etc                                                                           |          | ⚠️     |
 | [Spectate](mods/spectate.md)                       | use the new 1.8 SPECTATOR mode to allow flying and POV spectating                                       | SPECTATE | ✔️️    |
 | StandardLounge                                     | Default lounge module                                                                                   | JOIN     | ✔️️    |
 | StandardSpectate                                   | Default spectate module (survival mode)                                                                 | SPECTATE | ✔️️    |
@@ -71,7 +70,7 @@ version will be to make a great check-up of all of them and fix all eventual iss
 Anyway, don't hesitate to test legacy modules by yourself, a big part of them work normally or have trivial issues. Obviously
 if you encounter one, you can [report it](https://github.com/Eredrim/pvparena/issues) 😉
 
-### What happened to ArenaBoards, AutoSneak, AutoVote, BattlefieldGuard, Factions, FixInventoryLoss or MatchResultsStats?
+### What happened to ArenaBoards, AutoSneak, AutoVote, BattlefieldGuard, Factions, FixInventoryLoss, MatchResultsStats or SpecialJoin?
 These modules either used discontinued features (like arena rounds) or their features have been integrated in core of
 PVPArena plugin.
 

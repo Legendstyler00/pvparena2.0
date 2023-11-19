@@ -335,9 +335,6 @@ public class Config {
 
         MODULES_DUEL_FORCESTART("modules.duel.forcestart", true, "Duel"),
 
-        MODULES_FIXINVENTORYLOSS_GAMEMODE("modules.fixinventoryloss.gamemode", false, "FixInventoryLoss"),
-        MODULES_FIXINVENTORYLOSS_INVENTORY("modules.fixinventoryloss.inventory", false, "FixInventoryLoss"),
-
         MODULES_ITEMSPAWNERS_INTERVAL("modules.itemspawners.interval", 30, "ItemSpawners"),
 
         MODULES_RESPAWNRELAY_INTERVAL("modules.respawnrelay.respawnseconds", 10, "RespawnRelay"),
@@ -362,8 +359,6 @@ public class Config {
         MODULES_PROJECTILES_ENDERPEARL("modules.projectiles.enderPearl", false, "Projectiles"),
 
         MODULES_SKINS_VANILLA("modules.skins.vanilla", false, "Skins"),
-
-        MODULES_SPECIALJOIN_SHOWPLAYERS("modules.specialjoin.showplayers", true, "SpecialJoin"),
 
         MODULES_SQUADS_AUTOSQUAD("modules.squads.autoSquad", "none", "Squads"),
         MODULES_SQUADS_INGAMESWITCH("modules.squads.ingameSquadSwitch", true, "Squads"),
