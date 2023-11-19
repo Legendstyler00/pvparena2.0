@@ -31,12 +31,9 @@ true.
 Maybe you will wish to use buttons, pressure plates and command blocks to allowing players to choose their class, get
 ready or leave the arena.
 
-Most of PvPArena commands must be types by players (in order to keep context). So if you want to use plugins commands in
-a command block, you will have to use a **sudo** plugin. Utility plugins like 
-[EssentialsX](https://www.spigotmc.org/resources/essentialsx.9089/) already include this.
-
-"Sudo" make possible to type a command as if player typed it. For instance, if you a to create a command block to leave 
-an arena, use the command `sudo @p pa leave`.
+Most of PvPArena commands must be typed by players (in order to keep context). So if you want to use plugins commands in
+a command block, you have to use PVPArena super-user commands instead of player ones. They look like 
+`playerjoin` or `playerleave` and they are listed in [command documentation page](commands.md#arena-super-user-commands).
 
 > ⚙ **Technical precision:**  
 > Since Minecraft 1.13, spigot based servers does no longer support command selectors (like `@p`). If you want to use it

@@ -1,10 +1,8 @@
 package net.slipcor.pvparena.commands;
 
-import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.Help.HELP;
 import net.slipcor.pvparena.core.Language.MSG;
-import net.slipcor.pvparena.core.StringParser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,10 +19,10 @@ import java.util.List;
  * @version v0.10.0
  */
 
-public class PAA_PlayerJoin extends AbstractArenaCommand {
+public class PAP_PlayerSpectate extends AbstractArenaCommand {
 
-    public PAA_PlayerJoin() {
-        super(new String[]{"pvparena.cmds.playerjoin"});
+    public PAP_PlayerSpectate() {
+        super(new String[]{"pvparena.cmds.playerspectate"});
     }
 
     @Override
@@ -33,11 +31,11 @@ public class PAA_PlayerJoin extends AbstractArenaCommand {
             return;
         }
 
-        if (!argCountValid(sender, arena, args, new Integer[]{1, 2})) {
+        if (!argCountValid(sender, arena, args, new Integer[]{1})) {
             return;
         }
 
-        // usage: /pa {arenaname} playerjoin [playername] {team} | tp to a spawn
+        // usage: /pa {arenaname} playerspectate [playername]
 
         final Player player = Bukkit.getPlayer(args[0]);
 
@@ -46,9 +44,8 @@ public class PAA_PlayerJoin extends AbstractArenaCommand {
             return;
         }
 
-        final PAG_Join cmd = new PAG_Join();
-        player.addAttachment(PVPArena.getInstance(), "pvparena.join." + arena.getName(), true, 20);
-        cmd.commit(arena, player, StringParser.shiftArrayBy(args, 1));
+        final PAG_Spectate cmd = new PAG_Spectate();
+        cmd.commit(arena, player, new String[0]);
     }
 
     @Override
@@ -58,25 +55,23 @@ public class PAA_PlayerJoin extends AbstractArenaCommand {
 
     @Override
     public void displayHelp(final CommandSender sender) {
-        Arena.pmsg(sender, HELP.TELEPORT);
+        Arena.pmsg(sender, HELP.PLAYERSPECTATE);
     }
 
     @Override
     public List<String> getMain() {
-        return Collections.singletonList("playerjoin");
+        return Collections.singletonList("playerspectate");
     }
 
     @Override
     public List<String> getShort() {
-        return Collections.singletonList("!pj");
+        return Collections.singletonList("!ps");
     }
 
     @Override
     public CommandTree<String> getSubs(final Arena arena) {
         final CommandTree<String> result = new CommandTree<>(null);
-        for (String team : arena.getTeamNames()) {
-            result.define(new String[]{"{Player}", team});
-        }
+        result.define(new String[]{"{Player}"});
         return result;
     }
 }

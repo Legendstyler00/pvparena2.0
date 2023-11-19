@@ -62,6 +62,10 @@ permissions:
             pvparena.cmds.goal: true
             pvparena.cmds.modules: true
             pvparena.cmds.playerjoin: true
+            pvparena.cmds.playerleave: true
+            pvparena.cmds.playerspectate: true
+            pvparena.cmds.playerarenaclass: true
+            pvparena.cmds.playerready: true
             pvparena.cmds.protection: true
             pvparena.cmds.region: true
             pvparena.cmds.regionflag: true
@@ -123,11 +127,20 @@ permissions:
     pvparena.cmds.install:
         description: Allows you to run /pvparena install
         default: op
-    pvparena.cmds.playerclass:
-        description: Allows you to run /pvparena playerclass
-        default: op
     pvparena.cmds.playerjoin:
         description: Allows you to run /pvparena playerjoin
+        default: op
+    pvparena.cmds.playerleave:
+        description: Allows you to run /pvparena playerleave
+        default: op
+    pvparena.cmds.playerspectate:
+        description: Allows you to run /pvparena playerspectate
+        default: op
+    pvparena.cmds.playerarenaclass:
+        description: Allows you to run /pvparena playerarenaclass
+        default: op
+    pvparena.cmds.playerready:
+        description: Allows you to run /pvparena playerready
         default: op
     pvparena.cmds.protection:
         description: Allows you to run /pvparena protection

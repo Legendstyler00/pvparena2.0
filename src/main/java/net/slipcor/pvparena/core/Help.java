@@ -126,13 +126,37 @@ public final class Help {
                 "/pa install [modulename]",
                 LINE,
                 "modules / arenas will list available files"}),
-        PLAYERCLASS("nulang.help.msg.playerclass", new String[]{
-                "Manage arena player classes",
+
+        PLAYERJOIN("nulang.help.msg.playerjoin", new String[]{
+                "Make a player join an arena",
                 LINE,
-                "shorthand command: !pcl",
+                "shorthand command: !pj",
                 LINE,
-                "/pa [arenaname] playerclass save {classname}",
-                "/pa [arenaname] playerclass remove {classname}"}),
+                "/pa [arenaname] playerjoin [playerName] (teamName)"}),
+        PLAYERSPECTATE("nulang.help.msg.playerspectate", new String[]{
+                "Make a player spectate an arena",
+                LINE,
+                "shorthand command: !ps",
+                LINE,
+                "/pa [arenaname] playerspectate [playerName]"}),
+        PLAYERARENACLASS("nulang.help.msg.playerarenaclass", new String[]{
+                "Change arena class of a player",
+                LINE,
+                "shorthand command: !pac",
+                LINE,
+                "/pa [arenaname] playerarenaclass [playerName] [className]"}),
+        PLAYERLEAVE("nulang.help.msg.playerleave", new String[]{
+                "Make a player leave the arena",
+                LINE,
+                "shorthand command: !pl",
+                LINE,
+                "/pa [arenaname] playerleave [playerName]"}),
+        PLAYERREADY("nulang.help.msg.playerready", new String[]{
+                "Make a player ready",
+                LINE,
+                "shorthand command: !pr",
+                LINE,
+                "/pa [arenaname] playerready [playerName]"}),
         PROTECTION("nulang.help.msg.protection", new String[]{
                 "Manage arena region protections",
                 LINE,

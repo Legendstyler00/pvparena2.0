@@ -147,7 +147,6 @@ public class PVPArena extends JavaPlugin {
         this.arenaCommands.add(new PAA_Enable());
         this.arenaCommands.add(new PAA_ForceWin());
         this.arenaCommands.add(new PAA_Goal());
-        this.arenaCommands.add(new PAA_PlayerJoin());
         this.arenaCommands.add(new PAA_Protection());
         this.arenaCommands.add(new PAA_Regions());
         this.arenaCommands.add(new PAA_Region());
@@ -177,6 +176,11 @@ public class PVPArena extends JavaPlugin {
         this.arenaCommands.add(new PAG_Arenaclass());
         this.arenaCommands.add(new PAI_Info());
         this.arenaCommands.add(new PAI_Stats());
+        this.arenaCommands.add(new PAP_PlayerJoin());
+        this.arenaCommands.add(new PAP_PlayerLeave());
+        this.arenaCommands.add(new PAP_PlayerArenaClass());
+        this.arenaCommands.add(new PAP_PlayerReady());
+        this.arenaCommands.add(new PAP_PlayerSpectate());
     }
 
     private void loadGlobalCommands() {

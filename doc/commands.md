@@ -12,6 +12,24 @@ Click on a command to get its syntax, usage examples and more information about 
 
 <br>
 
+## Arena User Commands
+
+> ℹ Permission: pvparena.user (defaults to true)
+
+| Command                                  | Shorthand | Definition                                                          |
+|------------------------------------------|-----------|---------------------------------------------------------------------|
+| [/pa arenaclass](commands/arenaclass.md) | /pa -ac   | Change your class, if allowed                                       |
+| /pa chat                                 | /pa -c    | Set arena chat mode                                                 |
+| /pa info                                 | /pa -i    | Display the active modules of an arena and its settings             |
+| /pa help                                 | /pa -h    | Basic help. Splits into subsections.                                |
+| [/pa join](commands/join.md)             | /pa -j    | Join an arena (specifying a team or not)                            |
+| /pa leave                                | /pa -l    | Leave an arena                                                      |
+| /pa list                                 | none      | List available arenas (red: disabled, yellow: edit, green: running) |
+| [/pa ready](commands/ready.md)           | /pa -r    | Ready you up or list who is ready                                   |
+| /pa spectate                             | /pa -s    | Spectate an arena                                                   |
+| [/pa stats](commands/stats.md)           | /pa -s    | Show [arena/global] statistics                                      |
+| /pa version                              | /pa -v    | Show detailed version information                                   |
+
 ## Global Admin Commands
 
 > ℹ Permission: pvparena.admin
@@ -40,7 +58,6 @@ All of these commands have to be used prefixing the arena name (e.g. `/pa myAren
 | [/pa enable](commands/enable.md)           | /pa !en   | Enable an arena.                        |
 | [/pa forcewin](commands/forcewin.md)       | /pa !fw   | Force a player/team to win.             |
 | [/pa goal](commands/goal.md)               | /pa !g    | Manage arena goals                      |
-| [/pa playerjoin](commands/playerjoin.md)   | /pa !pj   | Make a player join                      |
 | [/pa protection](commands/protection.md)   | /pa !p    | Manage arena protections                |
 | [/pa region](commands/region.md)           | /pa !rg   | Manage arena regions                    |
 | [/pa regionclear](commands/regionclear.md) | /pa !rc   | Manage arena region clearing exceptions |
@@ -48,7 +65,7 @@ All of these commands have to be used prefixing the arena name (e.g. `/pa myAren
 | [/pa regiontype](commands/regiontype.md)   | /pa !rt   | Change a region type                    |
 | [/pa regions](commands/regions.md)         | /pa !rs   | Debug regions                           |
 | [/pa reload](commands/reload.md)           | /pa !rl   | Reload arena configs                    |
-| [/pa remove](commands/remove.md)           | /pa !rm   | Remove an arena.                        | |
+| [/pa remove](commands/remove.md)           | /pa !rm   | Remove an arena.                        |
 | [/pa set](commands/set.md)                 | /pa !s    | Set an arena config setting             |
 | [/pa setowner](commands/setowner.md)       | /pa !so   | Sets the owner of an arena              |
 | [/pa spawn](commands/spawn.md)             | /pa !sp   | Manage arena spawns                     |
@@ -59,20 +76,18 @@ All of these commands have to be used prefixing the arena name (e.g. `/pa myAren
 | [/pa togglemod](commands/togglemod.md)     | /pa !tm   | Enable or disable a module for an arena |
 | [/pa whitelist](commands/whitelist.md)     | /pa !wl   | Manage arena whitelists                 |
 
-## Arena Standard Commands
 
-> ℹ Permission: pvparena.user (defaults to true)
+## Arena Super-User Commands
 
-| Command                                  | Shorthand | Definition                                                          |
-|------------------------------------------|-----------|---------------------------------------------------------------------|
-| [/pa arenaclass](commands/arenaclass.md) | /pa -ac   | Change your class, if allowed                                       |
-| /pa chat                                 | /pa -c    | Set arena chat mode                                                 |
-| /pa info                                 | /pa -i    | Display the active modules of an arena and its settings             |
-| /pa help                                 | /pa -h    | Basic help. Splits into subsections.                                |
-| [/pa join](commands/join.md)             | /pa -j    | Join an arena (specifying a team or not)                            |
-| /pa leave                                | /pa -l    | Leave an arena                                                      |
-| /pa list                                 | none      | List available arenas (red: disabled, yellow: edit, green: running) |
-| [/pa ready](commands/ready.md)           | /pa -r    | Ready you up or list who is ready                                   |
-| /pa spectate                             | /pa -s    | Spectate an arena                                                   |
-| [/pa stats](commands/stats.md)           | /pa -s    | Show [arena/global] statistics                                      |
-| /pa version                              | /pa -v    | Show detailed version information                                   |
+> ℹ Permission: pvparena.admin
+
+Use these commands to force users doing things. Works inside command blocks!  
+All of these commands have to be used prefixing the arena name.
+
+| Command                                              | Shorthand | Definition                                           |
+|------------------------------------------------------|-----------|------------------------------------------------------|
+| [/pa playerjoin](commands/playerjoin.md)             | /pa !pj   | Make a player join an arena (specifying team or not) |
+| [/pa playerspectate](commands/playerspectate.md)     | /pa !ps   | Make a player spectate an arena                      |
+| [/pa playerleave](commands/playerleave.md)           | /pa !pl   | Make a player leave the arena                        |
+| [/pa playerarenaclass](commands/playerarenaclass.md) | /pa !pac  | Change a player arena class                          |
+| [/pa playerready](commands/playerready.md)           | /pa !pr   | Make a player ready                                  |
