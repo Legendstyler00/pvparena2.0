@@ -55,7 +55,7 @@ public class PAG_Join extends AbstractArenaCommand {
         }
 
         if (arena.isFightInProgress() && !arena.getConfig().getBoolean(CFG.JOIN_ALLOW_DURING_MATCH) &&
-                arena.getConfig().getBoolean(CFG.JOIN_ALLOW_REJOIN) && !arena.hasAlreadyPlayed(sender.getName())) {
+                (!arena.getConfig().getBoolean(CFG.JOIN_ALLOW_REJOIN) || !arena.hasAlreadyPlayed(sender.getName()))) {
             arena.msg(sender, MSG.ERROR_FIGHT_IN_PROGRESS);
             return;
         }
