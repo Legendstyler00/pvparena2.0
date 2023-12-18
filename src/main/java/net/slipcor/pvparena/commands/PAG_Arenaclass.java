@@ -117,16 +117,16 @@ public class PAG_Arenaclass extends AbstractArenaCommand {
             return;
         }
 
-        if (arena.getConfig().getBoolean(CFG.GENERAL_CLASSSWITCH_AFTER_RESPAWN) || arenaPlayer.getStatus() == DEAD) {
-            arena.msg(sender, MSG.CLASS_SELECTED_RESPAWN, arenaClass.getName());
-            arenaPlayer.setNextArenaClass(arenaClass);
-        } else if (!arena.getConfig().getBoolean(CFG.GENERAL_CLASSSWITCH_AFTER_RESPAWN) || !arena.isFightInProgress()) {
+        if (!arena.getConfig().getBoolean(CFG.GENERAL_CLASSSWITCH_AFTER_RESPAWN) || !arena.isFightInProgress()) {
             InventoryManager.clearInventory(arenaPlayer.getPlayer());
             arenaPlayer.setArenaClass(arenaClass);
             if (arenaPlayer.getArenaClass() != null) {
                 arenaPlayer.equipPlayerFightItems();
                 arena.msg(sender, MSG.CLASS_SELECTED, arenaClass.getName());
             }
+        } else if (arena.getConfig().getBoolean(CFG.GENERAL_CLASSSWITCH_AFTER_RESPAWN) || arenaPlayer.getStatus() == DEAD) {
+            arena.msg(sender, MSG.CLASS_SELECTED_RESPAWN, arenaClass.getName());
+            arenaPlayer.setNextArenaClass(arenaClass);
         }
     }
 
