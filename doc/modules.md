@@ -30,9 +30,9 @@ Hook into many different aspects of the game!
 | [Duel](mods/duel.md)                               | duel someone!                                                                                           |          | ⚠️     |
 | [EventActions](mods/eventactions.md)               | do stuff when stuff happens                                                                             |          | ✔️️    |
 | [FlySpectate](mods/flyspectate.md)                 | have players spectating a fight in fly mode                                                             | SPECTATE | ✔️️    |
-| [ItemSpawners](mods/itemspawners.md)               | spawn (random) items on different points                                                                |          | ✔️     |
+| [ItemSpawners](mods/itemspawners.md)               | spawn (random) items on different points                                                                |          | ✔️️    |
 | [LateLounge](mods/latelounge.md)                   | keep playing until enough ppl are joining                                                               |          | ☑️     |
-| [PlayerFinder](mods/playerfinder.md)               | allow players to find others with a compass                                                             |          | ☑️     |
+| [PlayerFinder](mods/playerfinder.md)               | allow players to find others with a compass                                                             |          | ✔️️    |
 | [Points](mods/points.md)                           | allow to restrict certain classes to require players to fight for better classes                        |          | ⚠️     |
 | [PowerUps](mods/powerups.md)                       | spawn items giving special powers                                                                       |          | ☑️     |
 | [Projectiles](mods/projectiles.md)                 | add knockback to throwable items (snowballs, eggs, etc)                                                 |          | ☑️     |
@@ -75,7 +75,7 @@ These modules either used discontinued features (like arena rounds) or their fea
 PVPArena plugin.
 
 ### What happened to BattlefieldManager and Items?
-The module have been renamed to SpawnCollections and ItemSpawners respectively.
+The modules have been renamed to SpawnCollections and ItemSpawners respectively.
 
 ## Installing modules
 

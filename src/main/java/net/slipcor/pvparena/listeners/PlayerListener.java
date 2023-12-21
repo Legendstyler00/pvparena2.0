@@ -391,6 +391,7 @@ public class PlayerListener implements Listener {
             if (this.checkAndCommitCancel(arena, event.getPlayer(), event)) {
                 if (arena != null) {
                     WorkflowManager.handleInteract(arena, player, event);
+                    ArenaModuleManager.onPlayerInteract(arena, event);
                 }
                 return;
             }
