@@ -39,7 +39,6 @@ Hook into many different aspects of the game!
 | [QuickLounge](mods/quicklounge.md)                 | join a lounge which starts the game automatically                                                       | JOIN     | ✔️️    |
 | [RealSpectate](mods/realspectate.md)               | spectate the game, CounterStrike style!                                                                 | SPECTATE | ✔️️    |
 | [RespawnRelay](mods/respawnrelay.md)               | add a relay for respawning players                                                                      |          | ✔️️    |
-| [SinglePlayerSupport](mods/singleplayersupport.md) | Allow players to use an arena on their own!                                                             |          | ⚠️     |
 | [Skins](mods/skins.md)                             | add custom skins to teams/classes                                                                       |          | ❌      |
 | [SpawnCollections](mods/spawncollections.md)       | save different spawn configurations of the battlefield and switch between them                          |          | ✔️️    |
 | [Spectate](mods/spectate.md)                       | use the new 1.8 SPECTATOR mode to allow flying and POV spectating                                       | SPECTATE | ✔️️    |
@@ -69,12 +68,17 @@ version will be to make a great check-up of all of them and fix all eventual iss
 Anyway, don't hesitate to test legacy modules by yourself, a big part of them work normally or have trivial issues. Obviously
 if you encounter one, you can [report it](https://github.com/Eredrim/pvparena/issues) 😉
 
-### What happened to ArenaBoards, AutoSneak, AutoVote, BattlefieldGuard, Factions, FixInventoryLoss, MatchResultsStats, RedstoneTriggers or SpecialJoin?
+### What happened to BattlefieldManager and Items?
+The modules have been renamed to SpawnCollections and ItemSpawners respectively.
+
+### What happened to other missing modules?
+
+As you maybe saw it, several modules has been removed. They are ArenaBoards, AutoSneak, AutoVote, BattlefieldGuard, 
+Factions, FixInventoryLoss, MatchResultsStats, RedstoneTriggers, SinglePlayerSupport and SpecialJoin.
+
 These modules either used discontinued features (like arena rounds) or their features have been integrated in core of
 PVPArena plugin.
 
-### What happened to BattlefieldManager and Items?
-The modules have been renamed to SpawnCollections and ItemSpawners respectively.
 
 ## Installing modules
 
