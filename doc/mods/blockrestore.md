@@ -10,12 +10,14 @@ Installation of this module can be done in a normal way. You'll find installatio
 
 ## Config settings
 
-- hard \- the mod will restore EVERY block of your battle region, regardless of a known changed state (default: false)
-- offset \- the time in TICKS (1/20 second) that the scheduler waits for the next block set to be replaced (default: 1)
-- restoreblocks \- restore blocks (default: true)
-- restorecontainers \- restore containers (chests, furnaces, brewing stands, etc) content (default: false) 
-- restoreinteractions \- restore player interactions with blocks like opened doors or toggled levers (default: false) 
-- containerlist \- list of coordinates of all registered containers 
+*These settings can be found under `modules.blockrestore` node in your arena config file.*
+
+- **hard** \- the mod will restore EVERY block of your battle region, regardless of a known changed state (default: false)
+- **offset** \- the time in TICKS (1/20 second) that the scheduler waits for the next block set to be replaced (default: 1)
+- **restoreblocks** \- restore blocks (default: true)
+- **restorecontainers** \- restore containers (chests, furnaces, brewing stands, etc) content (default: false) 
+- **restoreinteractions** \- restore player interactions with blocks like opened doors or toggled levers (default: false) 
+- **containerlist** \- list of coordinates of all registered containers 
 
 ## Commands
 

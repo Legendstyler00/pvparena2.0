@@ -9,16 +9,11 @@ behavior.
 
 Installation of this module can be done in a normal way. You'll find installation process in [modules page](../modules.md#installing-modules) of the doc.
 
-## Setup
-
-There is no special setup for this module, follow the [general module installation](../modules.md#installing-modules) 
-guide to enable it.
-
 ## Config settings
 
-*These settings can be found under `mods.projectiles` node in your arena config file.*
+*These settings can be found under `modules.projectiles` node in your arena config file.*
 
-- snowball - enable knockback for snowballs (default: true)
-- egg - enable knockback for eggs (default: true)
-- fishHook - enable knockback for fishing hooks (default: false)
-- enderPearl - enable knockback for ender pearls (default: false)
+- **snowball**: enable knockback for snowballs (default: true)
+- **egg**: enable knockback for eggs (default: true)
+- **fishHook**: enable knockback for fishing hooks (default: false)
+- **enderPearl**: enable knockback for ender pearls (default: false)

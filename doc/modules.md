@@ -17,7 +17,7 @@ Hook into many different aspects of the game!
 |----------------------------------------------------|---------------------------------------------------------------------------------------------------------|----------|--------|
 | [AfterMatch](mods/aftermatch.md)                   | could also be called "Sudden Death"                                                                     |          | ✔️️    |
 | [Announcements](mods/announcements.md)             | announce events happening                                                                               |          | ✔️️    |
-| [ArenaMaps](mods/arenamaps.md)                     | never  lose yourself ever again!                                                                        |          | ✔️️    |
+| [ArenaMaps](mods/arenamaps.md)                     | a live refreshed map to never lose yourself ever again!                                                 |          | ✔️️    |
 | [BanKick](mods/bankick.md)                         | ban or kick a player of an arena                                                                        |          | ✔️️    |
 | [BattlefieldJoin](mods/battlefieldjoin.md)         | join directly your battlefield without using the lounge                                                 | JOIN     | ✔️️    |
 | [BetterClasses](mods/betterclasses.md)             | add potion effects and more to specific classes                                                         |          | ✔️️    |
@@ -27,15 +27,15 @@ Hook into many different aspects of the game!
 | [BlockDissolve](mods/blockdissolve.md)             | dissolve blocks under fighting players                                                                  |          | ✔️️    |
 | [BlockRestore](mods/blockrestore.md)               | restore the battlefield                                                                                 |          | ✔️️    |
 | [ChestFiller](mods/chestfiller.md)                 | fill battlefield containers with random and customizable content!                                       |          | ✔️️    |
-| [Duel](mods/duel.md)                               | duel someone!                                                                                           |          | ⚠️     |
-| [EventActions](mods/eventactions.md)               | do stuff when stuff happens                                                                             |          | ✔️️    |
+| [Duel](mods/duel.md)                               | duel someone!                                                                                           |          | ⚠️️    |
+| [EventActions](mods/eventactions.md)               | trigger actions at different moments of the arena lifecycle                                             |          | ✔️️    |
 | [FlySpectate](mods/flyspectate.md)                 | have players spectating a fight in fly mode                                                             | SPECTATE | ✔️️    |
 | [ItemSpawners](mods/itemspawners.md)               | spawn (random) items on different points                                                                |          | ✔️️    |
-| [LateLounge](mods/latelounge.md)                   | keep playing until enough ppl are joining                                                               |          | ☑️     |
+| [LateLounge](mods/latelounge.md)                   | keep playing until enough players joined the arena                                                      |          | ☑️️    |
 | [PlayerFinder](mods/playerfinder.md)               | allow players to find others with a compass                                                             |          | ✔️️    |
 | [Points](mods/points.md)                           | allow to restrict certain classes to require players to fight for better classes                        |          | ⚠️     |
-| [PowerUps](mods/powerups.md)                       | spawn items giving special powers                                                                       |          | ☑️     |
-| [Projectiles](mods/projectiles.md)                 | add knockback to throwable items (snowballs, eggs, etc)                                                 |          | ☑️     |
+| [PowerUps](mods/powerups.md)                       | spawn items giving special powers                                                                       |          | ☑️️    |
+| [Projectiles](mods/projectiles.md)                 | add knockback to throwable items (snowballs, eggs, etc)                                                 |          | ✔️️    |
 | [QuickLounge](mods/quicklounge.md)                 | join a lounge which starts the game automatically                                                       | JOIN     | ✔️️    |
 | [RealSpectate](mods/realspectate.md)               | spectate the game, CounterStrike style!                                                                 | SPECTATE | ✔️️    |
 | [RespawnRelay](mods/respawnrelay.md)               | add a relay for respawning players                                                                      |          | ✔️️    |
