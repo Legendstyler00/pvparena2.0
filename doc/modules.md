@@ -44,8 +44,8 @@ Hook into many different aspects of the game!
 | [Spectate](mods/spectate.md)                       | use the new 1.8 SPECTATOR mode to allow flying and POV spectating                                       | SPECTATE | ✔️️    |
 | StandardLounge                                     | Default lounge module                                                                                   | JOIN     | ✔️️    |
 | StandardSpectate                                   | Default spectate module (survival mode)                                                                 | SPECTATE | ✔️️    |
-| [Squads](mods/squads.md)                           | add squads to the game, basically only showing players belonging together apart from teams and classes. |          | ☑️     |
-| [StartFreeze](mods/startfreeze.md)                 | freeze players at start                                                                                 |          | ⚠️     |
+| [Squads](mods/squads.md)                           | add squads to the game, basically only showing players belonging together apart from teams and classes. |          | ☑️️    |
+| [StartFreeze](mods/startfreeze.md)                 | freeze players at start                                                                                 |          | ✔️️    |
 | [TeamSizeRestrict](mods/teamsizerestrict.md)       | a small mod to restrict the size of specific teams                                                      |          | ⚠️     |
 | [Titles](mods/titles.md)                           | send messages to players as the "title" command would do                                                |          | ☑️     |
 | [TempPerms](mods/tempperms.md)                     | add temporary perms                                                                                     |          | ☑️     |

@@ -363,7 +363,7 @@ public class Config {
         MODULES_SQUADS_AUTOSQUAD("modules.squads.autoSquad", "none", "Squads"),
         MODULES_SQUADS_INGAMESWITCH("modules.squads.ingameSquadSwitch", true, "Squads"),
 
-        MODULES_STARTFREEZE_TIMER("modules.startfreeze.freezetimer", 0, "StartFreeze"),
+        MODULES_STARTFREEZE_TIMER("modules.startfreeze.freezetimer", 5, "StartFreeze"),
 
         MODULES_TITLES_COLOR("modules.titles.color", "AQUA", "Titles"),
         MODULES_TITLES_JOIN("modules.titles.join", false, "Titles"),
