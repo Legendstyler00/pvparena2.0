@@ -38,7 +38,6 @@ Hook into many different aspects of the game!
 | [Projectiles](mods/projectiles.md)                 | add knockback to throwable items (snowballs, eggs, etc)                                                 |          | ☑️     |
 | [QuickLounge](mods/quicklounge.md)                 | join a lounge which starts the game automatically                                                       | JOIN     | ✔️️    |
 | [RealSpectate](mods/realspectate.md)               | spectate the game, CounterStrike style!                                                                 | SPECTATE | ✔️️    |
-| [RedstoneTriggers](mods/redstonetriggers.md)       | add win/lose triggered by redstone                                                                      |          | ⚠️     |
 | [RespawnRelay](mods/respawnrelay.md)               | add a relay for respawning players                                                                      |          | ✔️️    |
 | [SinglePlayerSupport](mods/singleplayersupport.md) | Allow players to use an arena on their own!                                                             |          | ⚠️     |
 | [Skins](mods/skins.md)                             | add custom skins to teams/classes                                                                       |          | ❌      |
@@ -70,7 +69,7 @@ version will be to make a great check-up of all of them and fix all eventual iss
 Anyway, don't hesitate to test legacy modules by yourself, a big part of them work normally or have trivial issues. Obviously
 if you encounter one, you can [report it](https://github.com/Eredrim/pvparena/issues) 😉
 
-### What happened to ArenaBoards, AutoSneak, AutoVote, BattlefieldGuard, Factions, FixInventoryLoss, MatchResultsStats or SpecialJoin?
+### What happened to ArenaBoards, AutoSneak, AutoVote, BattlefieldGuard, Factions, FixInventoryLoss, MatchResultsStats, RedstoneTriggers or SpecialJoin?
 These modules either used discontinued features (like arena rounds) or their features have been integrated in core of
 PVPArena plugin.
 
