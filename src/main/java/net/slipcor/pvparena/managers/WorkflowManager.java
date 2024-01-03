@@ -122,6 +122,7 @@ public class WorkflowManager {
             }
         } catch (GameplayExceptionNotice e) {
             arena.msg(player, MSG.NOTICE_NOTICE, e.getMessage());
+            return false;
         } catch (GameplayException e) {
             arena.msg(player, MSG.ERROR_ERROR, e.getMessage());
             return false;

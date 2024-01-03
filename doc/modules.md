@@ -31,7 +31,7 @@ Hook into many different aspects of the game!
 | [EventActions](mods/eventactions.md)               | trigger actions at different moments of the arena lifecycle                                             |          | ✔️️    |
 | [FlySpectate](mods/flyspectate.md)                 | have players spectating a fight in fly mode                                                             | SPECTATE | ✔️️    |
 | [ItemSpawners](mods/itemspawners.md)               | spawn (random) items on different points                                                                |          | ✔️️    |
-| [LateLounge](mods/latelounge.md)                   | keep playing until enough players joined the arena                                                      |          | ☑️️    |
+| [LateLounge](mods/latelounge.md)                   | keep playing until enough players joined the arena                                                      |          | ✔️️    |
 | [PlayerFinder](mods/playerfinder.md)               | allow players to find others with a compass                                                             |          | ✔️️    |
 | [Points](mods/points.md)                           | allow to restrict certain classes to require players to fight for better classes                        |          | ⚠️     |
 | [PowerUps](mods/powerups.md)                       | spawn items giving special powers                                                                       |          | ☑️️    |

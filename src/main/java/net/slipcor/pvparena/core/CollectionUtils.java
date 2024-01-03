@@ -25,5 +25,4 @@ public class CollectionUtils {
     public static boolean containsIgnoreCase(Collection<String> collection, String value) {
         return isNotEmpty(collection) && collection.stream().anyMatch(e -> e.equalsIgnoreCase(value));
     }
-
 }

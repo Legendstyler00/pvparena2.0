@@ -297,6 +297,16 @@ public abstract class ArenaModule implements IArenaCommandHandler {
     }
 
     /**
+     * check if a module has a player waiting for join (like LateLounge)
+     *
+     * @param player the player to check
+     * @return true if the player has pre-joined the arena
+     */
+    public boolean hasPlayerWaitingForJoin(Player player) {
+        return false;
+    }
+
+    /**
      * hook into initiating a player when he joins directly into the battlefield
      * (contrary to standardlounge and spectating)
      *
@@ -569,7 +579,7 @@ public abstract class ArenaModule implements IArenaCommandHandler {
      * @param aPlayer the player who leaves
      * @return true if a module cares
      */
-    public boolean handleSpecialLeave(final ArenaPlayer aPlayer) {
+    public boolean handleQueuedLeave(final ArenaPlayer aPlayer) {
         return false;
     }
 

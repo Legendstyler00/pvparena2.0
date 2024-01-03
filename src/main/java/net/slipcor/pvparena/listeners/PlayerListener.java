@@ -14,6 +14,7 @@ import net.slipcor.pvparena.core.Language.MSG;
 import net.slipcor.pvparena.core.StringUtils;
 import net.slipcor.pvparena.events.goal.PAGoalEvent;
 import net.slipcor.pvparena.exceptions.GameplayException;
+import net.slipcor.pvparena.loadables.ArenaModule;
 import net.slipcor.pvparena.loadables.ArenaModuleManager;
 import net.slipcor.pvparena.managers.ArenaManager;
 import net.slipcor.pvparena.managers.InventoryManager;
@@ -681,6 +682,13 @@ public class PlayerListener implements Listener {
                 arena.playerLeave(player, CFG.TP_EXIT, false, true, false);
                 arenaPlayer.unload();
             }
+        } else if(arenaPlayer.getQueuedArena() != null) {
+            for (ArenaModule mod : arenaPlayer.getQueuedArena().getMods()) {
+                if(mod.handleQueuedLeave(arenaPlayer)) {
+                    arenaPlayer.unload();
+                    return;
+                }
+            }
         } else {
             arenaPlayer.unload();
         }
@@ -692,6 +700,12 @@ public class PlayerListener implements Listener {
         final ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
         final Arena arena = arenaPlayer.getArena();
         if (arena == null) {
+            for (ArenaModule mod : arenaPlayer.getQueuedArena().getMods()) {
+                if(mod.handleQueuedLeave(arenaPlayer)) {
+                    arenaPlayer.unload();
+                    return;
+                }
+            }
             return; // no fighting player => OUT
         }
         arena.playerLeave(player, CFG.TP_EXIT, false, true, false);

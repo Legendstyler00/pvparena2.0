@@ -43,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.Optional.ofNullable;
@@ -251,6 +252,18 @@ public class PVPArena extends JavaPlugin {
 
         String[] newArgs = args;
 
+        if(sender instanceof Player) {
+            ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer((Player) sender);
+            Arena queuedArena = arenaPlayer.getQueuedArena();
+            if(queuedArena != null) {
+                if(tempArena != null && !tempArena.equals(queuedArena)) {
+                    Arena.pmsg(sender, MSG.ERROR_ARENA_ALREADY_PART_OF, queuedArena.getName());
+                    return true;
+                }
+                tempArena = queuedArena;
+            }
+        }
+
         if (tempArena == null) {
             if (playerArena != null) {
                 tempArena = playerArena;
@@ -265,26 +278,14 @@ public class PVPArena extends JavaPlugin {
                 return true;
             } else if (ArenaManager.countAvailable() == 1) {
                 tempArena = ArenaManager.getAvailable();
+            } else {
+                Arena.pmsg(sender, MSG.ERROR_ARENA_NOTFOUND, name);
+                return true;
             }
         } else {
             if (args.length > 1) {
                 newArgs = StringParser.shiftArrayBy(args, 1);
             }
-        }
-
-        latelounge:
-        if (tempArena == null) {
-            for (Arena ar : ArenaManager.getArenas()) {
-                for (ArenaModule mod : ar.getMods()) {
-                    if (mod.hasSpawn(sender.getName(), null)) {
-                        tempArena = ar;
-                        break latelounge;
-                    }
-                }
-            }
-
-            Arena.pmsg(sender, MSG.ERROR_ARENA_NOTFOUND, name);
-            return true;
         }
 
         AbstractArenaCommand paacmd = null;
@@ -456,5 +457,13 @@ public class PVPArena extends JavaPlugin {
 
             this.dbConnector.initDatabase();
         }
+    }
+
+    private static Optional<Arena> getOtherArenaQueuedIfExists(Player player) {
+        return ArenaManager.getArenas().stream()
+                .flatMap(a -> a.getMods().stream())
+                .filter(mod -> mod.hasPlayerWaitingForJoin(player))
+                .findAny()
+                .map(ArenaModule::getArena);
     }
 }

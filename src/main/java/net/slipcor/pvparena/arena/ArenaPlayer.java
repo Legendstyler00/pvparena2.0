@@ -85,6 +85,7 @@ public class ArenaPlayer {
     private Boolean flying;
 
     private Arena arena;
+    private Arena queuedArena;
     private ArenaClass arenaClass;
     private ArenaClass nextArenaClass;
     private PlayerState state;
@@ -526,6 +527,10 @@ public class ArenaPlayer {
         return this.arena;
     }
 
+    public Arena getQueuedArena() {
+        return this.queuedArena;
+    }
+
     /**
      * return the arena class
      *
@@ -756,6 +761,10 @@ public class ArenaPlayer {
      */
     public final void setArena(final Arena arena) {
         this.arena = arena;
+    }
+
+    public void setQueuedArena(Arena queuedArena) {
+        this.queuedArena = queuedArena;
     }
 
     /**
