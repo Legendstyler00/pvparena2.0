@@ -145,16 +145,19 @@ public class WorkflowManager {
             return false;
         }
 
-        final ArenaTeam arenaTeam;
+        ArenaTeam arenaTeam;
+        final boolean canSwitchTeam;
         if (args.length < 1) {
             // usage: /pa {arenaname} join | join an arena
             arenaTeam = TeamManager.getRandomTeam(arena);
+            canSwitchTeam = true;
             if(arenaTeam == null){
                 arena.msg(player, MSG.ERROR_NO_TEAM_AVAILABLE);
                 return false;
             }
         } else {
             arenaTeam = arena.getTeam(args[0]);
+            canSwitchTeam = false;
             if(arenaTeam == null) {
                 arena.msg(player, MSG.ERROR_TEAM_NOT_FOUND, args[0]);
                 return false;
@@ -163,7 +166,15 @@ public class WorkflowManager {
 
         final ArenaPlayer arenaPlayer = ArenaPlayer.fromPlayer(player);
 
-        ArenaModuleManager.choosePlayerTeam(arena, player, arenaTeam.getColoredName());
+        try {
+            ArenaTeam teamToSwitch = ArenaModuleManager.choosePlayerTeam(arena, player, arenaTeam, canSwitchTeam);
+            if(teamToSwitch != null) {
+                arenaTeam = teamToSwitch;
+            }
+        } catch (GameplayException e) {
+            debug(arena, "Team choice cancelled by mod! Reason: {}", e.getMessage());
+            return false;
+        }
 
         arena.markPlayedPlayer(player.getName());
 

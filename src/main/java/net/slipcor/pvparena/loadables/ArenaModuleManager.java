@@ -5,11 +5,16 @@ import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaClass;
 import net.slipcor.pvparena.arena.ArenaTeam;
 import net.slipcor.pvparena.classes.PABlock;
-import net.slipcor.pvparena.classes.PASpawn;
 import net.slipcor.pvparena.classes.PADeathInfo;
+import net.slipcor.pvparena.classes.PASpawn;
+import net.slipcor.pvparena.exceptions.GameplayException;
 import net.slipcor.pvparena.loader.JarLoader;
 import net.slipcor.pvparena.loader.Loadable;
-import net.slipcor.pvparena.modules.*;
+import net.slipcor.pvparena.modules.BattlefieldJoin;
+import net.slipcor.pvparena.modules.QuickLounge;
+import net.slipcor.pvparena.modules.StandardLounge;
+import net.slipcor.pvparena.modules.StandardSpectate;
+import net.slipcor.pvparena.modules.WarmupJoin;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -18,7 +23,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 
@@ -98,10 +108,14 @@ public class ArenaModuleManager {
                 .collect(Collectors.toSet());
     }
 
-    public static void choosePlayerTeam(final Arena arena, final Player player, final String coloredTeam) {
+    public static ArenaTeam choosePlayerTeam(Arena arena, Player player, ArenaTeam team, boolean canSwitch) throws GameplayException {
         for (ArenaModule mod : arena.getMods()) {
-            mod.choosePlayerTeam(player, coloredTeam);
+            ArenaTeam arenaTeam = mod.choosePlayerTeam(player, team, canSwitch);
+            if(arenaTeam != null) {
+                return arenaTeam;
+            }
         }
+        return null;
     }
 
     public static boolean commitEnd(final Arena arena, final ArenaTeam aTeam) {

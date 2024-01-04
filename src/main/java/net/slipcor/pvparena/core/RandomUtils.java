@@ -15,9 +15,10 @@ public class RandomUtils {
      * @param <E>     random object
      * @return E the object randomly selected
      */
-    public static <E> E getWeightedRandom(Map<E, Double> weights, Random random) {
+    public static <E> E getWeightedRandom(Map<E, Integer> weights, Random random) {
+        Integer total = weights.values().stream().reduce(0, Integer::sum);
         return weights.entrySet().stream()
-                .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), -Math.log(random.nextDouble()) / e.getValue()))
+                .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), random.nextDouble() * e.getValue() / total))
                 .min(Map.Entry.comparingByValue())
                 .orElseThrow(IllegalArgumentException::new).getKey();
     }

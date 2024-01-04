@@ -193,10 +193,13 @@ public abstract class ArenaModule implements IArenaCommandHandler {
     /**
      * hook into a player choosing a team
      *
-     * @param player the choosing player
-     * @param team   the team name
+     * @param player    the choosing player
+     * @param team      the team
+     * @param canSwitch if true, the player didn't specify a particular team
+     * @return an ArenaTeam if the team has to be changed, null otherwise
      */
-    public void choosePlayerTeam(final Player player, final String team) {
+    public ArenaTeam choosePlayerTeam(Player player, ArenaTeam team, boolean canSwitch) throws GameplayException {
+        return null;
     }
 
     /**

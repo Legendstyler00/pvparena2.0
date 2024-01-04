@@ -46,7 +46,7 @@ Hook into many different aspects of the game!
 | StandardSpectate                                   | Default spectate module (survival mode)                                                                 | SPECTATE | ✔️️    |
 | [Squads](mods/squads.md)                           | add squads to the game, basically only showing players belonging together apart from teams and classes. |          | ☑️️    |
 | [StartFreeze](mods/startfreeze.md)                 | freeze players at start                                                                                 |          | ✔️️    |
-| [TeamSizeRestrict](mods/teamsizerestrict.md)       | a small mod to restrict the size of specific teams                                                      |          | ⚠️     |
+| [TeamSizeRestrict](mods/teamsizerestrict.md)       | a small mod to restrict the size of specific teams                                                      |          | ✔️️    |
 | [Titles](mods/titles.md)                           | send messages to players as the "title" command would do                                                |          | ☑️     |
 | [TempPerms](mods/tempperms.md)                     | add temporary perms                                                                                     |          | ☑️     |
 | [Turrets](mods/turrets.md)                         | add turrets where players fire projectiles                                                              |          | ⚠️     |
