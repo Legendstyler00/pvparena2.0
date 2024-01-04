@@ -91,9 +91,6 @@ public class PAA_ToggleMod extends AbstractArenaCommand {
     @Override
     public CommandTree<String> getSubs(final Arena arena) {
         final CommandTree<String> result = new CommandTree<>(null);
-        for (String string : PVPArena.getInstance().getAgm().getAllGoalNames()) {
-            result.define(new String[]{string});
-        }
         for (Loadable<?> mod : PVPArena.getInstance().getAmm().getAllLoadables()) {
             result.define(new String[]{mod.getName()});
         }
