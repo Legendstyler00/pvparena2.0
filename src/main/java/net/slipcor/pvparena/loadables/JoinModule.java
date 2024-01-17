@@ -4,8 +4,11 @@ import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.arena.ArenaTeam;
 import net.slipcor.pvparena.core.Config;
 import net.slipcor.pvparena.core.Language;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import me.clip.placeholderapi.PlaceholderAPI;
+
 
 /**
  * <pre>
@@ -48,36 +51,57 @@ public abstract class JoinModule extends ArenaModule {
         }
     }
     protected void broadcastJoinMessages(Player player, ArenaTeam arenaTeam) {
+        String message;
+
         if (this.arena.isFreeForAll()) {
-            this.arena.msg(player,
-                    Language.parse(this.arena, Config.CFG.MSG_YOUJOINED,
-                            Integer.toString(arenaTeam.getTeamMembers().size()),
-                            Integer.toString(this.arena.getConfig().getInt(Config.CFG.READY_MAXPLAYERS))
-                    ));
-            this.arena.broadcastExcept(
-                    player,
-                    Language.parse(this.arena, Config.CFG.MSG_PLAYERJOINED,
-                            player.getName(),
-                            Integer.toString(arenaTeam.getTeamMembers().size()),
-                            Integer.toString(this.arena.getConfig().getInt(Config.CFG.READY_MAXPLAYERS))
-                    ));
+            // Prepare the message for the player who joined
+            message = Language.parse(this.arena, Config.CFG.MSG_YOUJOINED,
+                    Integer.toString(arenaTeam.getTeamMembers().size()),
+                    Integer.toString(this.arena.getConfig().getInt(Config.CFG.READY_MAXPLAYERS)));
+
+            // Replace placeholders using PlaceholderAPI
+            if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+                message = PlaceholderAPI.setPlaceholders(player, message);
+            }
+            this.arena.msg(player, message);
+
+            // Prepare and send broadcast message to other players
+            String broadcastMessage = Language.parse(this.arena, Config.CFG.MSG_PLAYERJOINED,
+                    player.getName(),
+                    Integer.toString(arenaTeam.getTeamMembers().size()),
+                    Integer.toString(this.arena.getConfig().getInt(Config.CFG.READY_MAXPLAYERS)));
+
+            // Replace placeholders in the broadcast message
+            if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+                broadcastMessage = PlaceholderAPI.setPlaceholders(player, broadcastMessage);
+            }
+            this.arena.broadcastExcept(player, broadcastMessage);
+
         } else {
+            // Prepare the message for the player who joined a team
+            message = Language.parse(this.arena, Config.CFG.MSG_YOUJOINEDTEAM,
+                    arenaTeam.getColoredName() + ChatColor.COLOR_CHAR + 'r',
+                    Integer.toString(arenaTeam.getTeamMembers().size()),
+                    Integer.toString(this.arena.getConfig().getInt(Config.CFG.READY_MAXPLAYERS)));
 
-            this.arena.msg(player,
-                    Language.parse(this.arena, Config.CFG.MSG_YOUJOINEDTEAM,
-                            arenaTeam.getColoredName() + ChatColor.COLOR_CHAR + 'r',
-                            Integer.toString(arenaTeam.getTeamMembers().size()),
-                            Integer.toString(this.arena.getConfig().getInt(Config.CFG.READY_MAXPLAYERS))
-                    ));
+            // Replace placeholders
+            if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+                message = PlaceholderAPI.setPlaceholders(player, message);
+            }
+            this.arena.msg(player, message);
 
-            this.arena.broadcastExcept(
-                    player,
-                    Language.parse(this.arena, Config.CFG.MSG_PLAYERJOINEDTEAM,
-                            player.getName(),
-                            arenaTeam.getColoredName() + ChatColor.COLOR_CHAR + 'r',
-                            Integer.toString(arenaTeam.getTeamMembers().size()),
-                            Integer.toString(this.arena.getConfig().getInt(Config.CFG.READY_MAXPLAYERS))
-                    ));
+            // Prepare and send broadcast message to other players
+            String broadcastMessage = Language.parse(this.arena, Config.CFG.MSG_PLAYERJOINEDTEAM,
+                    player.getName(),
+                    arenaTeam.getColoredName() + ChatColor.COLOR_CHAR + 'r',
+                    Integer.toString(arenaTeam.getTeamMembers().size()),
+                    Integer.toString(this.arena.getConfig().getInt(Config.CFG.READY_MAXPLAYERS)));
+
+            // Replace placeholders in the broadcast message
+            if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+                broadcastMessage = PlaceholderAPI.setPlaceholders(player, broadcastMessage);
+            }
+            this.arena.broadcastExcept(player, broadcastMessage);
         }
     }
 

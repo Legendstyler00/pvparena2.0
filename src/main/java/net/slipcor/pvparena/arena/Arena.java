@@ -1,5 +1,6 @@
 package net.slipcor.pvparena.arena;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.classes.*;
 import net.slipcor.pvparena.core.*;
@@ -601,15 +602,20 @@ public class Arena {
     }
 
     public void msg(final CommandSender sender, final MSG msg, String... args) {
-        this.msg(sender, Language.parse(msg, args));
-    }
-
-    public void msg(final CommandSender sender, String msg) {
-        if (sender != null && !StringUtils.isBlank(msg)) {
-            debug(this, '@' + sender.getName() + ": " + msg);
-            sender.sendMessage(Language.parse(MSG.MESSAGES_GENERAL, this.prefix, msg));
+        if (sender instanceof Player) {
+            this.msg((Player) sender, Language.parse(msg, args));
+        } else {
+            sender.sendMessage(Language.parse(msg, args)); // Non-player CommandSenders
         }
     }
+
+    public void msg(final CommandSender sender, String message) {
+        if (sender instanceof Player && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            message = PlaceholderAPI.setPlaceholders((Player)sender, message);
+        }
+        sender.sendMessage(message);
+    }
+
 
     /**
      * return an understandable representation of a player's death cause
@@ -708,21 +714,22 @@ public class Arena {
         }
         debug(this, player, "fully removing player from arena");
         if (!silent) {
-
             final ArenaTeam team = aPlayer.getArenaTeam();
-            if (team == null) {
 
+            // Use PlaceholderAPI to replace the player's name placeholder, then apply team color
+            String playerNamePlaceholder = PlaceholderAPI.setPlaceholders(player, "%haonick_name%");
+            String coloredPlayerName = (team != null ? team.getColor().toString() : "") + playerNamePlaceholder + ChatColor.RESET;
+
+            if (team == null) {
                 this.broadcastExcept(
                         player,
-                        Language.parse(MSG.FIGHT_PLAYER_LEFT, player.getName()
-                                + ChatColor.YELLOW));
+                        Language.parse(MSG.FIGHT_PLAYER_LEFT, coloredPlayerName));
             } else {
                 ArenaModuleManager.parsePlayerLeave(this, player, team);
 
                 this.broadcastExcept(
                         player,
-                        Language.parse(MSG.FIGHT_PLAYER_LEFT,
-                                team.colorizePlayer(aPlayer) + ChatColor.YELLOW));
+                        Language.parse(MSG.FIGHT_PLAYER_LEFT, coloredPlayerName));
             }
             this.msg(player, MSG.NOTICE_YOU_LEFT);
         }
@@ -742,6 +749,7 @@ public class Arena {
 
         aPlayer.reset();
     }
+
 
     /**
      * check if an arena is ready

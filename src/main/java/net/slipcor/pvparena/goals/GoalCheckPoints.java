@@ -1,5 +1,6 @@
 package net.slipcor.pvparena.goals;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
@@ -181,21 +182,26 @@ public class GoalCheckPoints extends ArenaGoal {
         }
 
         if (winner != null) {
+            // Use parseWithPlaceholder to correctly replace the placeholders
+            String winnerBroadcastMessage = Language.parseWithPlaceholder(winner.getPlayer(), MSG.PLAYER_HAS_WON);
 
-            ArenaModuleManager
-                    .announce(
-                            arena,
-                            Language.parse(MSG.PLAYER_HAS_WON,
-                                    winner.getName()),
-                            "WINNER");
-            arena.broadcast(Language.parse(MSG.PLAYER_HAS_WON,
-                    winner.getName()));
+            // Broadcast the winner message to all players in the arena
+            arena.getEveryone().stream()
+                    .map(ArenaPlayer::getPlayer)
+                    .forEach(p -> p.sendMessage(winnerBroadcastMessage));
+
+            // Announce the winner to the server
+            ArenaModuleManager.announce(arena, winnerBroadcastMessage, "WINNER");
         }
 
         this.getPlayerLifeMap().clear();
-        new EndRunnable(arena, arena.getConfig().getInt(
-                CFG.TIME_ENDCOUNTDOWN));
+        new EndRunnable(arena, arena.getConfig().getInt(CFG.TIME_ENDCOUNTDOWN));
     }
+
+
+
+
+
 
     @Override
     public void commitCommand(final CommandSender sender, final String[] args) {

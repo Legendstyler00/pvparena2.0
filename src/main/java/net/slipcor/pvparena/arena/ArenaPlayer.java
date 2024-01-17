@@ -1,5 +1,6 @@
 package net.slipcor.pvparena.arena;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.classes.PABlockLocation;
 import net.slipcor.pvparena.classes.PADeathInfo;
@@ -340,19 +341,26 @@ public class ArenaPlayer {
      * @param deathInfo information about fake death event
      */
     public void handleDeathAndLose(PADeathInfo deathInfo) {
-        ArenaTeam team = this.getArenaTeam();
+        ArenaTeam killedPlayerTeam = this.getArenaTeam();
+        Player killedPlayer = this.getPlayer(); // Player who was killed
+        Player killerPlayer = deathInfo.getDamager() instanceof Player ? (Player) deathInfo.getDamager() : null; // Player who did the killing
 
-        final String playerName = (team == null) ? this.getName() : team.colorizePlayer(this);
+        // Get the ArenaPlayer instances for both the killed player and the killer
+        ArenaPlayer killerArenaPlayer = killerPlayer != null ? ArenaPlayer.fromPlayer(killerPlayer) : null;
+
+        // Get colored player names using PlaceholderAPI and team color
+        String killedPlayerName = killedPlayerTeam != null ? killedPlayerTeam.getColor() + PlaceholderAPI.setPlaceholders(killedPlayer, "%haonick_name%") : PlaceholderAPI.setPlaceholders(killedPlayer, "%haonick_name%");
+        String killerPlayerName = killerArenaPlayer != null ? killerArenaPlayer.getArenaTeam().getColor() + PlaceholderAPI.setPlaceholders(killerPlayer, "%haonick_name%") : ChatColor.GRAY + "environment";
+
         if (this.arena.getConfig().getBoolean(CFG.USES_DEATHMESSAGES)) {
-            this.arena.broadcast(Language.parse(
-                    Language.MSG.FIGHT_KILLED_BY,
-                    playerName + ChatColor.YELLOW,
-                    this.arena.parseDeathCause(
-                            this.player,
-                            deathInfo.getCause(),
-                            deathInfo.getKiller()
-                    )
-            ));
+            // Retrieve the death message template
+            String deathMessageTemplate = Language.parse(Language.MSG.FIGHT_KILLED_BY);
+
+            // Replace the custom placeholders with actual names and team colors
+            String deathMessageStr = deathMessageTemplate.replace("%killed_player%", killedPlayerName)
+                    .replace("%killer_player%", killerPlayerName);
+
+            this.arena.broadcast(deathMessageStr);
         }
 
         if (!this.hasCustomClass()) {

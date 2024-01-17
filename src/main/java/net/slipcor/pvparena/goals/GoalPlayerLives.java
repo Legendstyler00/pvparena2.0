@@ -60,17 +60,17 @@ public class GoalPlayerLives extends AbstractPlayerLivesGoal {
     protected void broadcastEndMessagesIfNeeded(ArenaTeam teamToCheck) {
         for (ArenaPlayer arenaPlayer : teamToCheck.getTeamMembers()) {
             if (arenaPlayer.getStatus() == PlayerStatus.FIGHT) {
-                ArenaModuleManager.announce(this.arena,
-                        Language.parse(MSG.PLAYER_HAS_WON, arenaPlayer.getName()),
-                        "END");
-                ArenaModuleManager.announce(this.arena,
-                        Language.parse(MSG.PLAYER_HAS_WON, arenaPlayer.getName()),
-                        "WINNER");
+                // Use the parseWithPlaceholder method for custom placeholder replacement
+                String winnerAnnouncement = Language.parseWithPlaceholder(arenaPlayer.getPlayer(), MSG.PLAYER_HAS_WON, arenaPlayer.getName());
 
-                this.arena.broadcast(Language.parse(MSG.PLAYER_HAS_WON, arenaPlayer.getName()));
+                ArenaModuleManager.announce(this.arena, winnerAnnouncement, "END");
+                ArenaModuleManager.announce(this.arena, winnerAnnouncement, "WINNER");
+
+                this.arena.broadcast(winnerAnnouncement);
             }
         }
     }
+
 
     @Override
     public int getLives(ArenaPlayer arenaPlayer) {

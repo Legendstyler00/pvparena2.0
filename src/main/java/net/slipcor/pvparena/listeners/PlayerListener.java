@@ -1,5 +1,7 @@
 package net.slipcor.pvparena.listeners;
 
+import me.clip.placeholderapi.PlaceholderAPI;
+import net.md_5.bungee.api.ChatColor;
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
@@ -524,21 +526,49 @@ public class PlayerListener implements Listener {
                 debug(arena, player, msg);
                 debug(arena, player, "===============");
 
+
                 if (!arena.isFightInProgress()) {
                     if (arenaPlayer.getStatus() != READY) {
-                        arena.msg(player, MSG.READY_DONE);
+                        arena.msg(player, MSG.READY_DONE); // Message to the player who is ready
                         if (!alreadyReady) {
-                            arena.broadcast(Language.parse(MSG.PLAYER_READY, arenaPlayer
-                                    .getArenaTeam().colorizePlayer(arenaPlayer)));
+                            // Get player's team color
+                            String teamColor = arenaPlayer.getArenaTeam() != null ? arenaPlayer.getArenaTeam().getColor().toString() : "";
+
+                            // Replace placeholders except for the player name
+                            String broadcastMsg = Language.parseWithPlaceholder(arenaPlayer.getPlayer(), MSG.PLAYER_READY);
+
+                            // Now replace the player name placeholder with the colored name
+                            String coloredPlayerName = teamColor + PlaceholderAPI.setPlaceholders(player, "%haonick_name%") + ChatColor.RESET;
+                            broadcastMsg = broadcastMsg.replace("%haonick_name%", coloredPlayerName);
+
+                            Arena finalArena = arena;
+                            String finalBroadcastMsg = broadcastMsg;
+                            arena.getEveryone().stream()
+                                    .map(ArenaPlayer::getPlayer)
+                                    .forEach(p -> finalArena.msg(p, finalBroadcastMsg));
+                        }
+                        arenaPlayer.setStatus(READY);
+                        if (!alreadyReady && arenaPlayer.getArenaTeam().isEveryoneReady()) {
+                            // Same approach for team ready message
+                            String teamColor = arenaPlayer.getArenaTeam() != null ? arenaPlayer.getArenaTeam().getColor().toString() : "";
+                            String coloredPlayerName = teamColor + arenaPlayer.getPlayer().getName() + ChatColor.RESET;
+
+                            String teamReadyMsg = Language.parseWithPlaceholder(arenaPlayer.getPlayer(), MSG.TEAM_READY);
+                            teamReadyMsg = teamReadyMsg.replace("%haonick_name%", coloredPlayerName);
+
+                            // Directly send the team ready message
+                            Arena finalArena1 = arena;
+                            String finalTeamReadyMsg = teamReadyMsg;
+                            arena.getEveryone().stream()
+                                    .map(ArenaPlayer::getPlayer)
+                                    .forEach(p -> finalArena1.msg(p, finalTeamReadyMsg));
+
                         }
                     }
-                    arenaPlayer.setStatus(READY);
-                    if (!alreadyReady && arenaPlayer.getArenaTeam().isEveryoneReady()) {
-                        arena.broadcast(Language.parse(MSG.TEAM_READY, arenaPlayer
-                                .getArenaTeam().getColoredName()));
-                    }
 
-                    if (arena.getConfig().getBoolean(CFG.USES_EVENTEAMS)
+
+
+                if (arena.getConfig().getBoolean(CFG.USES_EVENTEAMS)
                             && !TeamManager.checkEven(arena)) {
                         arena.msg(player, MSG.NOTICE_WAITING_EQUAL);
                         return; // even teams desired, not done => announce

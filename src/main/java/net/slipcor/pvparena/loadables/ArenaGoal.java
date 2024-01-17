@@ -1,5 +1,6 @@
 package net.slipcor.pvparena.loadables;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.slipcor.pvparena.api.IArenaCommandHandler;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
@@ -575,21 +576,27 @@ public class ArenaGoal implements IArenaCommandHandler {
     }
 
     protected void broadcastDeathMessage(Language.MSG deathMessage, ArenaPlayer arenaPlayer, PADeathInfo deathInfo, Integer remainingLives) {
-        final ArenaTeam respawnTeam = arenaPlayer.getArenaTeam();
+        ArenaTeam killedPlayerTeam = arenaPlayer.getArenaTeam();
+        Player killedPlayer = arenaPlayer.getPlayer(); // Player who was killed
+        Player killerPlayer = deathInfo.getDamager() instanceof Player ? (Player) deathInfo.getDamager() : null; // Player who did the killing
 
-        String deathCause = this.arena.parseDeathCause(arenaPlayer.getPlayer(), deathInfo.getCause(), deathInfo.getDamager());
-        String coloredPlayerName = respawnTeam.colorizePlayer(arenaPlayer) + ChatColor.YELLOW;
+        // Get the ArenaPlayer instance for the killer
+        ArenaPlayer killerArenaPlayer = killerPlayer != null ? ArenaPlayer.fromPlayer(killerPlayer) : null;
 
-        if (deathMessage == Language.MSG.FIGHT_KILLED_BY_REMAINING || deathMessage == Language.MSG.FIGHT_KILLED_BY_REMAINING_FRAGS) {
-            this.arena.broadcast(Language.parse(deathMessage,
-                    coloredPlayerName, deathCause, String.valueOf(remainingLives)));
-        } else if (deathMessage == Language.MSG.FIGHT_KILLED_BY_REMAINING_TEAM || deathMessage == Language.MSG.FIGHT_KILLED_BY_REMAINING_TEAM_FRAGS) {
-            this.arena.broadcast(Language.parse(deathMessage,
-                    coloredPlayerName, deathCause, String.valueOf(remainingLives),
-                    respawnTeam.getColoredName()));
-        } else {
-            this.arena.broadcast(Language.parse(Language.MSG.FIGHT_KILLED_BY,
-                    coloredPlayerName, deathCause));
-        }
+        // Get colored player names using PlaceholderAPI and team color
+        String killedPlayerName = killedPlayerTeam.getColor() + PlaceholderAPI.setPlaceholders(killedPlayer, "%haonick_name%");
+        String killerPlayerName = killerArenaPlayer != null ? killerArenaPlayer.getArenaTeam().getColor() + PlaceholderAPI.setPlaceholders(killerPlayer, "%haonick_name%") : ChatColor.GRAY + "environment";
+
+        // Retrieve the death message template
+        String deathMessageTemplate = Language.parse(deathMessage);
+
+        // Replace the custom placeholders with actual names and team colors
+        String deathMessageStr = deathMessageTemplate.replace("%killed_player%", killedPlayerName)
+                .replace("%killer_player%", killerPlayerName)
+                .replace("%3%", String.valueOf(remainingLives))
+                .replace("%4%", killedPlayerTeam.getColoredName());
+
+        this.arena.broadcast(deathMessageStr);
     }
+
 }

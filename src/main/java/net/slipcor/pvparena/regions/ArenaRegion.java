@@ -324,8 +324,8 @@ public class ArenaRegion {
     public boolean protectionSetAll(final Boolean value) {
         for (RegionProtection rp : RegionProtection.values()) {
             if (rp == null) {
-                this.arena.msg(Bukkit.getConsoleSender(),
-                        "&cWarning! RegionProtection is null!");
+                // Use a version of msg that can handle ConsoleCommandSender
+                this.arena.msg(Bukkit.getConsoleSender(), "&cWarning! RegionProtection is null!");
                 return false;
             }
             if (value == null) {
@@ -339,6 +339,7 @@ public class ArenaRegion {
 
         return true;
     }
+
 
     public boolean protectionToggle(final RegionProtection regionProtection) {
         if (regionProtection == null) {

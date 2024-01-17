@@ -1,5 +1,6 @@
 package net.slipcor.pvparena.core;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.slipcor.pvparena.PVPArena;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.core.Config.CFG;
@@ -7,6 +8,7 @@ import net.slipcor.pvparena.statistics.model.StatEntry;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 
@@ -929,5 +931,11 @@ public final class Language {
             result = result.replace("%" + ++i + '%', String.valueOf(word));
         }
         return StringParser.colorize(result);
+    }
+
+    public static String parseWithPlaceholder(final Player player, final MSG message, final String... args) {
+        String result = parse(message, args); // This uses the original parse method
+        // Apply PlaceholderAPI only to the player's name, not the entire message
+        return result.replace("%haonick_rank_prefix%%haonick_name%", PlaceholderAPI.setPlaceholders(player, "%haonick_rank_prefix%%haonick_name%"));
     }
 }

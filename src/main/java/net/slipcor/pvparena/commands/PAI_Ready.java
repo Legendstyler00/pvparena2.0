@@ -1,5 +1,7 @@
 package net.slipcor.pvparena.commands;
 
+import me.clip.placeholderapi.PlaceholderAPI;
+import net.md_5.bungee.api.ChatColor;
 import net.slipcor.pvparena.arena.Arena;
 import net.slipcor.pvparena.arena.ArenaPlayer;
 import net.slipcor.pvparena.arena.PlayerStatus;
@@ -93,12 +95,23 @@ public class PAI_Ready extends AbstractArenaCommand {
         }
 
         arena.msg(aPlayer.getPlayer(), MSG.READY_DONE);
-        arena.broadcast(Language.parse(MSG.PLAYER_READY, aPlayer.getArenaTeam().colorizePlayer(aPlayer)));
+
+        // Replace placeholders except for the player name
+        String readyMessage = Language.parseWithPlaceholder(aPlayer.getPlayer(), MSG.PLAYER_READY);
+
+        // Now replace the player name placeholder with the colored name
+        String teamColor = aPlayer.getArenaTeam() != null ? aPlayer.getArenaTeam().getColor().toString() : "";
+        String coloredPlayerName = teamColor + PlaceholderAPI.setPlaceholders(aPlayer.getPlayer(), "%haonick_name%") + ChatColor.RESET;
+        readyMessage = readyMessage.replace("%haonick_name%", coloredPlayerName);
+
+        String finalReadyMessage = readyMessage;
+        arena.getEveryone().stream()
+                .map(ArenaPlayer::getPlayer)
+                .forEach(p -> arena.msg(p, finalReadyMessage));
+
+        // Set player status to READY
         aPlayer.setStatus(PlayerStatus.READY);
 
-        if (aPlayer.getArenaTeam().isEveryoneReady()) {
-            arena.broadcast(Language.parse(MSG.TEAM_READY, aPlayer.getArenaTeam().getColoredName()));
-        }
 
         if (arena.getConfig().getBoolean(CFG.USES_EVENTEAMS) && !TeamManager.checkEven(arena)) {
             // even teams desired, not done => announce
@@ -119,6 +132,8 @@ public class PAI_Ready extends AbstractArenaCommand {
             throw new GameplayException(error);
         }
     }
+
+
 
     public static void checkReadyRequirementsDuringFight(Arena arena, ArenaPlayer aPlayer) throws GameplayException {
         if (aPlayer.getStatus() != PlayerStatus.LOUNGE) {
