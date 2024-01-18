@@ -386,7 +386,7 @@ public final class Language {
         PLAYERS("nulang.players", "Players"),
 
         READY_LIST("nulang.ready.list", "Players: %1%"),
-        READY_DONE("nulang.ready.done", "You have been flagged as ready!"),
+        READY_DONE("nulang.ready.done", ""),
 
         REGION_CLEAR_ADDED("nulang.region.clear.added", "Added to region entity clearing whitelist: &a%1%&r"),
         REGION_CLEAR_LIST("nulang.region.clear.list", "Region entity clearing whitelist: &a%1%&r"),
