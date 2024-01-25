@@ -48,6 +48,17 @@ public class PlayerArenaStats {
     @DatabaseField(columnName = "max_damage_taken", canBeNull = false)
     private Long maxDamageTaken;
 
+    @DatabaseField(canBeNull = false)
+    private Long elo;
+
+    public Long getElo() {
+        return this.elo;
+    }
+
+    public void setElo(Long elo) {
+        this.elo = elo;
+    }
+
     private void setBlankValues() {
         this.damage = 0L;
         this.damageTaken = 0L;
@@ -57,6 +68,7 @@ public class PlayerArenaStats {
         this.kills = 0L;
         this.maxDamage = 0L;
         this.maxDamageTaken = 0L;
+        this.elo = 100L;
     }
 
     public PlayerArenaStats() {
